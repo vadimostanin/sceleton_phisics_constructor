@@ -107,14 +107,14 @@ void DrawingContent::draw_cur_points( vector<GraphicPoint> & highlighted )
 
 		evas_object_move( r1, point_x - rect_width/2, point_y - rect_height / 2 );
 
-		if( std::find( highlighted.begin(), highlighted.end(), searchPoint ) != highlighted.end() )
-		{
-			evas_object_color_set(r1, 0, 255, 0, 255);
-		}
-		else
-		{
-			evas_object_color_set(r1, 0, 0, 255, 255);
-		}
+//		if( std::find( highlighted.begin(), highlighted.end(), searchPoint ) != highlighted.end() )
+//		{
+//			evas_object_color_set(r1, 0, 255, 0, 255);
+//		}
+//		else
+//		{
+//			evas_object_color_set(r1, 0, 0, 255, 255);
+//		}
 
 		evas_object_resize(r1, rect_width, rect_height);
 		evas_object_show(r1);

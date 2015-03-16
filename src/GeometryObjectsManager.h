@@ -24,6 +24,8 @@ public:
 	void getPoints( vector<Point> & points );
 	bool getPoint( int x, int y, Point & point );
 
+	void getLinks( vector<PointsLink> & links );
+
 	static GeometryObjectsManager & getInstance();
 
 private:

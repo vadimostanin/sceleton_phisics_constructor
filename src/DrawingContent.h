@@ -13,40 +13,43 @@
 using namespace std;
 
 #include "IViewUpdatable.h"
+#include "Point.h"
 
 class DrawingContent : public IViewUpdatable
 {
 	struct GraphicPoint
 	{
+		Point m_Point;
 		GraphicPoint( int x, int y )
 		{
-			m_x = x;
-			m_y = y;
+			m_Point.setX( x );
+			m_Point.setY( y );
 			m_Evas = 0;
 		}
 		GraphicPoint( const GraphicPoint & src )
 		{
-			m_x = src.m_x;
-			m_y = src.m_y;
+			m_Point = src.m_Point;
 			m_Evas = src.m_Evas;
 		}
-		bool operator ==( const GraphicPoint & src )
+		bool operator ==( GraphicPoint & src )
 		{
-			if( m_x != src.m_x )
+			if( m_Point.getX() != src.m_Point.getX() )
+			{
 				return false;
-			if( m_y != src.m_y )
+			}
+			if( m_Point.getY() != src.m_Point.getY() )
+			{
 				return false;
+			}
 			return true;
 		}
-		int getX(){ return m_x; }
-		int getY(){ return m_y; }
+		int getX(){ return m_Point.getX(); }
+		int getY(){ return m_Point.getY(); }
 
 		Evas_Object * getEvas(){ return m_Evas; }
 
 		void setEvas( Evas_Object * evas ){ m_Evas = evas; }
 	private:
-		int m_x;
-		int m_y;
 		Evas_Object * m_Evas;
 	};
 public:

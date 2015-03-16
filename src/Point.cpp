@@ -23,6 +23,19 @@ Point::Point( const Point & src )
 	m_y = src.m_y;
 }
 
+bool Point::operator==( Point & src )
+{
+	if( getX() != src.getX() )
+	{
+		return false;
+	}
+	if( getY() != src.getY() )
+	{
+		return false;
+	}
+	return true;
+}
+
 Point::~Point()
 {
 }
