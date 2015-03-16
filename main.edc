@@ -1,0 +1,122 @@
+collections
+{
+	group
+	{
+		name:"main_layout";
+		parts
+		{
+			part
+			{
+				name:"part.main.toolbar";
+				type: SWALLOW;
+				
+				description
+				{
+					state: "default" 0.0;
+					fixed: 1 1;
+					max: -1 100;
+					align: 0.0 0.0;
+					
+					rel1
+                    {
+                        relative: 0.0 0.0;
+                    }
+                    rel2
+                    {
+                        relative: 0.1 0.1;
+                    }
+				}
+			}
+			part
+			{
+				name:"part.main.drawing";
+				type: SWALLOW;
+				
+				description
+				{
+					state: "default" 0.0;
+					rel1
+                    {
+                        relative: 0.0 1.0;
+                        		to_y: part.main.toolbar;
+                    }
+                    rel2
+                    {
+                        relative: 1.0 1.0;
+                    }
+                }
+			}
+		}
+	}
+	group
+	{
+		name:"group.toolbar_layout";
+		parts
+		{
+			part
+			{
+				name:"part.toolbar_layout.button_1";
+				type:SWALLOW;
+				description
+				{
+					fixed: 1 1;
+					//max: 30 50;
+					align: 0.0 0.0;
+					rel1
+                    {
+                        relative: 0.0 0.0;
+                    }
+                    rel2
+                    {
+                        relative: 1.0 1.0;
+                    }
+				}
+			}
+			part
+			{
+				name:"part.toolbar_layout.button_2";
+				type:SWALLOW;
+				description
+				{
+					fixed: 1 1;
+					//max: 30 50;
+					align: 0.0 0.0;
+					rel1
+                    {
+                        relative: 1.0 0.0;
+                         to_x: "part.toolbar_layout.button_1";
+                    }
+                    rel2
+                    {
+                        relative: 1.0 1.0;
+                    }
+				}
+			}
+		}
+	}
+	group
+	{
+		name:"group.drawing_layout";
+		parts
+		{
+			part
+			{
+				name:"drawing_canvas";
+				type:SWALLOW;
+				description
+				{
+					fixed: 1 1;
+					align: 0.0 0.0;
+					rel1
+                    {
+                        relative: 0.0 0.0;
+                    }
+                    rel2
+                    {
+                        relative: 1.0 1.0;
+                    }
+				}
+			}
+		}
+	}
+}
