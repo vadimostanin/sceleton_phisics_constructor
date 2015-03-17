@@ -81,7 +81,7 @@ void GeometryOperationTracking::trackerBegin( int x, int y )
 		m_ViewUpdater.setGraphicObjects( graphicObjects );
 
 		m_CurObjectState = OBJECT_LINK_CREATING;
-		/*
+
 		m_GeometryObjectsTrackingStack.push_back( GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT ) );
 		((Point*)m_GeometryObjectsTrackingStack[0])->setX( point.getX() );
 		((Point*)m_GeometryObjectsTrackingStack[0])->setY( point.getY() );
@@ -110,6 +110,13 @@ void GeometryOperationTracking::trackerContinue( int x, int y )
 	{
 		((Point*)m_GeometryObjectsTrackingStack[0])->setX( x );
 		((Point*)m_GeometryObjectsTrackingStack[0])->setY( y );
+	}
+	else if( m_GeometryObjectsTrackingStack[0]->getType() == GEOMETRYOBJECT_LINK )
+	{
+		Point * point_ptr = ((Point*)m_GeometryObjectsTrackingStack[0]);
+		((PointsLink*)m_GeometryObjectsTrackingStack[1])->setPointFrom( *point_ptr );
+		Point temp_point( x, y );
+		((PointsLink*)m_GeometryObjectsTrackingStack[1])->setPointTo( temp_point );
 	}
 }
 
