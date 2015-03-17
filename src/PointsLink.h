@@ -21,6 +21,7 @@ public:
 	virtual ~PointsLink();
 
 	GeometryObjectsTypes getType();
+//	IGeometryObject & operator = ( IGeometryObject & src );
 
 	void setPointFrom( Point & point );
 	void setPointTo( Point & point );

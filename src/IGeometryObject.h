@@ -16,6 +16,8 @@ public:
 	virtual ~IGeometryObject(){}
 
 	virtual GeometryObjectsTypes getType() = 0;
+
+//	virtual IGeometryObject & operator = ( IGeometryObject & src ) = 0;
 };
 
 

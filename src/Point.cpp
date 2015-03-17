@@ -23,7 +23,7 @@ Point::Point( const Point & src )
 	m_y = src.m_y;
 }
 
-bool Point::operator==( Point & src )
+bool Point::operator==( const Point & src )
 {
 	if( getX() != src.getX() )
 	{
@@ -36,16 +36,27 @@ bool Point::operator==( Point & src )
 	return true;
 }
 
+//IGeometryObject & Point::operator = ( IGeometryObject & src )
+//{
+//	if( src.getType() != GEOMETRYOBJECT_POINT )
+//	{
+//		return *this;
+//	}
+//	setX( ((Point)src).getX() );
+//	setY( ((Point)src).getY() );
+//	return this;
+//}
+
 Point::~Point()
 {
 }
 
-int Point::getX()
+int Point::getX() const
 {
 	return m_x;
 }
 
-int Point::getY()
+int Point::getY() const
 {
 	return m_y;
 }

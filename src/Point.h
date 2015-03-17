@@ -16,16 +16,18 @@ public:
 	Point();
 	Point( int x, int y );
 	Point( const Point & src );
-	bool operator == ( Point & src );
+	bool operator == ( const Point & src );
 	virtual ~Point();
 
-	int getX();
-	int getY();
+	int getX() const;
+	int getY() const;
 
 	void setX( int x );
 	void setY( int y );
 
 	GeometryObjectsTypes getType();
+
+//	IGeometryObject & operator = ( IGeometryObject & src );
 private:
 	int m_x;
 	int m_y;

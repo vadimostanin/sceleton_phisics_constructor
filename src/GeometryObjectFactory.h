@@ -9,6 +9,7 @@
 #define GEOMETRYOBJECTFACTORY_H_
 
 #include "IGeometryObject.h"
+#include "IGraphicObject.h"
 #include "GeometryObjectsTypes.h"
 
 class GeometryObjectFactory
@@ -18,6 +19,7 @@ public:
 	virtual ~GeometryObjectFactory();
 
 	IGeometryObject * createGeometryObject( GeometryObjectsTypes type );
+	IGraphicObject * createGraphicObject( GeometryObjectsTypes type );
 
 	static GeometryObjectFactory & getInstance();
 };

@@ -10,7 +10,8 @@
 
 #include "IGeometryObjectTracker.h"
 #include "ObjectOperationStatus.h"
-#include "IViewUpdatable.h"
+//#include "IViewUpdatable.h"
+#include "DrawingContent.h"
 #include "Point.h"
 
 #include <vector>
@@ -19,7 +20,7 @@ using namespace std;
 class GeometryOperationTracking : public IGeometryObjectTracker
 {
 public:
-	GeometryOperationTracking( IViewUpdatable & viewUpdater );
+	GeometryOperationTracking( DrawingContent & viewUpdater );
 	virtual ~GeometryOperationTracking();
 
 	void trackerBegin( int x, int y );
@@ -33,9 +34,11 @@ private:
 
 	bool getPoint( int x, int y, Point & point );
 
+	void constructGraphicObjects( vector<IGraphicObject *> & graphicObjects );
+
 	vector<IGeometryObject *> m_GeometryObjectsTrackingStack;
 	ObjectState m_CurObjectState;
-	IViewUpdatable & m_ViewUpdater;
+	DrawingContent & m_ViewUpdater;
 };
 
 #endif /* GEOMETRYOPERATIONTRACKING_H_ */

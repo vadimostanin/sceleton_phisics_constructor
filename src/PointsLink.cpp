@@ -27,6 +27,17 @@ GeometryObjectsTypes PointsLink::getType()
 	return GEOMETRYOBJECT_LINK;
 }
 
+//IGeometryObject & Point::operator = ( IGeometryObject & src )
+//{
+//	if( src.getType() != GEOMETRYOBJECT_POINT )
+//	{
+//		return *this;
+//	}
+//	setX( ((Point)src).getX() );
+//	setY( ((Point)src).getY() );
+//	return this;
+//}
+
 void PointsLink::setPointFrom( Point & point )
 {
 	m_Points[0] = point;

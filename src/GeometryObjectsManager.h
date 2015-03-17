@@ -21,14 +21,15 @@ public:
 	virtual ~GeometryObjectsManager();
 
 	void addPoint( Point & point );
-	void getPoints( vector<Point> & points );
+	void addObject( IGeometryObject * object );
+	void getObjects( vector<IGeometryObject *> & objects );
 	bool getPoint( int x, int y, Point & point );
-
-	void getLinks( vector<PointsLink> & links );
 
 	static GeometryObjectsManager & getInstance();
 
 private:
+
+	vector<IGeometryObject *> m_geometryObjects;
 
 	vector<PointsLink> m_Links;
 	vector<Point> m_Points;
