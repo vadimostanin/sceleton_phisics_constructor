@@ -50,6 +50,7 @@ void GeometryOperationTracking::constructGraphicObjects( vector<IGraphicObject *
 				((GraphicPointHighlighted *)graphicObject)->setY( ((Point*)(*iter))->getY() );
 			break;
 			case GEOMETRYOBJECT_LINK:
+				((GraphicLink *)graphicObject)->setPointFrom( ((
 				break;
 		}
 		graphicObjects.push_back( graphicObject );
@@ -171,28 +172,3 @@ void GeometryOperationTracking::clearTrackingStack()
 //	}
 	m_GeometryObjectsTrackingStack.clear();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
