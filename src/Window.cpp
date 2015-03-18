@@ -29,8 +29,8 @@ using namespace std;
 
 #define PACKAGE "elm_dialog"
 
-Window::Window()
-    : BaseView(0)
+Window::Window( Evas_Object * parent )
+    : BaseView( parent )
     , m_Bg(0)
     , m_pContentLayout(0)
     , m_pConform(0)
@@ -46,7 +46,7 @@ Window::~Window()
 bool Window::create()
 {
     int w, h;
-    m_pMainLayout = elm_win_add(NULL, PACKAGE, ELM_WIN_BASIC);
+    m_pMainLayout = elm_win_add( m_pParent, PACKAGE, ELM_WIN_BASIC);
     elm_win_title_set(m_pMainLayout, PACKAGE);
 
     ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);

@@ -39,7 +39,7 @@ public:
 	/**
 	* Constructor
 	*/
-	Window();
+	Window( Evas_Object * parent = NULL );
 
 	/**
 	* Destructor
