@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-MouseListener::MouseListener( IGeometryObjectTracker &geoObjectTracker, Evas_Object *canvas ) :
+MouseListener::MouseListener( GeometryOperationTracking &geoObjectTracker, Evas_Object *canvas ) :
 		m_GeoObjectTracker( geoObjectTracker ), m_Canvas( canvas )
 {
 	evas_object_event_callback_add( m_Canvas, EVAS_CALLBACK_MOUSE_DOWN, _mouse_down, this);
@@ -30,9 +30,16 @@ void MouseListener::_mouse_down(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Eva
 	int x = mdInfo->output.x;
 	int y = mdInfo->output.y;
 
-	cout << "mouse down x=" << x << "; y=" << y << endl << flush;
+//	cout << "mouse down x=" << x << "; y=" << y << endl << flush;
 
-	lpThis->m_GeoObjectTracker.trackerBegin( x, y );
+	if( mdInfo->button == 1 )
+	{
+		lpThis->m_GeoObjectTracker.trackerBegin( x, y );
+	}
+	else if( mdInfo->button == 3 )
+	{
+		lpThis->m_GeoObjectTracker.deleteObject( x, y );
+	}
 }
 
 void MouseListener::_mouse_move(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_Object *obj, void *event_info)
@@ -60,7 +67,7 @@ void MouseListener::_mouse_up(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_
 	int x = muInfo->output.x;
 	int y = muInfo->output.y;
 
-	cout << "mouse up x=" << x << "; y=" << y << endl << flush;
+//	cout << "mouse up x=" << x << "; y=" << y << endl << flush;
 
 	lpThis->m_GeoObjectTracker.trackerEnd( x, y );
 }

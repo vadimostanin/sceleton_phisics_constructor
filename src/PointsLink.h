@@ -26,8 +26,16 @@ public:
 	void setPointFrom( Point & point );
 	void setPointTo( Point & point );
 
+	Point & getPointFrom();
+	Point & getPointTo();
+
+	int getId();
+
+	IGeometryObject * clone();
+
 private:
 	Point m_Points[2];
+	int m_Id;
 };
 
 #endif /* POINTSLINK_H_ */

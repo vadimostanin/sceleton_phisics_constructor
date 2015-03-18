@@ -1,23 +1,25 @@
 /*
- * GraphicPointLink.h
+ * GraphicLink.h
  *
  *  Created on: Mar 17, 2015
  *      Author: vostanin
  */
 
-#ifndef GRAPHICPOINTLINK_H_
-#define GRAPHICPOINTLINK_H_
+#ifndef GRAPHICLINK_H_
+#define GRAPHICLINK_H_
 
 #include <Evas.h>
 #include "Point.h"
+#include "PointsLink.h"
 #include "IGraphicObject.h"
 
-class GraphicPointLink : public IGraphicObject
+class GraphicLink : public IGraphicObject
 {
 public:
-	GraphicPointLink();
-	GraphicPointLink( const GraphicPointLink & src );
-	virtual ~GraphicPointLink();
+	GraphicLink();
+	GraphicLink( const GraphicLink & src );
+//	GraphicLink( const PointsLink src );
+	virtual ~GraphicLink();
 
 	Evas_Object * getEvas() const;
 
@@ -27,9 +29,15 @@ public:
 
 	void setPointFrom( Point & point );
 	void setPointTo( Point & point );
+
+	Point & getPointFrom();
+	Point & getPointTo();
+
+	GraphicLink & operator = ( PointsLink & src );
+
 private:
 	Point m_Points[2];
 	Evas_Object * m_Evas;
 };
 
-#endif /* GRAPHICPOINTLINK_H_ */
+#endif /* GRAPHICLINK_H_ */

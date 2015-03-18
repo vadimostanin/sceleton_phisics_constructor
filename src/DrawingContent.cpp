@@ -61,6 +61,16 @@ Evas_Object * DrawingContent::getDrawingCanvas()
 void DrawingContent::update()
 {
 	drawObjects();
+
+//	Eina_List * updates = evas_render_updates( getDrawingCanvas() );
+//	Eina_List * l = 0;
+//	Eina_Rectangle *rect;
+//
+//	EINA_LIST_FOREACH(updates, l, rect)
+//	{
+//		printf( "Rectangle (%d, %d, %d, %d) on canvas got a rendering update.\n", rect->x, rect->y,	rect->w, rect->h ); fflush( stdout );
+//	}
+//	evas_render_updates_free(updates);
 }
 
 void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObjects )
@@ -69,45 +79,10 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 
 	m_GraphicObjects = graphicObjects;
 
+	size_t count = m_GraphicObjects.size();
+
 	update();
 }
-
-void DrawingContent::highlightBegin( Point & point )
-{
-//	clear_prev_points();
-
-	GraphicPoint graphicPoint( point.getX(), point.getY() );
-	m_HighlightedPoints.push_back( graphicPoint );
-
-	size_t count = m_HighlightedPoints.size();
-
-//	draw_cur_points( m_HighlightedPoints );
-}
-
-void DrawingContent::highlightEnd()
-{
-	m_HighlightedPoints.clear();
-}
-
-//void DrawingContent::draw_cur_points( vector<GraphicPoint> & highlighted )
-//{
-//	vector<Point> points;
-//	GeometryObjectsManager::getInstance().getPoints( points );
-//
-//	Evas * canvas = evas_object_evas_get( m_DrawingLayout );
-//
-//	vector<Point>::iterator begin = points.begin();
-//	vector<Point>::iterator end = points.end();
-//	vector<Point>::iterator iter = begin;
-//	for( ; iter != end ; iter++ )
-//	{
-//		GraphicPoint searchPoint( (*iter).getX(), (*iter).getY() );
-//
-//		searchPoint.draw( canvas );
-//
-//		m_GraphicPoints.push_back( searchPoint );
-//	}
-//}
 
 void DrawingContent::drawObjects()
 {
@@ -133,19 +108,7 @@ void DrawingContent::clearObjects()
 	}
 	m_GraphicPoints.clear();
 }
-
-//void DrawingContent::clear_prev_points()
-//{
-//	vector<GraphicPoint>::iterator begin = m_GraphicPoints.begin();
-//	vector<GraphicPoint>::iterator end = m_GraphicPoints.end();
-//	vector<GraphicPoint>::iterator iter = begin;
-//	for( ; iter != end ; iter++ )
-//	{
-//		evas_object_del( (*iter).getEvas() );
-//	}
-//	m_GraphicPoints.clear();
-//}
-
+/*
 bool DrawingContent::getPoint( int x, int y, GraphicPoint & graphicPoint )
 {
 	vector<GraphicPoint>::iterator begin = m_GraphicPoints.begin();
@@ -166,6 +129,11 @@ bool DrawingContent::getPoint( int x, int y, GraphicPoint & graphicPoint )
 	}
 	return false;
 }
+*/
+
+
+
+
 
 
 

@@ -27,12 +27,14 @@ public:
 	void trackerContinue( int x, int y );
 	void trackerEnd( int x, int y );
 
+	void deleteObject( int x, int y );
+
 private:
 
 
 	void clearTrackingStack();
 
-	bool getPoint( int x, int y, Point & point );
+	bool getPoint( int x, int y, Point ** point );
 
 	void constructGraphicObjects( vector<IGraphicObject *> & graphicObjects );
 

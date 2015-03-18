@@ -18,6 +18,8 @@ using namespace std;
 #include "WindowListener.h"
 #include "MouseListener.h"
 #include "GeometryOperationTracking.h"
+#include <ctime>
+#include <stdlib.h>
 
 EAPI_MAIN int elm_main(int argc, char **argv)
 {
@@ -40,6 +42,8 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	GeometryOperationTracking geoObjectTracking( drawingContent );
 
 	MouseListener mouseListener( geoObjectTracking, drawingContent.getDrawingCanvas() );
+
+	srand( time ( 0 ) );
 
 	elm_run();
 	return 0;

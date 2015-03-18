@@ -16,8 +16,6 @@ public:
 	virtual ~IViewUpdatable(){}
 
 	virtual void update() = 0;
-	virtual void highlightBegin( Point & point ) = 0;
-	virtual void highlightEnd() = 0;
 };
 
 

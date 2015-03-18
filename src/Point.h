@@ -16,7 +16,7 @@ public:
 	Point();
 	Point( int x, int y );
 	Point( const Point & src );
-	bool operator == ( const Point & src );
+	bool operator == ( const Point & src ) const;
 	virtual ~Point();
 
 	int getX() const;
@@ -27,10 +27,15 @@ public:
 
 	GeometryObjectsTypes getType();
 
+	int getId();
+
+	IGeometryObject * clone();
+
 //	IGeometryObject & operator = ( IGeometryObject & src );
 private:
 	int m_x;
 	int m_y;
+	int m_Id;
 };
 
 #endif /* POINT_H_ */

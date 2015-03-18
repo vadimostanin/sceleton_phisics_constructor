@@ -25,20 +25,16 @@ public:
 	Evas_Object * getDrawingCanvas();
 
 	void update();
-	void highlightBegin( Point & point );
-	void highlightEnd();
 
 	void setGraphicObjects( vector<IGraphicObject *> & graphicObjects );
 
-	bool getPoint( int x, int y, GraphicPoint & graphicPoint );
+//	bool getPoint( int x, int y, GraphicPoint & graphicPoint );
 
 private:
 
 	void createDrawingLayout();
 	void createDrawingCanvas();
 
-//	void clear_prev_points();
-//	void draw_cur_points( vector<GraphicPoint> & highlighted );
 	void drawObjects();
 	void clearObjects();
 

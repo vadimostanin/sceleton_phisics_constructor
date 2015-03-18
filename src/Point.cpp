@@ -6,24 +6,25 @@
  */
 
 #include "Point.h"
+#include <stdlib.h>
 
-Point::Point() : m_x( 0 ), m_y( 0 )
+Point::Point() : m_x( 0 ), m_y( 0 ), m_Id( rand() )
 {
 
 }
 
-Point::Point( int x, int y ) : m_x( x ), m_y( y )
+Point::Point( int x, int y ) : m_x( x ), m_y( y ), m_Id( rand() )
 {
 
 }
 
-Point::Point( const Point & src )
+Point::Point( const Point & src ) : m_Id( rand() )
 {
 	m_x = src.m_x;
 	m_y = src.m_y;
 }
 
-bool Point::operator==( const Point & src )
+bool Point::operator==( const Point & src ) const
 {
 	if( getX() != src.getX() )
 	{
@@ -34,6 +35,22 @@ bool Point::operator==( const Point & src )
 		return false;
 	}
 	return true;
+}
+
+int Point::getId()
+{
+	return m_Id;
+}
+
+IGeometryObject * Point::clone()
+{
+	Point * newPoint = new Point;
+	newPoint->setX( this->getX() );
+	newPoint->setY( this->getY() );
+
+	newPoint->m_Id = m_Id;
+
+	return newPoint;
 }
 
 //IGeometryObject & Point::operator = ( IGeometryObject & src )
