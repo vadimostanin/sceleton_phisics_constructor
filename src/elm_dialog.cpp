@@ -36,7 +36,7 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	window.setContentLayout( mainContent.getLayout() );
 
-//	ToolbarContent toolbar( mainContent.getLayout() );
+	ToolbarContent toolbar( mainContent.getLayout() );
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
 //	GeometryOperationTracking geoObjectTracking( drawingContent );

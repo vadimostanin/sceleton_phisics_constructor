@@ -124,7 +124,8 @@ void DrawingContent::createDrawingCanvas()
 	Evas_Object * bx = elm_box_add( m_DrawingLayout );
 	evas_object_size_hint_align_set( bx, EVAS_HINT_FILL, EVAS_HINT_FILL );
 	evas_object_size_hint_weight_set( bx, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
-	elm_win_resize_object_add( m_MainWindowObject, bx);
+//	elm_win_resize_object_add( m_MainWindowObject, bx);
+	elm_object_part_content_set( m_DrawingLayout, "drawing_canvas", bx );
 
 	Evas_Object * glview = elm_glview_add( m_DrawingLayout );
 
@@ -133,8 +134,8 @@ void DrawingContent::createDrawingCanvas()
 
 	elm_glview_mode_set( glview, (Elm_GLView_Mode)( ELM_GLVIEW_ALPHA | ELM_GLVIEW_DEPTH ) );
 
-//	elm_glview_resize_policy_set( glview, ELM_GLVIEW_RESIZE_POLICY_RECREATE );
-//	elm_glview_render_policy_set( glview, ELM_GLVIEW_RENDER_POLICY_ON_DEMAND );
+	elm_glview_resize_policy_set( glview, ELM_GLVIEW_RESIZE_POLICY_RECREATE );
+	elm_glview_render_policy_set( glview, ELM_GLVIEW_RENDER_POLICY_ON_DEMAND );
 
 	elm_glview_init_func_set( glview, init_gles );
 	elm_glview_resize_func_set( glview, _resize_gl );
