@@ -31,15 +31,13 @@ public:
 
 private:
 
-
 	void clearTrackingStack();
 
 	bool getPoint( int x, int y, Point ** point );
 
 	void constructGraphicObjects( vector<IGraphicObject *> & graphicObjects );
 
-	vector<IGeometryObject *> m_GeometryObjectsTrackingStack;
-	ObjectState m_CurObjectState;
+	IGeometryObject * m_GeometryObjectTracking;
 	DrawingContent & m_ViewUpdater;
 };
 
