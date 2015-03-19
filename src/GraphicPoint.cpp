@@ -81,6 +81,8 @@ void GraphicPoint::initCircleVertex()
 	__evas_gl_glapi->glGenBuffers( 1, &m_vertexesBufferObject );
 	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
 	__evas_gl_glapi->glBufferData( GL_ARRAY_BUFFER, vertexNumber * coordinates_in_point * sizeof(GLfloat), &m_vertexBuffer[0], GL_DYNAMIC_DRAW );
+
+	__evas_gl_glapi->glVertexAttribPointer( 0, coordinates_in_point, GL_FLOAT, GL_FALSE, 0, 0 );
 }
 
 // Initialize the shader and program object
@@ -88,10 +90,11 @@ int GraphicPoint::initShaders()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
    GLbyte vShaderStr[] =
-      "attribute vec4 vPosition;\n"
+      "attribute vec3 vPosition;\n"
       "void main()\n"
       "{\n"
-      "   gl_Position = vPosition;\n"
+	  //"   vPosition = vPosition * vec3( 1.0, 0.0, 0.0 );\n"
+      "   gl_Position = vec4( vPosition, 1.0 );\n"
       "}\n";
 
    GLbyte fShaderStr[] =
@@ -119,11 +122,14 @@ int GraphicPoint::initShaders()
    __evas_gl_glapi->glAttachShader( m_Program,  m_vertexShader);
    __evas_gl_glapi->glAttachShader( m_Program,  m_fragmentShader);
 
-   __evas_gl_glapi->glBindAttribLocation( m_Program, 0, "vPosition" );
+   __evas_gl_glapi->glEnableVertexAttribArray( 0 );
+   __evas_gl_glapi->glEnableVertexAttribArray( 1 );
+//   __evas_gl_glapi->glBindAttribLocation( m_Program, 1, "vPosition" );
+
    __evas_gl_glapi->glLinkProgram( m_Program );
    __evas_gl_glapi->glGetProgramiv( m_Program, GL_LINK_STATUS, &linked );
 
-	if (!linked)
+	if( 0 == linked )
 	{
 		GLint info_len = 0;
 		__evas_gl_glapi->glGetProgramiv( m_Program, GL_INFO_LOG_LENGTH, &info_len);
@@ -138,7 +144,16 @@ int GraphicPoint::initShaders()
 		__evas_gl_glapi->glDeleteProgram( m_Program );
 		return 0;
 	}
-   return 1;
+
+
+
+
+
+	GLint vPositionLocation = __evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
+
+//	__evas_gl_glapi->glVertexAttrib3f( 1, 1.0, 1.0, 1.0 );
+
+	return 1;
 }
 
 //--------------------------------//
@@ -209,92 +224,15 @@ void GraphicPoint::setY( int y )
 	m_Point.setY( y );
 }
 
-void GraphicPoint::draw_triangle_2d()
-{
-	GLfloat vVertices[] = {
-	        0.0f,  0.5f, 0.0f,
-	        -0.5f, -0.5f, 0.0f,
-	        0.5f, -0.5f, 0.0f };
-
-	Evas_GL_API * __evas_gl_glapi = m_glApi;
-
-	__evas_gl_glapi->glUseProgram( m_Program );
-
-	__evas_gl_glapi->glGenBuffers( 1, &m_vertexesBufferObject );
-	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
-	__evas_gl_glapi->glBufferData( GL_ARRAY_BUFFER, 3 * 3 * sizeof(float), vVertices, GL_STATIC_DRAW );
-
-
-	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
-	__evas_gl_glapi->glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, 0 );
-	__evas_gl_glapi->glEnableVertexAttribArray( 0 );
-
-	__evas_gl_glapi->glDrawArrays( GL_TRIANGLES, 0, 3 );
-
-
-	__evas_gl_glapi->glDeleteBuffers( 1, &m_vertexesBufferObject );
-}
-
-void GraphicPoint::draw_quad_2d()
-{
-//	GLfloat vVertices[] = {//By Triangles
-//			// Left bottom triangle
-//			-0.5f, 0.5f, 0.0f,
-//			-0.5f, -0.5f, 0.0f,
-//			0.5f, -0.5f, 0.0f,
-//			// Right top triangle
-//			0.5f, -0.5f, 0.0f,
-//			0.5f, 0.5f, 0.0f,
-//			-0.5f, 0.5f, 0.0f
-//	};
-
-	GLfloat vVertices[] = {//By Lines
-			     0.0f,  0.0f, 0.0f,//Zero
-				-0.5f,  0.5f, 0.0f,//First line begin
-				 0.5f,  0.5f, 0.0f,//First line end
-				 0.5f,  0.5f, 0.0f,//Second line begin
-				 0.5f, -0.5f, 0.0f,//Second line end
-				 0.5f, -0.5f, 0.0f,//Third line begin
-				-0.5f, -0.5f, 0.0f,//Third line end
-				-0.5f, -0.5f, 0.0f,//Fourth line begin
-				-0.5f,  0.5f, 0.0f//Fourth line end equal to First line begin
-		};
-
-	const unsigned int coordinates_in_point = 3;
-
-	size_t vertices_count = sizeof( vVertices )/ sizeof( vVertices[0] ) / 3;
-
-	Evas_GL_API * __evas_gl_glapi = m_glApi;
-
-	__evas_gl_glapi->glGenBuffers( 1, &m_vertexesBufferObject );
-	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
-	__evas_gl_glapi->glBufferData( GL_ARRAY_BUFFER, vertices_count * coordinates_in_point * sizeof(GLfloat), vVertices, GL_STATIC_DRAW );
-
-
-	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
-	__evas_gl_glapi->glVertexAttribPointer( 0, coordinates_in_point, GL_FLOAT, GL_FALSE, 0, 0 );
-	__evas_gl_glapi->glEnableVertexAttribArray( 0 );
-
-	__evas_gl_glapi->glDrawArrays( GL_POINTS, 0, 1 );
-	__evas_gl_glapi->glDrawArrays( GL_LINES, 1, vertices_count - 1 );
-
-
-//	__evas_gl_glapi->glDeleteBuffers( 1, &vertexesBufferObject );
-}
-
 void GraphicPoint::draw_circle_2d()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
 
 
-	const int coordinates_in_point = 3;
+//	const int coordinates_in_point = 3;
 	const int vertexNumber = 300;
 
 	__evas_gl_glapi->glUseProgram( m_Program );
-
-	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
-	__evas_gl_glapi->glVertexAttribPointer( 0, coordinates_in_point, GL_FLOAT, GL_FALSE, 0, 0 );
-	__evas_gl_glapi->glEnableVertexAttribArray( 0 );
 
 	__evas_gl_glapi->glDrawArrays( GL_TRIANGLE_FAN, 0, vertexNumber + 2 );
 }
