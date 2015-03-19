@@ -34,7 +34,7 @@ void GeometryOperationTracking::constructGraphicObjects( vector<IGraphicObject *
 
 	for(  ; iter != end ; iter ++ )
 	{
-		IGraphicObject * graphicObject = GeometryObjectFactory::getInstance().createGraphicObject( (*iter)->getType() );
+		IGraphicObject * graphicObject = GeometryObjectFactory::getInstance().createGraphicObject( (*iter)->getType(), m_ViewUpdater.getDrawingCanvas() );
 
 		switch( (*iter)->getType() )
 		{
@@ -103,7 +103,7 @@ void GeometryOperationTracking::trackerContinue( int x, int y )
 
 				constructGraphicObjects( graphicObjects );
 
-				GraphicLink * graphLink = (GraphicLink *)GeometryObjectFactory::getInstance().createGraphicObject( GEOMETRYOBJECT_LINK );
+				GraphicLink * graphLink = (GraphicLink *)GeometryObjectFactory::getInstance().createGraphicObject( GEOMETRYOBJECT_LINK, m_ViewUpdater.getDrawingCanvas() );
 				*graphLink = geoLink;
 
 				graphicObjects.push_back( graphLink );

@@ -11,13 +11,16 @@
 #include <Evas.h>
 #include "Point.h"
 #include "IGraphicObject.h"
+#include <Evas_GL.h>
+#include <vector>
+using namespace std;
 
 class GraphicPoint : public IGraphicObject
 {
 public:
-	GraphicPoint();
-	GraphicPoint( int x, int y );
-	GraphicPoint( const Point & point );
+	GraphicPoint( Evas_Object * glview );
+	GraphicPoint( Evas_Object * glview, int x, int y );
+	GraphicPoint( Evas_Object * glview, const Point & point );
 	GraphicPoint( const GraphicPoint & src );
 	virtual ~GraphicPoint();
 	bool operator ==( const GraphicPoint & src );
@@ -26,14 +29,25 @@ public:
 	void setX( int x );
 	void setY( int y );
 
-	Evas_Object * getEvas() const;
-
-	void setEvas( Evas_Object * evas );
-
 	virtual void draw( Evas * canvas );
 private:
 	Point m_Point;
-	Evas_Object * m_Evas;
+
+	vector<GLfloat> m_vertexBuffer;
+	GLuint       	m_vertexesBufferObject;
+	Evas_GL_API   * m_glApi;
+
+	GLuint       	m_Program;
+	GLuint       	m_vertexShader;
+	GLuint       	m_fragmentShader;
+
+	void initCircleVertex();
+	int initShaders();
+	GLuint loadShader( GLenum type, const char *shader_src );
+
+	void draw_circle_2d();
+	void draw_quad_2d();
+	void draw_triangle_2d();
 };
 
 #endif /* GRAPHICPOINT_H_ */

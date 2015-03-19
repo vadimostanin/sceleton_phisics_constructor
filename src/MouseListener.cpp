@@ -53,9 +53,7 @@ void MouseListener::_mouse_move(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Eva
 
 	lpThis->m_GeoObjectTracker.trackerContinue( x, y );
 
-//	static int counter = 0;
 //	cout << "mouse move x=" << mmInfo->cur.output.x << "; y=" << mmInfo->cur.output.y << endl << flush;
-//	counter ++;
 }
 
 void MouseListener::_mouse_up(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_Object *obj, void *event_info)

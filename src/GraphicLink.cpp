@@ -36,21 +36,21 @@ GraphicLink & GraphicLink::operator = ( PointsLink & src )
 
 GraphicLink::~GraphicLink()
 {
-	evas_object_del( getEvas() );
+//	evas_object_del( getEvas() );
 }
 
 void GraphicLink::draw( Evas * canvas )
 {
-	setEvas( evas_object_line_add( canvas ) );
-
-	evas_object_line_xy_set( getEvas(), getPointFrom().getX(), getPointFrom().getY(), getPointTo().getX(), getPointTo().getY() );
-
-	evas_object_color_set( getEvas(), 0, 0, 0, 255 );
+//	setEvas( evas_object_line_add( canvas ) );
+//
+//	evas_object_line_xy_set( getEvas(), getPointFrom().getX(), getPointFrom().getY(), getPointTo().getX(), getPointTo().getY() );
+//
+//	evas_object_color_set( getEvas(), 0, 0, 0, 255 );
 
 	cout << "draw link from:" << getPointFrom().getX() << "x" << getPointFrom().getY() << "; to:" <<
 						getPointTo().getX() << "x" << getPointTo().getY() << endl << flush;
 
-	evas_object_show( getEvas() );
+//	evas_object_show( getEvas() );
 }
 
 Evas_Object * GraphicLink::getEvas() const

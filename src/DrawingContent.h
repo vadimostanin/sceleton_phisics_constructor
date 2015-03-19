@@ -38,12 +38,18 @@ private:
 	void drawObjects();
 	void clearObjects();
 
+	static void on_init_gles( Evas_Object * glview );
+	static void on_resize_gl( Evas_Object * glview );
+	static void on_draw_gl( Evas_Object * glview );
+
 	Evas_Object * m_MainLayout;
 	Evas_Object * m_DrawingLayout;
 
 	Evas_Object * m_MainWindowObject;
 
 	Evas_Object * m_DrawingCanvas;
+
+	Evas_GL_API * m_glApi;
 
 	vector<IGraphicObject *> m_GraphicObjects;
 
