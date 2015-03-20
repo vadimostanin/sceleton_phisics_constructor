@@ -234,8 +234,8 @@ void GraphicPoint::draw_circle_2d()
 //	cout << "x=" << x << "; trans_x=" << translate_x << endl << flush;
 //	cout << "y=" << y << "; trans_y=" << translate_y << endl << flush;
 
-	translate_xyz(model, translate_x, translate_y, -2.5f);
-	view_set_perspective(view, 60.0f, aspect, 1.0f, 20.0f);
+	translate_xyz( model, translate_x, translate_y, 0.0f );
+//	view_set_perspective(view, 60.0f, aspect, 1.0f, 20.0f);
 
 	multiply_matrix( m_mvpMatrix, view, model);
 
