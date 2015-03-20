@@ -10,15 +10,15 @@
 
 #include <Evas.h>
 #include "Point.h"
-#include "PointsLink.h"
-#include "IGraphicObject.h"
+#include "GeometryLink.h"
+#include "GraphicObjectBase.h"
 
-class GraphicLink : public IGraphicObject
+class GraphicLink : public GraphicObjectBase
 {
 public:
-	GraphicLink();
+	GraphicLink( Evas_Object * glview );
 	GraphicLink( const GraphicLink & src );
-//	GraphicLink( const PointsLink src );
+//	GraphicLink( const GeometryLink src );
 	virtual ~GraphicLink();
 
 	Evas_Object * getEvas() const;
@@ -33,11 +33,15 @@ public:
 	Point & getPointFrom();
 	Point & getPointTo();
 
-	GraphicLink & operator = ( PointsLink & src );
+	GraphicLink & operator = ( GeometryLink & src );
 
 private:
+
+	void initLineVertexes();
+	int initShaders();
+	void draw_line_2d();
+
 	Point m_Points[2];
-	Evas_Object * m_Evas;
 };
 
 #endif /* GRAPHICLINK_H_ */

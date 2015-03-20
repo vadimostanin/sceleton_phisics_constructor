@@ -1,24 +1,24 @@
 /*
- * PointsLink.h
+ * GeometryLink.h
  *
  *  Created on: Mar 16, 2015
  *      Author: vostanin
  */
 
-#ifndef POINTSLINK_H_
-#define POINTSLINK_H_
+#ifndef GeometryLink_H_
+#define GeometryLink_H_
 
 #include "Point.h"
 #include "IGeometryObject.h"
 
 //typedef Point LinkPoints[2];
 
-class PointsLink : public IGeometryObject
+class GeometryLink : public IGeometryObject
 {
 public:
-	PointsLink();
-	PointsLink( Point & point_1, Point & point_2 );
-	virtual ~PointsLink();
+	GeometryLink();
+	GeometryLink( Point & point_1, Point & point_2 );
+	virtual ~GeometryLink();
 
 	GeometryObjectsTypes getType();
 //	IGeometryObject & operator = ( IGeometryObject & src );
@@ -38,4 +38,4 @@ private:
 	int m_Id;
 };
 
-#endif /* POINTSLINK_H_ */
+#endif /* GeometryLink_H_ */

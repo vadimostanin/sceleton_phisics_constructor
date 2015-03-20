@@ -13,7 +13,7 @@
 #include <iostream>
 using namespace std;
 
-GeometryOperationTracking::GeometryOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater )
+GeometryOperationTracking::GeometryOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater ), m_GeometryObjectTracking( 0 )
 {
 }
 
@@ -46,16 +46,19 @@ void GeometryOperationTracking::constructGraphicObjects( vector<IGraphicObject *
 			}
 				break;
 			case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
+			{
 				((GraphicPointHighlighted *)graphicObject)->setX( ((Point*)(*iter))->getX() );
 				((GraphicPointHighlighted *)graphicObject)->setY( ((Point*)(*iter))->getY() );
-			break;
+			}
+				break;
 			case GEOMETRYOBJECT_LINK:
-              Point & pointFrom = ( GraphicLink * )( * iter )->getPointFrom();
-              Point & pointTo = ( GraphicLink * )( * iter )->getPointTo();
+			{
+				Point & pointFrom = (( GeometryLink * )( * iter ))->getPointFrom();
+				Point & pointTo = (( GeometryLink * )( * iter ))->getPointTo();
 
-				 ((GraphicLink *)graphicObject)->setPointFrom( pointFrom );
-              ((GraphicLink *)graphicObject)->setPointTo( pointTo );
-
+				((GraphicLink *)graphicObject)->setPointFrom( pointFrom );
+				((GraphicLink *)graphicObject)->setPointTo( pointTo );
+			}
 				break;
 		}
 		graphicObjects.push_back( graphicObject );
@@ -67,23 +70,25 @@ void GeometryOperationTracking::trackerBegin( int x, int y )
 	Point * point;
 	if( false == getPoint( x, y, &point ) )
 	{
-       Point * stack_point = GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
-		m_GeometryObjectsTrackingStack = stack_point;
+		Point * stack_point = (Point *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+		m_GeometryObjectTracking = stack_point;
        
-       GeometryObjectsManager::getInstance().addObject( stack_point );
+		GeometryObjectsManager::getInstance().addObject( stack_point );
+		stack_point->setX( x );
+		stack_point->setY( y );
 	    cout << "add point:" << stack_point->getX() << "x" << stack_point->getY() << endl << flush;
 	}
 	else
 	{
-       PointsLink * stack_link = (PointsLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
-		m_GeometryObjectsTrackingStack = stack_link;
+		GeometryLink * stack_link = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
+		m_GeometryObjectTracking = stack_link;
 		stack_link->setPointFrom( *point );
-       stack_link->setPointTo( *point );
+		stack_link->setPointTo( *point );
 
-       cout << "add link from:" << stack_link->getPointFrom().getX() << "x" << stack_link->getPointFrom().getY() << "; to:" <<
-					stack_link->getPointTo().getX() << "x" << stack_link->getPointTo().getY() << endl << flush;
+		cout << "add link from:" << stack_link->getPointFrom().getX() << "x" << stack_link->getPointFrom().getY() << "; to:" <<
+				stack_link->getPointTo().getX() << "x" << stack_link->getPointTo().getY() << endl << flush;
 
-       GeometryObjectsManager::getInstance().addObject( stack_link );
+		GeometryObjectsManager::getInstance().addObject( stack_link );
 	}
 
 	vector<IGraphicObject *> graphicObjects;
@@ -95,33 +100,35 @@ void GeometryOperationTracking::trackerBegin( int x, int y )
 
 void GeometryOperationTracking::trackerContinue( int x, int y )
 {
-	if( m_GeometryObjectsTrackingStack == 0 )
+	if( m_GeometryObjectTracking == 0 )
 	{
 		return;
 	}
-	if( m_GeometryObjectsTrackingStack[0]->getType() == GEOMETRYOBJECT_LINK )
+	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
 	{
-			PointsLink & geoLink = *((PointsLink*)m_GeometryObjectsTrackingStack[0]);
-			const Point & pointFrom = geoLink.getPointFrom();
-			Point temp_point( x, y );
-			bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestPoint( pointFrom, x, y, temp_point );
-			if( foundNearestPoint == true )
-			{
-				geoLink.setPointTo( temp_point );
-
-				vector<IGraphicObject *> graphicObjects;
-
-				constructGraphicObjects( graphicObjects );
-
-				m_ViewUpdater.setGraphicObjects( graphicObjects );
-			}
+		GeometryLink & geoLink = *((GeometryLink*)m_GeometryObjectTracking);
+		const Point & pointFrom = geoLink.getPointFrom();
+		Point temp_point( x, y );
+		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestPoint( pointFrom, x, y, temp_point );
+		if( foundNearestPoint == true )
+		{
+			geoLink.setPointTo( temp_point );
+		}
+//		cout << "add link from:" << geoLink.getPointFrom().getX() << "x" << geoLink.getPointFrom().getY() << "; to:" <<
+//				geoLink.getPointTo().getX() << "x" << geoLink.getPointTo().getY() << endl << flush;
 	}
-	else if( m_GeometryObjectsTrackingStack[0]->getType() == GEOMETRYOBJECT_POINT )
+	else if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_POINT )
 	{
-          Point * stack_point = (Point*)m_GeometryObjectsTrackingStack[0];
-			stack_point->setX( x );
-			stack_point->setY( y );
+		Point * stack_point = (Point*)m_GeometryObjectTracking;
+		stack_point->setX( x );
+		stack_point->setY( y );
 	}
+
+	vector<IGraphicObject *> graphicObjects;
+
+	constructGraphicObjects( graphicObjects );
+
+	m_ViewUpdater.setGraphicObjects( graphicObjects );
 
 	m_ViewUpdater.update();
 }
@@ -162,13 +169,5 @@ bool GeometryOperationTracking::getPoint( int x, int y, Point ** point )
 
 void GeometryOperationTracking::clearTrackingStack()
 {
-//	vector<IGeometryObject *>::iterator begin = m_GeometryObjectsTrackingStack.begin();
-//	vector<IGeometryObject *>::iterator end = m_GeometryObjectsTrackingStack.end();
-//	vector<IGeometryObject *>::iterator iter = begin;
-//
-//	for(  ; iter != end ; iter ++ )
-//	{
-//		delete (*iter);
-//	}
-	m_GeometryObjectsTrackingStack.clear();
+	m_GeometryObjectTracking = 0;
 }

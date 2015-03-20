@@ -24,6 +24,16 @@ Point::Point( const Point & src ) : m_Id( rand() )
 	m_y = src.m_y;
 }
 
+Point & Point::operator = ( const Point & src )
+{
+	m_x = src.m_x;
+	m_y = src.m_y;
+
+	m_Id = src.m_Id;
+
+	return *this;
+}
+
 bool Point::operator==( const Point & src ) const
 {
 	if( getX() != src.getX() )

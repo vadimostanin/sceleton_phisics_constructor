@@ -10,12 +10,12 @@
 
 #include <Evas.h>
 #include "Point.h"
-#include "IGraphicObject.h"
+#include "GraphicObjectBase.h"
 #include <Evas_GL.h>
 #include <vector>
 using namespace std;
 
-class GraphicPoint : public IGraphicObject
+class GraphicPoint : public GraphicObjectBase
 {
 public:
 	GraphicPoint( Evas_Object * glview );
@@ -33,18 +33,9 @@ public:
 private:
 	Point m_Point;
 
-	vector<GLfloat> m_vertexBuffer;
-	GLuint       	m_vertexesBufferObject;
-	GLuint       	m_vboPosition;
-	Evas_GL_API   * m_glApi;
-
-	GLuint       	m_Program;
-	GLuint       	m_vertexShader;
-	GLuint       	m_fragmentShader;
-
 	void initCircleVertex();
+	void initQuadVertex();
 	int initShaders();
-	GLuint loadShader( GLenum type, const char *shader_src );
 
 	void draw_circle_2d();
 };

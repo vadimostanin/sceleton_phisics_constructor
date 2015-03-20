@@ -17,6 +17,7 @@ public:
 	Point( int x, int y );
 	Point( const Point & src );
 	bool operator == ( const Point & src ) const;
+	Point & operator = ( const Point & src );
 	virtual ~Point();
 
 	int getX() const;

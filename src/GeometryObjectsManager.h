@@ -9,7 +9,7 @@
 #define GEOMETRYOBJECTSMANAGER_H_
 
 #include "Point.h"
-#include "PointsLink.h"
+#include "GeometryLink.h"
 
 #include <vector>
 using namespace std;

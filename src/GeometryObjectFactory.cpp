@@ -9,7 +9,7 @@
 
 #include "GraphicLink.h"
 #include "Point.h"
-#include "PointsLink.h"
+#include "GeometryLink.h"
 #include "GraphicPoint.h"
 #include "GraphicPointHighlighted.h"
 
@@ -32,7 +32,7 @@ IGeometryObject * GeometryObjectFactory::createGeometryObject( GeometryObjectsTy
 				object = new Point();
 			break;
 		case GEOMETRYOBJECT_LINK:
-				object = new PointsLink();
+				object = new GeometryLink();
 			break;
 	}
 	return object;
@@ -50,7 +50,7 @@ IGraphicObject * GeometryObjectFactory::createGraphicObject( GeometryObjectsType
 				object = new GraphicPointHighlighted( canvas );
 			break;
 		case GEOMETRYOBJECT_LINK:
-				object = new GraphicLink();
+				object = new GraphicLink( canvas );
 			break;
 	}
 	return object;
