@@ -170,39 +170,49 @@ void GraphicObjectBase::view_set_perspective(float* result, const float fovy, co
 	float right = top * aspect;
 
 	view_set_ortho( result, -right, right, -top, top, near, far );
-
-//	const float range = near - far;
-//	const float fovradian = fovy / 2 / 360.0f * M_PI;
-//	const float tanHalfFOV = tanf( fovradian );
-//
-//	result[0] = 1.0;
-//	result[1] = 0.0;
-//	result[2] = 0.0;
-//	result[3] = 0.0;
-//
-//	result[4] = 0.0;
-//	result[5] = 1.0;
-//	result[6] = 0.0;
-//	result[7] = 0.0;
-//
-//	result[8] = 0.0;
-//	result[9] = 0.0;
-//	result[10] = ( ( -1 ) * near - far ) / range;
-//	result[11] = 2.0 * far * near / range;
-//
-//	result[12] = 0.0;
-//	result[13] = 0.0;
-//	result[14] = 1.0;
-//	result[15] = 0.0;
-
-//	const float range = near - far;
-//	const float fovradian = fovy / 2 / 360.0f * M_PI;
-//	const float tanHalfFOV = tanf( fovradian );
-//	const float size = near * tanf( fovradian );
-//
-//	makeFrustum( result, -size, size, -size / aspect, size / aspect, near, far );
-
 }
+
+//matrix will receive the calculated perspective matrix. //You would have to upload to your shader // or use glLoadMatrixf if you aren't using shaders. 
+void glhPerspectivef2(float *matrix, float fovyInDegrees, float aspectRatio, float znear, float zfar)
+{
+    float ymax, xmax; 
+    float temp, temp2, temp3, temp4; 
+    ymax = znear * tanf(fovyInDegrees * M_PI / 360.0); 
+    //ymin = -ymax; 
+    //xmin = -ymax * aspectRatio; 
+    xmax = ymax * aspectRatio; 
+    glhFrustumf2(matrix, -xmax, xmax, -ymax, ymax, znear, zfar);
+} 
+
+void glhFrustumf2(float *matrix, float left, float right, float bottom, float top, float znear, float zfar)
+{ 
+    float twice_near, width, height_negative , temp4; 
+    twice_near = 2.0 * znear; 
+    width = right - left; 
+    height_negative = top - bottom; 
+    temp4 = zfar - znear; 
+
+    matrix[0] = twice_near / width; 
+    matrix[1] = 0.0; 
+    matrix[2] = 0.0; 
+    matrix[3] = 0.0; 
+
+    matrix[4] = 0.0; 
+    matrix[5] = twice_near / height_negative ; 
+    matrix[6] = 0.0; 
+    matrix[7] = 0.0; 
+
+    matrix[8] = (right + left) / width; 
+    matrix[9] = (top + bottom) / height_negative ; 
+    matrix[10] = (-zfar - znear) / temp4; 
+    matrix[11] = -1.0; 
+
+    matrix[12] = 0.0; 
+    matrix[13] = 0.0; 
+    matrix[14] = (- twice_near * zfar) / temp4; 
+    matrix[15] = 0.0;
+}
+
 
 //--------------------------------//
 // a helper function to load shaders from a shader source
