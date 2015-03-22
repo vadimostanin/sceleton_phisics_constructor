@@ -205,10 +205,9 @@ void GraphicPoint::draw_circle_2d()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
 
-	float model[16], view[16];
+	float model[16], mvpMatrix[16];
 
 	init_matrix(model);
-	init_matrix(view);
 
 	int width = m_DrawCanvasWidth;
 	int height = m_DrawCanvasHeight;
@@ -237,7 +236,7 @@ void GraphicPoint::draw_circle_2d()
 	translate_xyz( model, translate_x, translate_y, 0.0f );
 //	view_set_perspective(view, 60.0f, aspect, 1.0f, 20.0f);
 
-	multiply_matrix( m_mvpMatrix, view, model);
+	multiply_matrix( mvpMatrix, m_projectionMatrix, model);
 
 	const int coordinates_in_point = 3;
 
@@ -252,7 +251,7 @@ void GraphicPoint::draw_circle_2d()
 
 	const int matrixCount = 1;
 
-	__evas_gl_glapi->glUniformMatrix4fv( m_mvpMatrixIdx, matrixCount, GL_FALSE, m_mvpMatrix );
+	__evas_gl_glapi->glUniformMatrix4fv( m_mvpMatrixIdx, matrixCount, GL_FALSE, mvpMatrix );
 
 	__evas_gl_glapi->glDrawArrays( GL_POINTS, 0, vertixesCount * coordinates_in_point );
 

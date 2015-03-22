@@ -15,7 +15,7 @@ using namespace std;
 
 class GraphicObjectBase : public IGraphicObject
 {
-public:
+protected:
 	GraphicObjectBase();
 	GraphicObjectBase( Evas_Object * glview );
 	GraphicObjectBase( const GraphicObjectBase & src );
@@ -27,8 +27,11 @@ public:
 	void view_set_ortho(float* result, const float left, const float right, const float bottom, const float top, const float near, const float far);
 	void view_set_perspective(float* result, const float fovy, const float aspect, const float near, const float far);
 
-protected:
 	GLuint loadShader( GLenum type, const char *shader_src );
+
+	void initProjectionMatrix();
+
+protected:
 
 	vector<GLfloat> m_vertexBuffer;
 	GLuint       	m_vertexesBufferObject;
@@ -41,10 +44,7 @@ protected:
 
 	Evas_GL_API   * m_glApi;
 
-
-
-
-	float 			* m_mvpMatrix;
+	float m_projectionMatrix[16];
 
 	int 			m_DrawCanvasHeight;
 	int 			m_DrawCanvasWidth;

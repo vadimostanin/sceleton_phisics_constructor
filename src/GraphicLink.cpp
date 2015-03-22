@@ -6,7 +6,7 @@
  */
 
 #include <iostream>
-
+#include <Evas_GL.h>
 #include "GraphicLink.h"
 using namespace std;
 
@@ -31,8 +31,10 @@ GraphicLink::GraphicLink( const GraphicLink & src )
 
 GraphicLink & GraphicLink::operator = ( GeometryLink & src )
 {
-	setPointFrom( src.getPointFrom() );
-	setPointTo( src.getPointTo() );
+	GeometryLink & src_unconst = const_cast<GeometryLink&>( src );
+
+	setPointFrom( src_unconst.getPointFrom() );
+	setPointTo( src_unconst.getPointTo() );
 
 	return *this;
 }

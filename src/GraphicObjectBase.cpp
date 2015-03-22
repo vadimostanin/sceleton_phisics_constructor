@@ -10,24 +10,22 @@
 
 GraphicObjectBase::GraphicObjectBase() : m_vertexesBufferObject( 0 ), m_Program( 0 ), m_vertexShader( 0 ), m_fragmentShader( 0 )
 {
-	m_mvpMatrix = new float[16];
 	m_glApi = 0;
-
-	init_matrix( m_mvpMatrix );
 
 	m_DrawCanvasWidth = 0;
 	m_DrawCanvasHeight = 0;
+
+	initProjectionMatrix();
 }
 
 GraphicObjectBase::GraphicObjectBase( Evas_Object * glview ) : m_vertexesBufferObject( 0 ), m_Program( 0 ), m_vertexShader( 0 ), m_fragmentShader( 0 ),
 															   m_mvpMatrixIdx( 0 ), m_positionIdx( 0 )
 {
-	m_mvpMatrix = new float[16];
 	m_glApi = elm_glview_gl_api_get( glview );
 
-	init_matrix( m_mvpMatrix );
-
 	elm_glview_size_get( glview, &m_DrawCanvasWidth, &m_DrawCanvasHeight );
+
+	initProjectionMatrix();
 
 }
 
@@ -41,9 +39,10 @@ GraphicObjectBase::GraphicObjectBase( const GraphicObjectBase & src )
 	m_fragmentShader = src.m_fragmentShader;
 	m_positionIdx = src.m_positionIdx;
 	m_mvpMatrixIdx = src.m_mvpMatrixIdx;
-	m_mvpMatrix = src.m_mvpMatrix;
 	m_DrawCanvasWidth = src.m_DrawCanvasWidth;
 	m_DrawCanvasHeight = src.m_DrawCanvasHeight;
+
+	initProjectionMatrix();
 }
 
 GraphicObjectBase::~GraphicObjectBase() {
@@ -171,47 +170,47 @@ void GraphicObjectBase::view_set_perspective(float* result, const float fovy, co
 
 	view_set_ortho( result, -right, right, -top, top, near, far );
 }
-
-//matrix will receive the calculated perspective matrix. //You would have to upload to your shader // or use glLoadMatrixf if you aren't using shaders. 
-void glhPerspectivef2(float *matrix, float fovyInDegrees, float aspectRatio, float znear, float zfar)
-{
-    float ymax, xmax; 
-    float temp, temp2, temp3, temp4; 
-    ymax = znear * tanf(fovyInDegrees * M_PI / 360.0); 
-    //ymin = -ymax; 
-    //xmin = -ymax * aspectRatio; 
-    xmax = ymax * aspectRatio; 
-    glhFrustumf2(matrix, -xmax, xmax, -ymax, ymax, znear, zfar);
-} 
-
-void glhFrustumf2(float *matrix, float left, float right, float bottom, float top, float znear, float zfar)
-{ 
-    float twice_near, width, height_negative , temp4; 
-    twice_near = 2.0 * znear; 
-    width = right - left; 
-    height_negative = top - bottom; 
-    temp4 = zfar - znear; 
-
-    matrix[0] = twice_near / width; 
-    matrix[1] = 0.0; 
-    matrix[2] = 0.0; 
-    matrix[3] = 0.0; 
-
-    matrix[4] = 0.0; 
-    matrix[5] = twice_near / height_negative ; 
-    matrix[6] = 0.0; 
-    matrix[7] = 0.0; 
-
-    matrix[8] = (right + left) / width; 
-    matrix[9] = (top + bottom) / height_negative ; 
-    matrix[10] = (-zfar - znear) / temp4; 
-    matrix[11] = -1.0; 
-
-    matrix[12] = 0.0; 
-    matrix[13] = 0.0; 
-    matrix[14] = (- twice_near * zfar) / temp4; 
-    matrix[15] = 0.0;
-}
+//
+////matrix will receive the calculated perspective matrix. //You would have to upload to your shader // or use glLoadMatrixf if you aren't using shaders.
+//void glhPerspectivef2(float *matrix, float fovyInDegrees, float aspectRatio, float znear, float zfar)
+//{
+//    float ymax, xmax;
+//    float temp, temp2, temp3, temp4;
+//    ymax = znear * tanf(fovyInDegrees * M_PI / 360.0);
+//    //ymin = -ymax;
+//    //xmin = -ymax * aspectRatio;
+//    xmax = ymax * aspectRatio;
+//    glhFrustumf2(matrix, -xmax, xmax, -ymax, ymax, znear, zfar);
+//}
+//
+//void glhFrustumf2(float *matrix, float left, float right, float bottom, float top, float znear, float zfar)
+//{
+//    float twice_near, width, height_negative , temp4;
+//    twice_near = 2.0 * znear;
+//    width = right - left;
+//    height_negative = top - bottom;
+//    temp4 = zfar - znear;
+//
+//    matrix[0] = twice_near / width;
+//    matrix[1] = 0.0;
+//    matrix[2] = 0.0;
+//    matrix[3] = 0.0;
+//
+//    matrix[4] = 0.0;
+//    matrix[5] = twice_near / height_negative ;
+//    matrix[6] = 0.0;
+//    matrix[7] = 0.0;
+//
+//    matrix[8] = (right + left) / width;
+//    matrix[9] = (top + bottom) / height_negative ;
+//    matrix[10] = (-zfar - znear) / temp4;
+//    matrix[11] = -1.0;
+//
+//    matrix[12] = 0.0;
+//    matrix[13] = 0.0;
+//    matrix[14] = (- twice_near * zfar) / temp4;
+//    matrix[15] = 0.0;
+//}
 
 
 //--------------------------------//
@@ -251,4 +250,33 @@ GLuint GraphicObjectBase::loadShader( GLenum type, const char *shader_src )
 	}
 
 	return shader;
+}
+
+void GraphicObjectBase::initProjectionMatrix()
+{
+
+	m_projectionMatrix[0] = 2.0 / m_DrawCanvasHeight;
+	m_projectionMatrix[1] = 0.0;
+	m_projectionMatrix[2] = 0.0;
+	m_projectionMatrix[3] = -1.0;
+
+	m_projectionMatrix[4] = 0.0;
+	m_projectionMatrix[5] = 2.0 / m_DrawCanvasWidth;
+	m_projectionMatrix[6] = 0.0;
+	m_projectionMatrix[7] = -1.0;
+
+	m_projectionMatrix[8] = 0.0;
+	m_projectionMatrix[9] = 0.0;
+	m_projectionMatrix[10] = -1.0;
+	m_projectionMatrix[11] = 0.0;
+
+	m_projectionMatrix[12] = 0.0;
+	m_projectionMatrix[13] = 0.0;
+	m_projectionMatrix[14] = 0.0;
+	m_projectionMatrix[15] = 1.0;
+//
+//	m_projectionMatrix[]( 2.0/768.0, 0.0, 0.0, -1.0,
+//			0.0, 2.0/1024.0, 0.0, -1.0,
+//			0.0, 0.0, -1.0, 0.0,
+//			0.0, 0.0, 0.0, 1.0);
 }
