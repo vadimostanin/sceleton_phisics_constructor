@@ -39,12 +39,12 @@ protected:
 	GLuint       	m_vertexShader;
 	GLuint       	m_fragmentShader;
 
-	GLuint       	m_mvpMatrixIdx;
-	GLuint       	m_positionIdx;
+	GLint       	m_mvpMatrixIdx;
+	GLint       	m_positionIdx;
 
 	Evas_GL_API   * m_glApi;
 
-	float m_projectionMatrix[16];
+	float			m_projectionMatrix[16];
 
 	int 			m_DrawCanvasHeight;
 	int 			m_DrawCanvasWidth;

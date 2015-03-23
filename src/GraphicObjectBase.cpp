@@ -47,6 +47,8 @@ GraphicObjectBase::GraphicObjectBase( const GraphicObjectBase & src )
 
 GraphicObjectBase::~GraphicObjectBase() {
 	// TODO Auto-generated destructor stub
+	m_glApi->glDeleteShader( m_vertexShader );
+	m_glApi->glDeleteShader( m_fragmentShader );
 }
 
 void GraphicObjectBase::init_matrix( float * result )
@@ -254,26 +256,53 @@ GLuint GraphicObjectBase::loadShader( GLenum type, const char *shader_src )
 
 void GraphicObjectBase::initProjectionMatrix()
 {
+	float tempMatrix[16];
 
-	m_projectionMatrix[0] = 2.0 / m_DrawCanvasHeight;
-	m_projectionMatrix[1] = 0.0;
-	m_projectionMatrix[2] = 0.0;
-	m_projectionMatrix[3] = -1.0;
+//	m_projectionMatrix[0] = 2.0 / m_DrawCanvasHeight;
+//	m_projectionMatrix[1] = 0.0;
+//	m_projectionMatrix[2] = 0.0;
+//	m_projectionMatrix[3] = -1.0;
+//
+//	m_projectionMatrix[4] = 0.0;
+//	m_projectionMatrix[5] = 2.0 / m_DrawCanvasWidth;
+//	m_projectionMatrix[6] = 0.0;
+//	m_projectionMatrix[7] = -1.0;
+//
+//	m_projectionMatrix[8] = 0.0;
+//	m_projectionMatrix[9] = 0.0;
+//	m_projectionMatrix[10] = -1.0;
+//	m_projectionMatrix[11] = 0.0;
+//
+//	m_projectionMatrix[12] = 0.0;
+//	m_projectionMatrix[13] = 0.0;
+//	m_projectionMatrix[14] = 0.0;
+//	m_projectionMatrix[15] = 1.0;
 
-	m_projectionMatrix[4] = 0.0;
-	m_projectionMatrix[5] = 2.0 / m_DrawCanvasWidth;
-	m_projectionMatrix[6] = 0.0;
-	m_projectionMatrix[7] = -1.0;
+	tempMatrix[0] = 2.0 / m_DrawCanvasHeight;
+	tempMatrix[1] = 0.0;
+	tempMatrix[2] = 0.0;
+	tempMatrix[3] = -1.0;
 
-	m_projectionMatrix[8] = 0.0;
-	m_projectionMatrix[9] = 0.0;
-	m_projectionMatrix[10] = -1.0;
-	m_projectionMatrix[11] = 0.0;
+	tempMatrix[4] = 0.0;
+	tempMatrix[5] = 2.0 / m_DrawCanvasWidth;
+	tempMatrix[6] = 0.0;
+	tempMatrix[7] = -1.0;
 
-	m_projectionMatrix[12] = 0.0;
-	m_projectionMatrix[13] = 0.0;
-	m_projectionMatrix[14] = 0.0;
-	m_projectionMatrix[15] = 1.0;
+	tempMatrix[8] = 0.0;
+	tempMatrix[9] = 0.0;
+	tempMatrix[10] = 2.0/2.0;
+	tempMatrix[11] = -1.0;
+
+	tempMatrix[12] = 0.0;
+	tempMatrix[13] = 0.0;
+	tempMatrix[14] = 0.0;
+	tempMatrix[15] = 1.0;
+
+	float identityMatrix[16];
+
+	init_matrix( identityMatrix );
+
+	multiply_matrix( m_projectionMatrix, identityMatrix, tempMatrix );
 //
 //	m_projectionMatrix[]( 2.0/768.0, 0.0, 0.0, -1.0,
 //			0.0, 2.0/1024.0, 0.0, -1.0,

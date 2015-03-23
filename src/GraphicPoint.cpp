@@ -8,17 +8,34 @@
 #include "GraphicPoint.h"
 #include <Evas.h>
 #include <iostream>
+#include <fstream>
 using namespace std;
+
+static void dump( vector<float> & input, int split_count )
+{
+	ofstream file( "dump.txt", ios_base::app );
+
+	for( size_t input_i = 0 ; input_i < input.size() ; input_i++ )
+	{
+		if( input_i != 0 && input_i % split_count == 0 )
+		{
+			file << endl << flush;
+		}
+		file << input[input_i] << " " << flush;
+	}
+	file << endl;
+	file.close();
+}
 
 GraphicPoint::GraphicPoint( Evas_Object * glview ) : GraphicObjectBase( glview )
 {
-	initCircleVertex();
+	initQuadVertex();
 	initShaders();
 }
 
 GraphicPoint::GraphicPoint( Evas_Object * glview, const Point & point ) : GraphicObjectBase( glview ), m_Point( point )
 {
-	initCircleVertex();
+	initQuadVertex();
 	initShaders();
 }
 
@@ -27,7 +44,7 @@ GraphicPoint::GraphicPoint( Evas_Object * glview, int x, int y ) : GraphicObject
 	m_Point.setX( x );
 	m_Point.setY( y );
 
-	initCircleVertex();
+	initQuadVertex();
 	initShaders();
 }
 
@@ -38,19 +55,17 @@ GraphicPoint::GraphicPoint( const GraphicPoint & src )
 
 GraphicPoint::~GraphicPoint()
 {
-//	m_glApi->glDeleteBuffers( 1, &m_vertexesBufferObject );
-	m_glApi->glDeleteShader( m_vertexShader );
-	m_glApi->glDeleteShader( m_fragmentShader );
+	m_glApi->glDeleteBuffers( 1, &m_vertexesBufferObject );
 }
 
 void GraphicPoint::initQuadVertex()
 {
-//	GLfloat vVertices[] = {//By Points
-//			-0.5f, 0.5f, 0.0f,
-//			0.5f, 0.5f, 0.0f,
-//			0.5f, -0.5f, 0.0f,
-//			-0.5f, -0.5f, 0.0f,
-//	};
+	GLfloat vVertices[] = {//By Points
+			-0.5f, 0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f,
+			-0.5f, -0.5f, 0.0f,
+	};
 
 //	GLfloat vVertices[] = {//By Lines
 //				-0.05f,  0.05f, 0.0f,      0.05f,  0.05f, 0.0f,
@@ -59,16 +74,16 @@ void GraphicPoint::initQuadVertex()
 //				-0.05f, -0.05f, 0.0f,     -0.05f,  0.05f, 0.0f
 //		};
 
-	GLfloat vVertices[] = {//By Triangles
-			// Left bottom triangle
-			-0.05f,  0.05f, 0.0f,
-			-0.05f, -0.05f, 0.0f,
-			 0.05f, -0.05f, 0.0f,
-			// Right top triangle
-			 0.05f, -0.05f, 0.0f,
-			 0.05f,  0.05f, 0.0f,
-			-0.05f,  0.05f, 0.0f
-	};
+//	GLfloat vVertices[] = {//By Triangles
+//			// Left bottom triangle
+//			-0.05f,  0.05f, 0.0f,
+//			-0.05f, -0.05f, 0.0f,
+//			 0.05f, -0.05f, 0.0f,
+//			// Right top triangle
+//			 0.05f, -0.05f, 0.0f,
+//			 0.05f,  0.05f, 0.0f,
+//			-0.05f,  0.05f, 0.0f
+//	};
 
 	m_vertexBuffer.assign( vVertices, vVertices + sizeof( vVertices )/ sizeof( vVertices[0]) );
 }
@@ -91,6 +106,8 @@ void GraphicPoint::initCircleVertex()
 
 		ang += da;
 	}
+
+	dump( m_vertexBuffer, 3 );
 }
 
 // Initialize the shader and program object
@@ -99,10 +116,14 @@ int GraphicPoint::initShaders()
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
    GLbyte vShaderStr[] =
 		"attribute vec3 vPosition;\n"
-		"uniform mat4 u_mvpMatrix;\n"
+		"uniform float offset_x;\n"
+		"uniform float offset_y;\n"
+//		"uniform float scale;\n"
 		"void main()\n"
 		"{\n"
-		"   gl_Position = u_mvpMatrix * vec4( vPosition, 1.0 );\n"
+//		"   gl_Position = vec4( ( vPosition.x + offset_x ) * scale, ( vPosition.y + offset_y ) * scale, 0.0, 1.0 );\n"
+//		"   gl_Position = vec4( ( vPosition.x + offset_x ),			( vPosition.y + offset_y */ ), vPosition.z, 1.0 );\n"
+	    "   gl_Position = vec4( ( vPosition.x ),			( vPosition.y ), vPosition.z, 1.0 );\n"
 		"}\n";
 
    GLbyte fShaderStr[] =
@@ -148,13 +169,12 @@ int GraphicPoint::initShaders()
 	}
 
 
+	m_positionIdx = __evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
+	m_offset_x_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "offset_x" );
+	m_offset_y_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "offset_y" );
+	m_scale_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "scale" );
 
-
-
-	GLint vPositionLocation = __evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
-	m_positionIdx = vPositionLocation;
-
-	m_mvpMatrixIdx = __evas_gl_glapi->glGetUniformLocation( m_Program, "u_mvpMatrix");
+	__evas_gl_glapi->glGenBuffers( 1, &m_vertexesBufferObject );
 
 	return 1;
 }
@@ -201,64 +221,107 @@ void dump_short_mat4( float mat4[16] )
 	cout << mat4[0] << " " << mat4[5] << " " << mat4[10] << " " << mat4[15] << endl << flush;
 }
 
+//void GraphicPoint::draw_circle_2d()
+//{
+//	Evas_GL_API * __evas_gl_glapi = m_glApi;
+//
+//	float model[16], mvpMatrix[16];
+//
+//	init_matrix(model);
+//
+//	int width = m_DrawCanvasWidth;
+//	int height = m_DrawCanvasHeight;
+//
+//	int x = getX();
+//	int y = getY();
+//
+//	float aspect = (float) width / (float) height;
+//
+//	float translate_x =  ( x - width / 2.0 );
+//	translate_x  /= (float)( width / 2 );
+//	float translate_y = ( height / 2.0 - y + 60 );
+//	translate_y /=  (float)( height / 2 );
+//	translate_y *= 1.45;
+//	translate_x *= 2.13;
+//
+////	float mouse_x = ( (float)( 2 * x ) / (float) width ) - 1;
+////	float mouse_y = ( (float)( 2 * ( height - y ) ) / (float) width ) - 1;
+//
+//	static float trans_x = 0.0;
+//	trans_x += 0.01;
+//
+////	cout << "x=" << x << "; trans_x=" << translate_x << endl << flush;
+////	cout << "y=" << y << "; trans_y=" << translate_y << endl << flush;
+//
+//	translate_xyz( model, translate_x, translate_y, 0.0f );
+//	initProjectionMatrix();
+//	view_set_perspective(m_projectionMatrix, 60.0f, aspect, -1.0f, 1.0f);
+//
+//	multiply_matrix( mvpMatrix, m_projectionMatrix, model);
+//
+//	const int coordinates_in_point = 3;
+//
+//	size_t vertixesCount = m_vertexBuffer.size() / coordinates_in_point;
+//
+//	__evas_gl_glapi->glUseProgram( m_Program );
+//
+//	__evas_gl_glapi->glEnableVertexAttribArray( m_positionIdx );
+//	__evas_gl_glapi->glEnableVertexAttribArray( m_mvpMatrixIdx );
+//
+//	__evas_gl_glapi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &m_vertexBuffer[0] );
+//
+//	const int matrixCount = 1;
+//
+//	dump( m_vertexBuffer );
+//
+//	__evas_gl_glapi->glUniformMatrix4fv( m_mvpMatrixIdx, matrixCount, GL_FALSE, mvpMatrix );
+//
+//	__evas_gl_glapi->glDrawArrays( GL_TRIANGLES, 0, vertixesCount * coordinates_in_point );
+//
+//	__evas_gl_glapi->glDisableVertexAttribArray( m_positionIdx );
+//	__evas_gl_glapi->glDisableVertexAttribArray( m_mvpMatrixIdx );
+//
+//	__evas_gl_glapi->glBindBuffer(GL_ARRAY_BUFFER, 0); //Unbind
+//}
+
+
 void GraphicPoint::draw_circle_2d()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
 
-	float model[16], mvpMatrix[16];
-
-	init_matrix(model);
-
-	int width = m_DrawCanvasWidth;
-	int height = m_DrawCanvasHeight;
-
+	const int coordinates_in_point = 3;
 	int x = getX();
 	int y = getY();
+	float translate_x =  ( x - m_DrawCanvasWidth / 2.0 );
+	translate_x  /= (float)( m_DrawCanvasWidth / 2 );
+	float translate_y = ( m_DrawCanvasHeight / 2.0 - y + 60 );
+	translate_y /=  (float)( m_DrawCanvasHeight / 2 );
 
-	float aspect = (float) width / (float) height;
-
-	float translate_x =  ( x - width / 2.0 );
-	translate_x  /= (float)( width / 2 );
-	float translate_y = ( height / 2.0 - y + 60 );
-	translate_y /=  (float)( height / 2 );
-	translate_y *= 1.45;
-	translate_x *= 2.13;
-
-//	float mouse_x = ( (float)( 2 * x ) / (float) width ) - 1;
-//	float mouse_y = ( (float)( 2 * ( height - y ) ) / (float) width ) - 1;
-
-	static float trans_x = 0.0;
-	trans_x += 0.01;
-
-//	cout << "x=" << x << "; trans_x=" << translate_x << endl << flush;
-//	cout << "y=" << y << "; trans_y=" << translate_y << endl << flush;
-
-	translate_xyz( model, translate_x, translate_y, 0.0f );
-//	view_set_perspective(view, 60.0f, aspect, 1.0f, 20.0f);
-
-	multiply_matrix( mvpMatrix, m_projectionMatrix, model);
-
-	const int coordinates_in_point = 3;
+	GLfloat offset_x = translate_x;
+	GLfloat offset_y = translate_y;
 
 	size_t vertixesCount = m_vertexBuffer.size() / coordinates_in_point;
 
 	__evas_gl_glapi->glUseProgram( m_Program );
 
-	__evas_gl_glapi->glEnableVertexAttribArray( m_positionIdx );
-	__evas_gl_glapi->glEnableVertexAttribArray( m_mvpMatrixIdx );
+	__evas_gl_glapi->glBufferData( GL_ARRAY_BUFFER, vertixesCount * coordinates_in_point * sizeof( GLfloat ), &m_vertexBuffer[0], GL_STATIC_DRAW );
 
-	__evas_gl_glapi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &m_vertexBuffer[0] );
+	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
 
-	const int matrixCount = 1;
+	__evas_gl_glapi->glVertexAttribPointer( 0, coordinates_in_point, GL_FLOAT, GL_FALSE, 0, 0 );
 
-	__evas_gl_glapi->glUniformMatrix4fv( m_mvpMatrixIdx, matrixCount, GL_FALSE, mvpMatrix );
+//	__evas_gl_glapi->glEnableVertexAttribArray( m_positionIdx );
+
+//	__evas_gl_glapi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &m_vertexBuffer[0] );
+
+	__evas_gl_glapi->glUniform1f( m_offset_x_idx, offset_x );
+	__evas_gl_glapi->glUniform1f( m_offset_y_idx, offset_y );
 
 	__evas_gl_glapi->glDrawArrays( GL_POINTS, 0, vertixesCount * coordinates_in_point );
 
-	__evas_gl_glapi->glDisableVertexAttribArray( m_positionIdx );
-	__evas_gl_glapi->glDisableVertexAttribArray( m_mvpMatrixIdx );
+//	__evas_gl_glapi->glDisableVertexAttribArray( m_positionIdx );
 
-	__evas_gl_glapi->glBindBuffer(GL_ARRAY_BUFFER, 0); //Unbind
+	__evas_gl_glapi->glUseProgram( 0 );
 }
 
 void GraphicPoint::draw( Evas * canvas )
