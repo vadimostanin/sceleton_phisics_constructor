@@ -15,7 +15,7 @@ GraphicObjectBase::GraphicObjectBase() : m_vertexesBufferObject( 0 ), m_Program(
 	m_DrawCanvasWidth = 0;
 	m_DrawCanvasHeight = 0;
 
-	initProjectionMatrix();
+	initProjectionMatrix( m_projectionMatrix );
 }
 
 GraphicObjectBase::GraphicObjectBase( Evas_Object * glview ) : m_vertexesBufferObject( 0 ), m_Program( 0 ), m_vertexShader( 0 ), m_fragmentShader( 0 ),
@@ -25,7 +25,7 @@ GraphicObjectBase::GraphicObjectBase( Evas_Object * glview ) : m_vertexesBufferO
 
 	elm_glview_size_get( glview, &m_DrawCanvasWidth, &m_DrawCanvasHeight );
 
-	initProjectionMatrix();
+	initProjectionMatrix( m_projectionMatrix );
 
 }
 
@@ -42,7 +42,7 @@ GraphicObjectBase::GraphicObjectBase( const GraphicObjectBase & src )
 	m_DrawCanvasWidth = src.m_DrawCanvasWidth;
 	m_DrawCanvasHeight = src.m_DrawCanvasHeight;
 
-	initProjectionMatrix();
+	initProjectionMatrix( m_projectionMatrix );
 }
 
 GraphicObjectBase::~GraphicObjectBase() {
@@ -51,7 +51,7 @@ GraphicObjectBase::~GraphicObjectBase() {
 	m_glApi->glDeleteShader( m_fragmentShader );
 }
 
-void GraphicObjectBase::init_matrix( float * result )
+void GraphicObjectBase::init_matrix( GLfloat * result )
 {
 	result[0] = 1.0f;
 	result[1] = 0.0f;
@@ -74,7 +74,7 @@ void GraphicObjectBase::init_matrix( float * result )
 	result[15] = 1.0f;
 }
 
-void GraphicObjectBase::translate_xyz(float* result, const float translatex, const float translatey, const float translatez)
+void GraphicObjectBase::translate_xyz(GLfloat* result, const float translatex, const float translatey, const float translatez)
 {
 	result[12] += result[0] * translatex + result[4] * translatey
 			+ result[8] * translatez;
@@ -84,9 +84,24 @@ void GraphicObjectBase::translate_xyz(float* result, const float translatex, con
 			+ result[10] * translatez;
 	result[15] += result[3] * translatex + result[7] * translatey
 			+ result[11] * translatez;
+
+
+//	result[3] += translatex + result[0] * translatex + result[1] * translatey
+//			+ result[2] * translatez;
+//	result[7] += result[4] * translatex + result[5] * translatey
+//			+ result[6] * translatez;
+//	result[11] += result[8] * translatex + result[9] * translatey
+//			+ result[10] * translatez;
 }
 
-void GraphicObjectBase::multiply_matrix(float* result, const float *matrix0, const float *matrix1)
+void GraphicObjectBase::scale_xyz( GLfloat* result, const float scale_x, const float scale_y, const float scale_z )
+{
+	result[0]  = scale_x * result[0];
+	result[5]  = scale_y * result[5];
+	result[10] = scale_z * result[10];
+}
+
+void GraphicObjectBase::multiply_matrix(GLfloat* result, const float *matrix0, const float *matrix1)
 {
 	int row_i = 0, column_i = 0;
 	float temp[16] = { 0 };
@@ -109,7 +124,7 @@ void GraphicObjectBase::multiply_matrix(float* result, const float *matrix0, con
 	}
 }
 
-void GraphicObjectBase::view_set_ortho(float* result, const float left, const float right, const float bottom, const float top, const float near, const float far)
+void GraphicObjectBase::view_set_ortho(GLfloat* result, const float left, const float right, const float bottom, const float top, const float near, const float far)
 {
 	float diffx = right - left;
 	float diffy = top - bottom;
@@ -164,7 +179,7 @@ void makeFrustum( float * result, const float left, const float right, const flo
 	result[15] = 0.0;
 }
 
-void GraphicObjectBase::view_set_perspective(float* result, const float fovy, const float aspect, const float near, const float far)
+void GraphicObjectBase::view_set_perspective(GLfloat* result, const float fovy, const float aspect, const float near, const float far)
 {
 	float fovradian = fovy / 360.0f * M_PI;
 	float top = tanf(fovradian) * near;
@@ -254,58 +269,47 @@ GLuint GraphicObjectBase::loadShader( GLenum type, const char *shader_src )
 	return shader;
 }
 
-void GraphicObjectBase::initProjectionMatrix()
+void GraphicObjectBase::initProjectionMatrix( GLfloat * result )
 {
-	float tempMatrix[16];
+	result[0] = 2.0 / m_DrawCanvasHeight;
+	result[4] = 0.0;
+	result[8] = 0.0;
+	result[12] = 0.0;
 
-//	m_projectionMatrix[0] = 2.0 / m_DrawCanvasHeight;
-//	m_projectionMatrix[1] = 0.0;
-//	m_projectionMatrix[2] = 0.0;
-//	m_projectionMatrix[3] = -1.0;
+	result[1] = 0.0;
+	result[5] = 2.0 / m_DrawCanvasWidth;
+	result[9] = 0.0;
+	result[13] = 0.0;
+
+	result[2] = 0.0;
+	result[6] = 0.0;
+	result[10] = 2.0/2.0;
+	result[14] = 0.0;
+
+	result[3] = -1.0;
+	result[7] = -1.0;
+	result[11] = -1.0;
+	result[15] = 1.0;
+
+
+
+//	result[0] = 2.0 / m_DrawCanvasHeight;
+//	result[1] = 0.0;
+//	result[2] = 0.0;
+//	result[3] = -1.0;
 //
-//	m_projectionMatrix[4] = 0.0;
-//	m_projectionMatrix[5] = 2.0 / m_DrawCanvasWidth;
-//	m_projectionMatrix[6] = 0.0;
-//	m_projectionMatrix[7] = -1.0;
+//	result[4] = 0.0;
+//	result[5] = 2.0 / m_DrawCanvasWidth;
+//	result[6] = 0.0;
+//	result[7] = -1.0;
 //
-//	m_projectionMatrix[8] = 0.0;
-//	m_projectionMatrix[9] = 0.0;
-//	m_projectionMatrix[10] = -1.0;
-//	m_projectionMatrix[11] = 0.0;
+//	result[8] = 0.0;
+//	result[9] = 0.0;
+//	result[10] = 2.0/2.0;
+//	result[11] = -1.0;
 //
-//	m_projectionMatrix[12] = 0.0;
-//	m_projectionMatrix[13] = 0.0;
-//	m_projectionMatrix[14] = 0.0;
-//	m_projectionMatrix[15] = 1.0;
-
-	tempMatrix[0] = 2.0 / m_DrawCanvasHeight;
-	tempMatrix[1] = 0.0;
-	tempMatrix[2] = 0.0;
-	tempMatrix[3] = -1.0;
-
-	tempMatrix[4] = 0.0;
-	tempMatrix[5] = 2.0 / m_DrawCanvasWidth;
-	tempMatrix[6] = 0.0;
-	tempMatrix[7] = -1.0;
-
-	tempMatrix[8] = 0.0;
-	tempMatrix[9] = 0.0;
-	tempMatrix[10] = 2.0/2.0;
-	tempMatrix[11] = -1.0;
-
-	tempMatrix[12] = 0.0;
-	tempMatrix[13] = 0.0;
-	tempMatrix[14] = 0.0;
-	tempMatrix[15] = 1.0;
-
-	float identityMatrix[16];
-
-	init_matrix( identityMatrix );
-
-	multiply_matrix( m_projectionMatrix, identityMatrix, tempMatrix );
-//
-//	m_projectionMatrix[]( 2.0/768.0, 0.0, 0.0, -1.0,
-//			0.0, 2.0/1024.0, 0.0, -1.0,
-//			0.0, 0.0, -1.0, 0.0,
-//			0.0, 0.0, 0.0, 1.0);
+//	result[12] = 0.0;
+//	result[13] = 0.0;
+//	result[14] = 0.0;
+//	result[15] = 1.0;
 }
