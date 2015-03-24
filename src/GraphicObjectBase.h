@@ -21,15 +21,16 @@ protected:
 	GraphicObjectBase( const GraphicObjectBase & src );
 	virtual ~GraphicObjectBase();
 
-	void init_matrix( float * result );
-	void translate_xyz(float* result, const float translatex, const float translatey, const float translatez);
-	void multiply_matrix(float* result, const float *matrix0, const float *matrix1);
-	void view_set_ortho(float* result, const float left, const float right, const float bottom, const float top, const float near, const float far);
-	void view_set_perspective(float* result, const float fovy, const float aspect, const float near, const float far);
+	void init_matrix( GLfloat * result );
+	void translate_xyz( GLfloat* result, const float translatex, const float translatey, const float translatez );
+	void scale_xyz( GLfloat* result, const float scale_x, const float scale_y, const float scale_z );
+	void multiply_matrix( GLfloat* result, const float *matrix0, const float *matrix1 );
+	void view_set_ortho( GLfloat* result, const float left, const float right, const float bottom, const float top, const float near, const float far );
+	void view_set_perspective( GLfloat* result, const float fovy, const float aspect, const float near, const float far );
 
 	GLuint loadShader( GLenum type, const char *shader_src );
 
-	void initProjectionMatrix();
+	void initProjectionMatrix( GLfloat * result );
 
 protected:
 
@@ -39,12 +40,12 @@ protected:
 	GLuint       	m_vertexShader;
 	GLuint       	m_fragmentShader;
 
-	GLuint       	m_mvpMatrixIdx;
-	GLuint       	m_positionIdx;
+	GLint       	m_mvpMatrixIdx;
+	GLint       	m_positionIdx;
 
 	Evas_GL_API   * m_glApi;
 
-	float m_projectionMatrix[16];
+	float			m_projectionMatrix[16];
 
 	int 			m_DrawCanvasHeight;
 	int 			m_DrawCanvasWidth;

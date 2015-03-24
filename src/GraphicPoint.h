@@ -33,8 +33,15 @@ public:
 private:
 	Point m_Point;
 
+//	GLint m_offset_x_idx;
+//	GLint m_offset_y_idx;
+//	GLint m_scale_idx;
+	GLint m_perspective_idx;
+	GLint m_translate_idx;
+
 	void initCircleVertex();
 	void initQuadVertex();
+	void initVertex();
 	int initShaders();
 
 	void draw_circle_2d();
