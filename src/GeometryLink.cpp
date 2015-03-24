@@ -7,6 +7,8 @@
 
 #include "GeometryLink.h"
 #include <stdlib.h>
+#include <sstream>
+using namespace std;
 
 GeometryLink::GeometryLink() : m_Id( rand() )
 {
@@ -42,6 +44,15 @@ IGeometryObject * GeometryLink::clone()
 	newLink->m_Id = m_Id;
 
 	return newLink;
+}
+
+string GeometryLink::toString()
+{
+	stringstream stream;
+
+	stream << getType() << " " << getId() << " " << getPointFrom().getId() << " " << getPointTo().getId() << flush;
+
+	return stream.str();
 }
 
 //IGeometryObject & Point::operator = ( IGeometryObject & src )

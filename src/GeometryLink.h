@@ -32,6 +32,7 @@ public:
 	int getId();
 
 	IGeometryObject * clone();
+	string toString();
 
 private:
 	Point m_Points[2];

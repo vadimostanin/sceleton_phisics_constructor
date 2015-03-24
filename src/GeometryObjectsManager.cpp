@@ -10,6 +10,7 @@
 #include <limits.h>
 #include <iostream>
 #include <algorithm>
+#include <fstream>
 
 #define UN_TRACKING_POINT_RADIUS 40
 
@@ -129,8 +130,42 @@ bool GeometryObjectsManager::getNearestPoint( const Point & startPoint,  int x, 
 	return false;
 }
 
+void GeometryObjectsManager::save( string filename )
+{
+	ofstream file( filename.c_str() );
+	if( false == file.is_open() )
+	{
+		return;
+	}
+
+	vector<IGeometryObject *> objects;
+	getObjects( objects );
+
+	vector<IGeometryObject *>::iterator begin = objects.begin();
+	vector<IGeometryObject *>::iterator end = objects.end();
+	vector<IGeometryObject *>::iterator iter = begin;
+	for(  ; iter != end ; iter ++ )
+	{
+		file << (*iter)->toString() << endl;
+	}
+}
+
 GeometryObjectsManager & GeometryObjectsManager::getInstance()
 {
 	static GeometryObjectsManager instance;
 	return instance;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

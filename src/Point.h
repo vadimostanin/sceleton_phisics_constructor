@@ -31,6 +31,7 @@ public:
 	int getId();
 
 	IGeometryObject * clone();
+	string toString();
 
 //	IGeometryObject & operator = ( IGeometryObject & src );
 private:

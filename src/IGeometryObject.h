@@ -9,6 +9,8 @@
 #define IGEOMETRYOBJECT_H_
 
 #include "GeometryObjectsTypes.h"
+#include <string>
+using namespace std;
 
 class IGeometryObject
 {
@@ -18,6 +20,7 @@ public:
 	virtual GeometryObjectsTypes getType() = 0;
 	virtual int getId() = 0;
 	virtual IGeometryObject * clone() = 0;
+	virtual string toString() = 0;
 
 //	virtual IGeometryObject & operator = ( IGeometryObject & src ) = 0;
 };

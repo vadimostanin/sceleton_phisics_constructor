@@ -7,6 +7,8 @@
 
 #include "Point.h"
 #include <stdlib.h>
+#include <sstream>
+using namespace std;
 
 Point::Point() : m_x( 0 ), m_y( 0 ), m_Id( rand() )
 {
@@ -63,6 +65,15 @@ IGeometryObject * Point::clone()
 	return newPoint;
 }
 
+string Point::toString()
+{
+	stringstream stream;
+
+	stream << getType() << " " << getId() << " " << getX() << " " << getY() << flush;
+
+	return stream.str();
+}
+
 //IGeometryObject & Point::operator = ( IGeometryObject & src )
 //{
 //	if( src.getType() != GEOMETRYOBJECT_POINT )
@@ -102,5 +113,8 @@ GeometryObjectsTypes Point::getType()
 {
 	return GEOMETRYOBJECT_POINT;
 }
+
+
+
 
 

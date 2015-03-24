@@ -35,6 +35,8 @@ public:
 	bool getPoint( int x, int y, Point ** point );
 	bool getNearestPoint( const Point & startPoint, int x, int y, Point & point );
 
+	void save( string filename );
+
 	static GeometryObjectsManager & getInstance();
 
 private:
