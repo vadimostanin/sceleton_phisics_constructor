@@ -19,7 +19,7 @@ GraphicObjectBase::GraphicObjectBase() : m_vertexesBufferObject( 0 ), m_Program(
 }
 
 GraphicObjectBase::GraphicObjectBase( Evas_Object * glview ) : m_vertexesBufferObject( 0 ), m_Program( 0 ), m_vertexShader( 0 ), m_fragmentShader( 0 ),
-															   m_mvpMatrixIdx( 0 ), m_positionIdx( 0 )
+															   m_positionIdx( 0 )
 {
 	m_glApi = elm_glview_gl_api_get( glview );
 
@@ -38,7 +38,6 @@ GraphicObjectBase::GraphicObjectBase( const GraphicObjectBase & src )
 	m_vertexShader = src.m_vertexShader;
 	m_fragmentShader = src.m_fragmentShader;
 	m_positionIdx = src.m_positionIdx;
-	m_mvpMatrixIdx = src.m_mvpMatrixIdx;
 	m_DrawCanvasWidth = src.m_DrawCanvasWidth;
 	m_DrawCanvasHeight = src.m_DrawCanvasHeight;
 

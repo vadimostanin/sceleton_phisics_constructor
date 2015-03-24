@@ -87,12 +87,10 @@ void GraphicLink::initLineVertexes()
 		translate_x  /= (float)( width / 2 );
 		float translate_y = ( height / 2.0 - y + 60 );
 		translate_y /=  (float)( height / 2 );
-		translate_y *= 1.45;
-		translate_x *= 2.13;
 
 		m_vertexBuffer.push_back( translate_x );
 		m_vertexBuffer.push_back( translate_y );
-		m_vertexBuffer.push_back( 0.0 );
+//		m_vertexBuffer.push_back( 0.0 );
 	}
 
 	{
@@ -106,33 +104,35 @@ void GraphicLink::initLineVertexes()
 		translate_x  /= (float)( width / 2 );
 		float translate_y = ( height / 2.0 - y + 60 );
 		translate_y /=  (float)( height / 2 );
-		translate_y *= 1.45;
-		translate_x *= 2.13;
 
 		m_vertexBuffer.push_back( translate_x );
 		m_vertexBuffer.push_back( translate_y );
-		m_vertexBuffer.push_back( 0.0 );
+//		m_vertexBuffer.push_back( 0.0 );
 	}
 }
+
+#define SHADER(shader) #shader
 
 // Initialize the shader and program object
 int GraphicLink::initShaders()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
-	GLbyte vShaderStr[] =
-		"attribute vec3 vPosition;\n"
-		"uniform mat4 u_mvpMatrix;\n"
-		"void main()\n"
-		"{\n"
-		"   gl_Position = u_mvpMatrix * vec4( vPosition, 1.0 );\n"
-		"}\n";
+	GLbyte vShaderStr[] = SHADER(
+		attribute vec3 vPosition;
+		uniform mat4 perspective;
+		uniform mat4 translate;
+		uniform mat4 scale;
+		void main()
+		{
+		   gl_Position = perspective * translate * scale * vec4( vPosition, 1.0 );
+		}
+		);
 
-	GLbyte fShaderStr[] =
-		   "precision mediump float;                     \n"
-		   "void main()\n"
-		   "{\n"
-		   "  gl_FragColor = vec4 ( 0.5, 0.5, 1.0, 1.0 );\n"
-		   "}\n";
+	GLbyte fShaderStr[] = SHADER(void main()\n
+								{\n
+									gl_FragColor = vec4( 0.5, 0.5, 1.0, 1.0 );\n
+								}\n
+		   );
 
 	GLint linked;
 
@@ -169,10 +169,10 @@ int GraphicLink::initShaders()
 		return 0;
 	}
 
-	GLint vPositionLocation = __evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
-	m_positionIdx = vPositionLocation;
-
-	m_mvpMatrixIdx = __evas_gl_glapi->glGetUniformLocation( m_Program, "u_mvpMatrix");
+	m_positionIdx = 	__evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
+	m_perspective_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "perspective" );
+	m_translate_idx = 	__evas_gl_glapi->glGetUniformLocation( m_Program, "translate" );
+	m_scale_idx = 		__evas_gl_glapi->glGetUniformLocation( m_Program, "scale" );
 
 	return 1;
 }
@@ -181,57 +181,47 @@ void GraphicLink::draw_line_2d()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
 
-	float model[16], mvpMatrix[16];
-
-	init_matrix(model);
-
-	int w = m_DrawCanvasWidth;
-	int h = m_DrawCanvasHeight;
-
 	int x = getPointFrom().getX();
 	int y = getPointFrom().getY();
 
-	float aspect = (float) w / (float) h;
+	float dimension = (float) m_DrawCanvasWidth / (float) m_DrawCanvasHeight;
 
-	float translate_x =  ( x - w/2.0 );
-	translate_x  /= (float)( w/2 );
-	float translate_y = ( h/2.0 - y + 60 );
-	translate_y /=  (float)( h/2 );
-	translate_y *= 1.45;
-	translate_x *= 2.13;
+	float translate_x =  ( x - m_DrawCanvasWidth / 2.0 );
+	translate_x  /= (float)( m_DrawCanvasWidth / 2 );
+	float translate_y = ( m_DrawCanvasHeight / 2.0 - y + 60 );
+	translate_y /=  (float)( m_DrawCanvasHeight / 2 );
 
-//	static float trans_x = 0.0;
-//	trans_x += 0.01;
+	GLfloat translateMatrix[16];
+	GLfloat scaleMatrix[16];
 
-//	cout << "x=" << x << "; trans_x=" << translate_x << endl << flush;
-//	cout << "y=" << y << "; trans_y=" << translate_y << endl << flush;
+	GLfloat perspective[16];
+	init_matrix( perspective );
+	init_matrix( translateMatrix );
+	init_matrix( scaleMatrix );
 
-	translate_xyz(model, translate_x, translate_y, -2.5f);
-//	view_set_perspective(view, 0.0f, aspect, -20.0f, 20.0f);
+	scale_xyz( scaleMatrix, 1.0, 1.0, 1.0 );
 
-	multiply_matrix( mvpMatrix, m_projectionMatrix, model);
-
-	const int coordinates_in_point = 3;
+	const int coordinates_in_point = 2;
 
 	size_t vertixesCount = m_vertexBuffer.size() / coordinates_in_point;
 
 	__evas_gl_glapi->glUseProgram( m_Program );
 
 	__evas_gl_glapi->glEnableVertexAttribArray( m_positionIdx );
-	__evas_gl_glapi->glEnableVertexAttribArray( m_mvpMatrixIdx );
 
 	__evas_gl_glapi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &m_vertexBuffer[0] );
 
 	const int matrixCount = 1;
 
-	__evas_gl_glapi->glUniformMatrix4fv( m_mvpMatrixIdx, matrixCount, GL_FALSE, mvpMatrix );
+	__evas_gl_glapi->glUniformMatrix4fv( m_perspective_idx, matrixCount, GL_FALSE, perspective );
+	__evas_gl_glapi->glUniformMatrix4fv( m_translate_idx, matrixCount, GL_FALSE, translateMatrix );
+	__evas_gl_glapi->glUniformMatrix4fv( m_scale_idx, matrixCount, GL_FALSE, scaleMatrix );
 
-	__evas_gl_glapi->glDrawArrays( GL_LINES, 0, vertixesCount * coordinates_in_point );
+	__evas_gl_glapi->glDrawArrays( GL_LINES, 0, vertixesCount );
 
 	__evas_gl_glapi->glDisableVertexAttribArray( m_positionIdx );
-	__evas_gl_glapi->glDisableVertexAttribArray( m_mvpMatrixIdx );
 
-	__evas_gl_glapi->glBindBuffer(GL_ARRAY_BUFFER, 0); //Unbind
+	__evas_gl_glapi->glUseProgram( 0 );
 }
 
 

@@ -40,7 +40,6 @@ protected:
 	GLuint       	m_vertexShader;
 	GLuint       	m_fragmentShader;
 
-	GLint       	m_mvpMatrixIdx;
 	GLint       	m_positionIdx;
 
 	Evas_GL_API   * m_glApi;
