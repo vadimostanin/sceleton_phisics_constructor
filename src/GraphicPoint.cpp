@@ -7,6 +7,7 @@
 
 #include "GraphicPoint.h"
 #include <Evas.h>
+#include <GL/gl.h>
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -116,14 +117,16 @@ int GraphicPoint::initShaders()
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
    GLbyte vShaderStr[] =
 		"attribute vec3 vPosition;\n"
-		"uniform float offset_x;\n"
-		"uniform float offset_y;\n"
+	    "uniform mat4 perspective;\n"
+		"uniform mat4 translate;\n"
+//		"uniform float offset_x;\n"
+//		"uniform float offset_y;\n"
 //		"uniform float scale;\n"
 		"void main()\n"
 		"{\n"
 //		"   gl_Position = vec4( ( vPosition.x + offset_x ) * scale, ( vPosition.y + offset_y ) * scale, 0.0, 1.0 );\n"
 //		"   gl_Position = vec4( ( vPosition.x + offset_x ),			( vPosition.y + offset_y */ ), vPosition.z, 1.0 );\n"
-	    "   gl_Position = vec4( ( vPosition.x ),			( vPosition.y ), vPosition.z, 1.0 );\n"
+	    "   gl_Position = perspective * vec4( vPosition, 0.0 );\n"
 		"}\n";
 
    GLbyte fShaderStr[] =
@@ -170,9 +173,10 @@ int GraphicPoint::initShaders()
 
 
 	m_positionIdx = __evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
-	m_offset_x_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "offset_x" );
-	m_offset_y_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "offset_y" );
-	m_scale_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "scale" );
+//	m_offset_x_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "offset_x" );
+//	m_offset_y_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "offset_y" );
+//	m_scale_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "scale" );
+	m_perspective_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "perspective" );
 
 	__evas_gl_glapi->glGenBuffers( 1, &m_vertexesBufferObject );
 
@@ -300,22 +304,28 @@ void GraphicPoint::draw_circle_2d()
 	GLfloat offset_x = translate_x;
 	GLfloat offset_y = translate_y;
 
+	GLfloat model[16];
+
+	translate_xyz(model, offset_x, offset_y, 0.0f);
+
 	size_t vertixesCount = m_vertexBuffer.size() / coordinates_in_point;
 
 	__evas_gl_glapi->glUseProgram( m_Program );
+
+	__evas_gl_glapi->glVertexAttribPointer( 0, coordinates_in_point, GL_FLOAT, GL_FALSE, 0, 0 );
 
 	__evas_gl_glapi->glBufferData( GL_ARRAY_BUFFER, vertixesCount * coordinates_in_point * sizeof( GLfloat ), &m_vertexBuffer[0], GL_STATIC_DRAW );
 
 	__evas_gl_glapi->glBindBuffer( GL_ARRAY_BUFFER, m_vertexesBufferObject );
 
-	__evas_gl_glapi->glVertexAttribPointer( 0, coordinates_in_point, GL_FLOAT, GL_FALSE, 0, 0 );
-
 //	__evas_gl_glapi->glEnableVertexAttribArray( m_positionIdx );
 
 //	__evas_gl_glapi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &m_vertexBuffer[0] );
 
-	__evas_gl_glapi->glUniform1f( m_offset_x_idx, offset_x );
-	__evas_gl_glapi->glUniform1f( m_offset_y_idx, offset_y );
+//	__evas_gl_glapi->glUniform1f( m_offset_x_idx, offset_x );
+//	__evas_gl_glapi->glUniform1f( m_offset_y_idx, offset_y );
+
+	__evas_gl_glapi->glUniformMatrix4fv( m_perspective_idx, 1, GL_FALSE, m_projectionMatrix );
 
 	__evas_gl_glapi->glDrawArrays( GL_POINTS, 0, vertixesCount * coordinates_in_point );
 
