@@ -17,24 +17,27 @@ GraphicLink::GraphicLink( Evas_Object * glview ) : GraphicObjectBase( glview )
 
 GraphicLink::GraphicLink( const GraphicLink & src )
 {
-	GraphicLink & src1 = const_cast<GraphicLink &>( src );
+	m_geometryLink = src.m_geometryLink;
+	m_perspective_idx = src.m_perspective_idx;
+	m_translate_idx = src.m_translate_idx;
+	m_scale_idx = src.m_scale_idx;
 
-	setPointFrom( src1.getPointFrom() );
-	setPointTo( src1.getPointTo() );
+	m_geometryLink.setPointFrom( src.m_geometryLink.getPointFrom() );
+	m_geometryLink.setPointTo( src.m_geometryLink.getPointTo() );
 }
 
-//GraphicLink::GraphicLink( const GeometryLink src ) : m_Evas( 0 )
-//{
-//	setPointFrom( src.getPointFrom() );
-//	setPointTo( src.getPointTo() );
-//}
-
-GraphicLink & GraphicLink::operator = ( GeometryLink & src )
+GraphicLink::GraphicLink( const GeometryLink & src )
 {
-	GeometryLink & src_unconst = const_cast<GeometryLink&>( src );
+	initShaders();
 
-	setPointFrom( src_unconst.getPointFrom() );
-	setPointTo( src_unconst.getPointTo() );
+	m_geometryLink.setPointFrom( src.getPointFrom() );
+	m_geometryLink.setPointTo( src.getPointTo() );
+}
+
+GraphicLink & GraphicLink::operator = ( const GeometryLink & src )
+{
+	m_geometryLink.setPointFrom( src.getPointFrom() );
+	m_geometryLink.setPointTo( src.getPointTo() );
 
 	return *this;
 }
@@ -45,40 +48,25 @@ GraphicLink::~GraphicLink()
 
 void GraphicLink::draw( Evas * canvas )
 {
-	cout << "draw link from:" << getPointFrom().getX() << "x" << getPointFrom().getY() << "; to:" <<
-						getPointTo().getX() << "x" << getPointTo().getY() << endl << flush;
+//	cout << "draw link from:" << getPointFrom().getX() << "x" << getPointFrom().getY() << "; to:" <<
+//						getPointTo().getX() << "x" << getPointTo().getY() << endl << flush;
 
 	initLineVertexes();
 
 	draw_line_2d();
 }
 
-void GraphicLink::setPointFrom( Point & point )
+IGeometryObject & GraphicLink::getGeometryObject()
 {
-	m_Points[0] = point;
-}
-
-void GraphicLink::setPointTo( Point & point )
-{
-	m_Points[1] = point;
-}
-
-Point & GraphicLink::getPointFrom()
-{
-	return m_Points[0];
-}
-
-Point & GraphicLink::getPointTo()
-{
-	return m_Points[1];
+	return m_geometryLink;
 }
 
 void GraphicLink::initLineVertexes()
 {
 	m_vertexBuffer.clear();
 	{
-		int x = getPointFrom().getX();
-		int y = getPointFrom().getY();
+		int x = m_geometryLink.getPointFrom().getX();
+		int y = m_geometryLink.getPointFrom().getY();
 
 		int width =  m_DrawCanvasWidth;
 		int height = m_DrawCanvasHeight;
@@ -94,8 +82,8 @@ void GraphicLink::initLineVertexes()
 	}
 
 	{
-		int x = getPointTo().getX();
-		int y = getPointTo().getY();
+		int x = m_geometryLink.getPointTo().getX();
+		int y = m_geometryLink.getPointTo().getY();
 
 		int width =  m_DrawCanvasWidth;
 		int height = m_DrawCanvasHeight;
@@ -181,8 +169,8 @@ void GraphicLink::draw_line_2d()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
 
-	int x = getPointFrom().getX();
-	int y = getPointFrom().getY();
+	int x = m_geometryLink.getPointFrom().getX();
+	int y = m_geometryLink.getPointFrom().getY();
 
 	float dimension = (float) m_DrawCanvasWidth / (float) m_DrawCanvasHeight;
 

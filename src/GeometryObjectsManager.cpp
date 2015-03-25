@@ -6,6 +6,7 @@
  */
 
 #include "GeometryObjectsManager.h"
+#include "GeometryObjectFindPredicate.h"
 #include <cmath>
 #include <limits.h>
 #include <iostream>
@@ -13,20 +14,6 @@
 #include <fstream>
 
 #define UN_TRACKING_POINT_RADIUS 40
-
-GeometryObjectFindPredicate::GeometryObjectFindPredicate( IGeometryObject * origin ) : m_Origin( origin )
-{
-
-}
-
-bool GeometryObjectFindPredicate::operator()( IGeometryObject * object )
-{
-	if( object->getId() == m_Origin->getId() )
-	{
-		return true;
-	}
-	return false;
-}
 
 GeometryObjectsManager::GeometryObjectsManager()
 {
@@ -49,11 +36,7 @@ void GeometryObjectsManager::removeObject( IGeometryObject * object )
 	{
 		return;
 	}
-//	size_t count = m_geometryObjects.size();
-//	cout << "drawing object before count = " << count << endl << flush;
 	m_geometryObjects.erase( found_iter );
-//	count = m_geometryObjects.size();
-//	cout << "drawing object after count = " << count << endl << flush;
 }
 
 void GeometryObjectsManager::getObjects( vector<IGeometryObject *> & objects )

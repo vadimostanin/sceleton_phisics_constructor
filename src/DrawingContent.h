@@ -27,6 +27,9 @@ public:
 	void update();
 
 	void setGraphicObjects( vector<IGraphicObject *> & graphicObjects );
+	void addGraphicObject( IGraphicObject * graphicObject );
+	void deleteGraphicObject( IGraphicObject * graphicObject );
+	void changeGraphicObject( IGraphicObject * graphicObject );
 
 //	bool getPoint( int x, int y, GraphicPoint & graphicPoint );
 

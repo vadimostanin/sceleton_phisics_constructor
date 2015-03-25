@@ -13,29 +13,26 @@
 #include "GeometryLink.h"
 #include "GraphicObjectBase.h"
 
-class GraphicLink : public GraphicObjectBase
+class GraphicLink : public GraphicObjectBase, public IGraphicObject
 {
 public:
 	GraphicLink( Evas_Object * glview );
 	GraphicLink( const GraphicLink & src );
-//	GraphicLink( const GeometryLink src );
+	GraphicLink( const GeometryLink & src );
 	virtual ~GraphicLink();
 
 	Evas_Object * getEvas() const;
 
 	void setEvas( Evas_Object * evas );
 
-	virtual void draw( Evas * canvas );
+	void draw( Evas * canvas );
+	IGeometryObject & getGeometryObject();
 
-	void setPointFrom( Point & point );
-	void setPointTo( Point & point );
-
-	Point & getPointFrom();
-	Point & getPointTo();
-
-	GraphicLink & operator = ( GeometryLink & src );
+	GraphicLink & operator = ( const GeometryLink & src );
 
 private:
+
+	GeometryLink m_geometryLink;
 
 	GLint m_perspective_idx;
 	GLint m_translate_idx;
@@ -44,8 +41,6 @@ private:
 	void initLineVertexes();
 	int initShaders();
 	void draw_line_2d();
-
-	Point m_Points[2];
 };
 
 #endif /* GRAPHICLINK_H_ */

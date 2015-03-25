@@ -53,11 +53,11 @@ void GeometryOperationTracking::constructGraphicObjects( vector<IGraphicObject *
 				break;
 			case GEOMETRYOBJECT_LINK:
 			{
-				Point & pointFrom = (( GeometryLink * )( * iter ))->getPointFrom();
-				Point & pointTo = (( GeometryLink * )( * iter ))->getPointTo();
+				const Point & pointFrom = (( GeometryLink * )( * iter ))->getPointFrom();
+				const Point & pointTo = (( GeometryLink * )( * iter ))->getPointTo();
 
-				((GraphicLink *)graphicObject)->setPointFrom( pointFrom );
-				((GraphicLink *)graphicObject)->setPointTo( pointTo );
+				((GeometryLink &)graphicObject->getGeometryObject()).setPointFrom( pointFrom );
+				((GeometryLink &)graphicObject->getGeometryObject()).setPointTo( pointTo );
 			}
 				break;
 		}

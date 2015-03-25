@@ -13,7 +13,7 @@
 #include <vector>
 using namespace std;
 
-class GraphicObjectBase : public IGraphicObject
+class GraphicObjectBase
 {
 protected:
 	GraphicObjectBase();

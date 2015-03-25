@@ -14,15 +14,6 @@
 #include <vector>
 using namespace std;
 
-class GeometryObjectFindPredicate
-{
-public:
-	GeometryObjectFindPredicate( IGeometryObject * origin );
-	bool operator()( IGeometryObject * object );
-private:
-	IGeometryObject * m_Origin;
-};
-
 class GeometryObjectsManager
 {
 public:

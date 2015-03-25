@@ -15,7 +15,7 @@
 #include <vector>
 using namespace std;
 
-class GraphicPoint : public GraphicObjectBase
+class GraphicPoint : public GraphicObjectBase, public IGraphicObject
 {
 public:
 	GraphicPoint( Evas_Object * glview );
@@ -29,7 +29,9 @@ public:
 	void setX( int x );
 	void setY( int y );
 
-	virtual void draw( Evas * canvas );
+	void draw( Evas * canvas );
+	IGeometryObject & getGeometryObject();
+
 private:
 	Point m_Point;
 

@@ -25,12 +25,12 @@ GeometryLink::~GeometryLink()
 {
 }
 
-GeometryObjectsTypes GeometryLink::getType()
+GeometryObjectsTypes GeometryLink::getType() const
 {
 	return GEOMETRYOBJECT_LINK;
 }
 
-int GeometryLink::getId()
+int GeometryLink::getId() const
 {
 	return rand();
 }
@@ -55,36 +55,61 @@ string GeometryLink::toString()
 	return stream.str();
 }
 
-//IGeometryObject & Point::operator = ( IGeometryObject & src )
-//{
-//	if( src.getType() != GEOMETRYOBJECT_POINT )
-//	{
-//		return *this;
-//	}
-//	setX( ((Point)src).getX() );
-//	setY( ((Point)src).getY() );
-//	return this;
-//}
+GeometryLink & GeometryLink::operator = ( const GeometryLink & src )
+{
+	if( *this == src )
+	{
+		return *this;
+	}
+	const Point & point = src.getPointFrom();
+	setPointFrom( point );
+	setPointTo( src.getPointTo() );
+	return *this;
+}
 
-void GeometryLink::setPointFrom( Point & point )
+bool GeometryLink::operator == ( const GeometryLink & src )
+{
+	if( getPointFrom() != src.getPointFrom() )
+	{
+		return false;
+	}
+	if( getPointTo() !=  src.getPointTo() )
+	{
+		return false;
+	}
+	return true;
+}
+
+IGeometryObject & GeometryLink::operator = ( IGeometryObject & src )
+{
+	if( src.getType() != GEOMETRYOBJECT_LINK )
+	{
+		return *this;
+	}
+	setPointFrom( ((GeometryLink &)src).getPointFrom() );
+	setPointTo(   ((GeometryLink &)src).getPointTo()   );
+	return *this;
+}
+
+void GeometryLink::setPointFrom( const Point & point )
 {
 	m_Points[0] = point;
 }
 
-void GeometryLink::setPointTo( Point & point )
+void GeometryLink::setPointTo( const Point & point )
 {
 	m_Points[1] = point;
 }
 
-Point & GeometryLink::getPointFrom()
+const Point & GeometryLink::getPointFrom() const
 {
-	Point & p = m_Points[0];
+	const Point & p = m_Points[0];
 	return p;
 }
 
-Point & GeometryLink::getPointTo()
+const Point & GeometryLink::getPointTo() const
 {
-	Point & p = m_Points[1];
+	const Point & p = m_Points[1];
 	return p;
 }
 

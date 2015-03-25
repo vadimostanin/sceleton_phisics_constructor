@@ -36,7 +36,7 @@ Point & Point::operator = ( const Point & src )
 	return *this;
 }
 
-bool Point::operator==( const Point & src ) const
+bool Point::operator == ( const Point & src ) const
 {
 	if( getX() != src.getX() )
 	{
@@ -49,7 +49,16 @@ bool Point::operator==( const Point & src ) const
 	return true;
 }
 
-int Point::getId()
+bool Point::operator != ( const Point & src ) const
+{
+	if( *this == src )
+	{
+		return false;
+	}
+	return true;
+}
+
+int Point::getId() const
 {
 	return m_Id;
 }
@@ -74,16 +83,16 @@ string Point::toString()
 	return stream.str();
 }
 
-//IGeometryObject & Point::operator = ( IGeometryObject & src )
-//{
-//	if( src.getType() != GEOMETRYOBJECT_POINT )
-//	{
-//		return *this;
-//	}
-//	setX( ((Point)src).getX() );
-//	setY( ((Point)src).getY() );
-//	return this;
-//}
+IGeometryObject & Point::operator = ( IGeometryObject & src )
+{
+	if( src.getType() != GEOMETRYOBJECT_POINT )
+	{
+		return *this;
+	}
+	setX( ((Point &)src).getX() );
+	setY( ((Point &)src).getY() );
+	return *this;
+}
 
 Point::~Point()
 {
@@ -109,7 +118,7 @@ void Point::setY( int y )
 	m_y = y;
 }
 
-GeometryObjectsTypes Point::getType()
+GeometryObjectsTypes Point::getType() const
 {
 	return GEOMETRYOBJECT_POINT;
 }

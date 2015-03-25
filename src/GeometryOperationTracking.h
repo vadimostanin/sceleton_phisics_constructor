@@ -10,7 +10,6 @@
 
 #include "IGeometryObjectTracker.h"
 #include "ObjectOperationStatus.h"
-//#include "IViewUpdatable.h"
 #include "DrawingContent.h"
 #include "Point.h"
 
@@ -37,8 +36,8 @@ private:
 
 	void constructGraphicObjects( vector<IGraphicObject *> & graphicObjects );
 
-	IGeometryObject * m_GeometryObjectTracking;
 	DrawingContent & m_ViewUpdater;
+	IGeometryObject * m_GeometryObjectTracking;
 };
 
 #endif /* GEOMETRYOPERATIONTRACKING_H_ */

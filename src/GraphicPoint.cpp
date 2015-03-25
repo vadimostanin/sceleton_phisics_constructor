@@ -62,7 +62,11 @@ GraphicPoint::GraphicPoint( const GraphicPoint & src )
 
 GraphicPoint::~GraphicPoint()
 {
-//	m_glApi->glDeleteBuffers( 1, &m_vertexesBufferObject );
+}
+
+IGeometryObject & GraphicPoint::getGeometryObject()
+{
+	return m_Point;
 }
 
 void GraphicPoint::initQuadVertex()
