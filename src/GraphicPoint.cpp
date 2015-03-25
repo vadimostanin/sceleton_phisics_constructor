@@ -137,26 +137,30 @@ void GraphicPoint::initCircleVertex()
 	}
 }
 
+#define SHADER(shader) #shader
+
 // Initialize the shader and program object
 int GraphicPoint::initShaders()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
-   GLbyte vShaderStr[] =
-		"attribute vec2 vPosition;\n"
-	    "uniform mat4 perspective;\n"
-		"uniform mat4 translate;\n"
-		"uniform mat4 scale;\n"
-		"void main()\n"
-		"{\n"
-	    "   gl_Position = perspective * translate * scale * vec4( vPosition.x, vPosition.y, 0.0, 1.0 );\n"
-		"}\n";
+   GLbyte vShaderStr[] = SHADER(
+								attribute vec2 vPosition;
+								uniform mat4 perspective;
+								uniform mat4 translate;
+								uniform mat4 scale;
+								void main()
+								{
+									gl_Position = perspective * translate * scale * vec4( vPosition.x, vPosition.y, 0.0, 1.0 );
+								}
+						);
 
-   GLbyte fShaderStr[] =
-		   "precision mediump float;                     \n"
-		   "void main()\n"
-		   "{\n"
-		   "  gl_FragColor = vec4 ( 0.5, 0.5, 1.0, 1.0 );\n"
-		   "}\n";
+   GLbyte fShaderStr[] = SHADER(
+								precision mediump float;\n
+								void main()\n
+								{\n
+									gl_FragColor = vec4 ( 0.5, 0.5, 1.0, 1.0 );\n
+								}\n
+		   );
 
    GLint linked;
 

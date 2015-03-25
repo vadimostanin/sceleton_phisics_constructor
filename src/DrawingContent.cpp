@@ -18,9 +18,6 @@ using namespace std;
 
 #define MAIN_EDJ "./main.edj"
 
-#define SEARCHING_POINT_RADIUS 20
-
-
 DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject )
 {
 	createDrawingLayout();
