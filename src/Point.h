@@ -30,6 +30,7 @@ public:
 	GeometryObjectsTypes getType() const;
 
 	int getId() const;
+	void setId( int id);
 
 	IGeometryObject * clone();
 	string toString();

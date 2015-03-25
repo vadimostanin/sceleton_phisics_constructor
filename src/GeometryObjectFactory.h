@@ -19,7 +19,7 @@ public:
 	virtual ~GeometryObjectFactory();
 
 	IGeometryObject * createGeometryObject( GeometryObjectsTypes type );
-	IGraphicObject * createGraphicObject( GeometryObjectsTypes type, Evas_Object * canvas );
+	IGraphicObject * createGraphicObject( IGeometryObject * geometryObject, Evas_Object * canvas );
 
 	static GeometryObjectFactory & getInstance();
 };

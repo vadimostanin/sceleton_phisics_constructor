@@ -7,7 +7,7 @@
 
 #include "GraphicPointHighlighted.h"
 
-GraphicPointHighlighted::GraphicPointHighlighted( Evas_Object * canvas ) : GraphicPoint( canvas )
+GraphicPointHighlighted::GraphicPointHighlighted( IGeometryObject * geometryObject, Evas_Object * canvas ) : GraphicPoint( geometryObject, canvas )
 {
 }
 
@@ -15,7 +15,7 @@ GraphicPointHighlighted::~GraphicPointHighlighted()
 {
 }
 
-GraphicPointHighlighted::GraphicPointHighlighted( Evas_Object * canvas, int x, int y ) : GraphicPoint( canvas )
+GraphicPointHighlighted::GraphicPointHighlighted( IGeometryObject * geometryObject, Evas_Object * canvas, int x, int y ) : GraphicPoint( geometryObject, canvas )
 {
 	;
 }

@@ -35,6 +35,7 @@ private:
 	bool getPoint( int x, int y, Point ** point );
 
 	void constructGraphicObjects( vector<IGraphicObject *> & graphicObjects );
+	void constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject );
 
 	DrawingContent & m_ViewUpdater;
 	IGeometryObject * m_GeometryObjectTracking;

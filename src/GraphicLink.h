@@ -16,7 +16,7 @@
 class GraphicLink : public GraphicObjectBase, public IGraphicObject
 {
 public:
-	GraphicLink( Evas_Object * glview );
+	GraphicLink( IGeometryObject * geometryObject, Evas_Object * glview );
 	GraphicLink( const GraphicLink & src );
 	GraphicLink( const GeometryLink & src );
 	virtual ~GraphicLink();

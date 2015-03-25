@@ -63,6 +63,11 @@ int Point::getId() const
 	return m_Id;
 }
 
+void Point::setId( int id)
+{
+	m_Id = id;
+}
+
 IGeometryObject * Point::clone()
 {
 	Point * newPoint = new Point;

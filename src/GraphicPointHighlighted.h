@@ -13,9 +13,9 @@
 class GraphicPointHighlighted : public GraphicPoint
 {
 public:
-	GraphicPointHighlighted( Evas_Object * canvas );
+	GraphicPointHighlighted( IGeometryObject * geometryObject, Evas_Object * canvas );
 	virtual ~GraphicPointHighlighted();
-	GraphicPointHighlighted( Evas_Object * canvas, int x, int y );
+	GraphicPointHighlighted( IGeometryObject * geometryObject, Evas_Object * canvas, int x, int y );
 	GraphicPointHighlighted( Evas_Object * canvas, const Point & point );
 	GraphicPointHighlighted( const GraphicPoint & src );
 	virtual void draw( Evas * canvas );

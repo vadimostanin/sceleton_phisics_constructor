@@ -155,6 +155,8 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 void DrawingContent::addGraphicObject( IGraphicObject * graphicObject )
 {
 	m_GraphicObjects.push_back( graphicObject );
+
+	update();
 }
 
 void DrawingContent::deleteGraphicObject( IGraphicObject * graphicObject )
@@ -165,18 +167,32 @@ void DrawingContent::deleteGraphicObject( IGraphicObject * graphicObject )
 	{
 		return;
 	}
+	delete (*foundIter);
 	m_GraphicObjects.erase( foundIter );
+
+	update();
 }
 
 void DrawingContent::changeGraphicObject( IGraphicObject * graphicObject )
 {
+//	cout << "changeGraphicObject enter" << endl << flush;
 	GraphicObjectFindPredicate predicate( graphicObject );
+//	cout << "count=" << m_GraphicObjects.size() << endl << flush;
 	vector<IGraphicObject *>::iterator foundIter = find_if( m_GraphicObjects.begin(), m_GraphicObjects.end(), predicate );
-	if( foundIter == m_GraphicObjects.end() )
+	if( foundIter != m_GraphicObjects.end() )
 	{
-		return;
+//		cout << "YES found" << endl << flush;
+		delete (*foundIter);
+		m_GraphicObjects.erase( foundIter );
 	}
-	(*foundIter) = graphicObject;
+	else
+	{
+//		cout << "NOT found" << endl << flush;
+	}
+	m_GraphicObjects.push_back( graphicObject );
+
+	update();
+//	cout << "changeGraphicObject leave" << endl << flush;
 }
 
 void DrawingContent::drawObjects()

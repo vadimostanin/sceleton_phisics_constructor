@@ -32,7 +32,7 @@ GeometryObjectsTypes GeometryLink::getType() const
 
 int GeometryLink::getId() const
 {
-	return rand();
+	return m_Id;
 }
 
 IGeometryObject * GeometryLink::clone()
@@ -88,6 +88,9 @@ IGeometryObject & GeometryLink::operator = ( IGeometryObject & src )
 	}
 	setPointFrom( ((GeometryLink &)src).getPointFrom() );
 	setPointTo(   ((GeometryLink &)src).getPointTo()   );
+
+	m_Id = ((GeometryLink &)src).m_Id;
+
 	return *this;
 }
 

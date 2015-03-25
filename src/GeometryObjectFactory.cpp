@@ -38,19 +38,19 @@ IGeometryObject * GeometryObjectFactory::createGeometryObject( GeometryObjectsTy
 	return object;
 }
 
-IGraphicObject * GeometryObjectFactory::createGraphicObject( GeometryObjectsTypes type, Evas_Object * canvas )
+IGraphicObject * GeometryObjectFactory::createGraphicObject( IGeometryObject * geometryObject, Evas_Object * canvas )
 {
 	IGraphicObject * object = 0;
-	switch( type )
+	switch( geometryObject->getType() )
 	{
 		case GEOMETRYOBJECT_POINT:
-				object = new GraphicPoint( canvas );
+				object = new GraphicPoint( geometryObject, canvas );
 			break;
 		case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
-				object = new GraphicPointHighlighted( canvas );
+				object = new GraphicPointHighlighted( geometryObject, canvas );
 			break;
 		case GEOMETRYOBJECT_LINK:
-				object = new GraphicLink( canvas );
+				object = new GraphicLink( geometryObject, canvas );
 			break;
 	}
 	return object;

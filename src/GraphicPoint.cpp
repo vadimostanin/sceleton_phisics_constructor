@@ -33,10 +33,12 @@ void GraphicPoint::initVertex()
 	initCircleVertex();
 }
 
-GraphicPoint::GraphicPoint( Evas_Object * glview ) : GraphicObjectBase( glview )
+GraphicPoint::GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glview ) : GraphicObjectBase( glview )
 {
 	initVertex();
 	initShaders();
+
+	m_Point = (Point&)( * geometryObject );
 }
 
 GraphicPoint::GraphicPoint( Evas_Object * glview, const Point & point ) : GraphicObjectBase( glview ), m_Point( point )

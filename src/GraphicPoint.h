@@ -18,7 +18,7 @@ using namespace std;
 class GraphicPoint : public GraphicObjectBase, public IGraphicObject
 {
 public:
-	GraphicPoint( Evas_Object * glview );
+	GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glview );
 	GraphicPoint( Evas_Object * glview, int x, int y );
 	GraphicPoint( Evas_Object * glview, const Point & point );
 	GraphicPoint( const GraphicPoint & src );

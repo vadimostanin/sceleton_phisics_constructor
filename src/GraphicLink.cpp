@@ -10,9 +10,11 @@
 #include "GraphicLink.h"
 using namespace std;
 
-GraphicLink::GraphicLink( Evas_Object * glview ) : GraphicObjectBase( glview )
+GraphicLink::GraphicLink( IGeometryObject * geometryObject, Evas_Object * glview ) : GraphicObjectBase( glview )
 {
 	initShaders();
+
+	m_geometryLink = *geometryObject;
 }
 
 GraphicLink::GraphicLink( const GraphicLink & src )
@@ -21,23 +23,18 @@ GraphicLink::GraphicLink( const GraphicLink & src )
 	m_perspective_idx = src.m_perspective_idx;
 	m_translate_idx = src.m_translate_idx;
 	m_scale_idx = src.m_scale_idx;
-
-	m_geometryLink.setPointFrom( src.m_geometryLink.getPointFrom() );
-	m_geometryLink.setPointTo( src.m_geometryLink.getPointTo() );
 }
 
 GraphicLink::GraphicLink( const GeometryLink & src )
 {
 	initShaders();
 
-	m_geometryLink.setPointFrom( src.getPointFrom() );
-	m_geometryLink.setPointTo( src.getPointTo() );
+	m_geometryLink = src;
 }
 
 GraphicLink & GraphicLink::operator = ( const GeometryLink & src )
 {
-	m_geometryLink.setPointFrom( src.getPointFrom() );
-	m_geometryLink.setPointTo( src.getPointTo() );
+	m_geometryLink = src;
 
 	return *this;
 }
