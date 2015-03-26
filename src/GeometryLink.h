@@ -8,23 +8,23 @@
 #ifndef GeometryLink_H_
 #define GeometryLink_H_
 
-#include "Point.h"
+#include "GeometryPoint.h"
 #include "IGeometryObject.h"
 
 class GeometryLink : public IGeometryObject
 {
 public:
 	GeometryLink();
-	GeometryLink( Point & point_1, Point & point_2 );
+	GeometryLink( GeometryPoint & point_1, GeometryPoint & point_2 );
 	virtual ~GeometryLink();
 
 	GeometryObjectsTypes getType() const;
 
-	void setPointFrom( const Point & point );
-	void setPointTo( const Point & point );
+	void setPointFrom( const GeometryPoint & point );
+	void setPointTo( const GeometryPoint & point );
 
-	const Point & getPointFrom() const;
-	const Point & getPointTo() const;
+	const GeometryPoint & getPointFrom() const;
+	const GeometryPoint & getPointTo() const;
 
 	int getId() const;
 
@@ -35,7 +35,7 @@ public:
 	IGeometryObject & operator = ( IGeometryObject & src );
 
 private:
-	Point m_Points[2];
+	GeometryPoint m_Points[2];
 	int m_Id;
 };
 

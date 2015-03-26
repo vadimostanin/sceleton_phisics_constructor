@@ -44,7 +44,7 @@ void GeometryObjectsManager::getObjects( vector<IGeometryObject *> & objects )
 	objects = m_geometryObjects;
 }
 
-bool GeometryObjectsManager::getPoint( int x, int y, Point ** point )
+bool GeometryObjectsManager::getPoint( int x, int y, GeometryPoint ** point )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -55,7 +55,7 @@ bool GeometryObjectsManager::getPoint( int x, int y, Point ** point )
 		{
 			continue;
 		}
-		Point * point_iter = (Point *)(*iter);
+		GeometryPoint * point_iter = (GeometryPoint *)(*iter);
 		int point_x = point_iter->getX();
 		int point_y = point_iter->getY();
 
@@ -64,13 +64,13 @@ bool GeometryObjectsManager::getPoint( int x, int y, Point ** point )
 		{
 			continue;
 		}
-		*point = (Point *)(*point_iter).clone();
+		*point = (GeometryPoint *)(*point_iter).clone();
 		return true;
 	}
 	return false;
 }
 
-bool GeometryObjectsManager::getNearestPoint( const Point & startPoint,  int x, int y, Point & point )
+bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint,  int x, int y, GeometryPoint & point )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -86,7 +86,7 @@ bool GeometryObjectsManager::getNearestPoint( const Point & startPoint,  int x, 
 			continue;
 		}
 
-		const Point & point_iter = *(Point *)(*iter);
+		const GeometryPoint & point_iter = *(GeometryPoint *)(*iter);
 
 		if( startPoint == point_iter )
 		{

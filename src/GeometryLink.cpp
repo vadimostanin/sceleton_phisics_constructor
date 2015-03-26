@@ -15,7 +15,7 @@ GeometryLink::GeometryLink() : m_Id( rand() )
 
 }
 
-GeometryLink::GeometryLink( Point & point_1, Point & point_2 ) : m_Id( rand() )
+GeometryLink::GeometryLink( GeometryPoint & point_1, GeometryPoint & point_2 ) : m_Id( rand() )
 {
 	m_Points[0] = point_1;
 	m_Points[1] = point_2;
@@ -61,7 +61,7 @@ GeometryLink & GeometryLink::operator = ( const GeometryLink & src )
 	{
 		return *this;
 	}
-	const Point & point = src.getPointFrom();
+	const GeometryPoint & point = src.getPointFrom();
 	setPointFrom( point );
 	setPointTo( src.getPointTo() );
 	return *this;
@@ -94,25 +94,25 @@ IGeometryObject & GeometryLink::operator = ( IGeometryObject & src )
 	return *this;
 }
 
-void GeometryLink::setPointFrom( const Point & point )
+void GeometryLink::setPointFrom( const GeometryPoint & point )
 {
 	m_Points[0] = point;
 }
 
-void GeometryLink::setPointTo( const Point & point )
+void GeometryLink::setPointTo( const GeometryPoint & point )
 {
 	m_Points[1] = point;
 }
 
-const Point & GeometryLink::getPointFrom() const
+const GeometryPoint & GeometryLink::getPointFrom() const
 {
-	const Point & p = m_Points[0];
+	const GeometryPoint & p = m_Points[0];
 	return p;
 }
 
-const Point & GeometryLink::getPointTo() const
+const GeometryPoint & GeometryLink::getPointTo() const
 {
-	const Point & p = m_Points[1];
+	const GeometryPoint & p = m_Points[1];
 	return p;
 }
 

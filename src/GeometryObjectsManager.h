@@ -8,7 +8,7 @@
 #ifndef GEOMETRYOBJECTSMANAGER_H_
 #define GEOMETRYOBJECTSMANAGER_H_
 
-#include "Point.h"
+#include "GeometryPoint.h"
 #include "GeometryLink.h"
 
 #include <vector>
@@ -23,8 +23,8 @@ public:
 	void addObject( IGeometryObject * object );
 	void removeObject( IGeometryObject * object );
 	void getObjects( vector<IGeometryObject *> & objects );
-	bool getPoint( int x, int y, Point ** point );
-	bool getNearestPoint( const Point & startPoint, int x, int y, Point & point );
+	bool getPoint( int x, int y, GeometryPoint ** point );
+	bool getNearestPoint( const GeometryPoint & startPoint, int x, int y, GeometryPoint & point );
 
 	void save( string filename );
 

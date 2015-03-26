@@ -8,14 +8,12 @@
 #ifndef DRAWINGCONTENT_H_
 #define DRAWINGCONTENT_H_
 
+#include "GraphicPoint.h"
 #include <Evas.h>
 #include <vector>
 using namespace std;
 
-#include "IViewUpdatable.h"
-#include "GraphicPoint.h"
-
-class DrawingContent : public IViewUpdatable
+class DrawingContent
 {
 
 public:

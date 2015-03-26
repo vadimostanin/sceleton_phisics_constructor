@@ -20,7 +20,7 @@ GraphicPointHighlighted::GraphicPointHighlighted( IGeometryObject * geometryObje
 	;
 }
 
-GraphicPointHighlighted::GraphicPointHighlighted( Evas_Object * canvas, const Point & point) : GraphicPoint( canvas, point )
+GraphicPointHighlighted::GraphicPointHighlighted( Evas_Object * canvas, const GeometryPoint & point) : GraphicPoint( canvas, point )
 {
 	;
 }

@@ -8,7 +8,7 @@
 #include "GeometryObjectFactory.h"
 
 #include "GraphicLink.h"
-#include "Point.h"
+#include "GeometryPoint.h"
 #include "GeometryLink.h"
 #include "GraphicPoint.h"
 #include "GraphicPointHighlighted.h"
@@ -29,7 +29,7 @@ IGeometryObject * GeometryObjectFactory::createGeometryObject( GeometryObjectsTy
 	{
 		case GEOMETRYOBJECT_POINT:
 		case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
-				object = new Point();
+				object = new GeometryPoint();
 			break;
 		case GEOMETRYOBJECT_LINK:
 				object = new GeometryLink();

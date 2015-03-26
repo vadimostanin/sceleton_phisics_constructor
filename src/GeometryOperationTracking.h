@@ -11,7 +11,7 @@
 #include "IGeometryObjectTracker.h"
 #include "ObjectOperationStatus.h"
 #include "DrawingContent.h"
-#include "Point.h"
+#include "GeometryPoint.h"
 
 #include <vector>
 using namespace std;
@@ -32,7 +32,7 @@ private:
 
 	void clearTrackingStack();
 
-	bool getPoint( int x, int y, Point ** point );
+	bool getPoint( int x, int y, GeometryPoint ** point );
 
 	void constructGraphicObjects( vector<IGraphicObject *> & graphicObjects );
 	void constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject );

@@ -9,7 +9,7 @@
 #define GRAPHICLINK_H_
 
 #include <Evas.h>
-#include "Point.h"
+#include "GeometryPoint.h"
 #include "GeometryLink.h"
 #include "GraphicObjectBase.h"
 

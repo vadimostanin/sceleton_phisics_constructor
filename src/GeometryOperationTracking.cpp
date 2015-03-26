@@ -39,22 +39,22 @@ void GeometryOperationTracking::constructGraphicObjects( vector<IGraphicObject *
 		{
 			case GEOMETRYOBJECT_POINT:
 			{
-					int x = ((Point*)(*iter))->getX();
-					int y = ((Point*)(*iter))->getY();
+					int x = ((GeometryPoint*)(*iter))->getX();
+					int y = ((GeometryPoint*)(*iter))->getY();
 					((GraphicPoint *)graphicObject)->setX( x );
 					((GraphicPoint *)graphicObject)->setY( y );
 			}
 				break;
 			case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
 			{
-				((GraphicPointHighlighted *)graphicObject)->setX( ((Point*)(*iter))->getX() );
-				((GraphicPointHighlighted *)graphicObject)->setY( ((Point*)(*iter))->getY() );
+				((GraphicPointHighlighted *)graphicObject)->setX( ((GeometryPoint*)(*iter))->getX() );
+				((GraphicPointHighlighted *)graphicObject)->setY( ((GeometryPoint*)(*iter))->getY() );
 			}
 				break;
 			case GEOMETRYOBJECT_LINK:
 			{
-				const Point & pointFrom = (( GeometryLink * )( * iter ))->getPointFrom();
-				const Point & pointTo = (( GeometryLink * )( * iter ))->getPointTo();
+				const GeometryPoint & pointFrom = (( GeometryLink * )( * iter ))->getPointFrom();
+				const GeometryPoint & pointTo = (( GeometryLink * )( * iter ))->getPointTo();
 
 				((GeometryLink &)graphicObject->getGeometryObject()).setPointFrom( pointFrom );
 				((GeometryLink &)graphicObject->getGeometryObject()).setPointTo( pointTo );
@@ -73,22 +73,22 @@ void GeometryOperationTracking::constructGraphicObject( IGeometryObject * geomet
 	{
 		case GEOMETRYOBJECT_POINT:
 		{
-//			int x = ((Point*)geometryObject)->getX();
-//			int y = ((Point*)geometryObject)->getY();
+//			int x = ((GeometryPoint*)geometryObject)->getX();
+//			int y = ((GeometryPoint*)geometryObject)->getY();
 //			((Point &)(* graphicObject )->getGeometryObject()).setX( x );
 //			((Point &)(* graphicObject )->getGeometryObject()).setY( y );
 		}
 		break;
 		case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
 		{
-			((Point &)(* graphicObject )->getGeometryObject()).setX( ((Point*)geometryObject)->getX() );
-			((Point &)(* graphicObject )->getGeometryObject()).setY( ((Point*)geometryObject)->getY() );
+			((GeometryPoint &)(* graphicObject )->getGeometryObject()).setX( ((GeometryPoint*)geometryObject)->getX() );
+			((GeometryPoint &)(* graphicObject )->getGeometryObject()).setY( ((GeometryPoint*)geometryObject)->getY() );
 		}
 		break;
 		case GEOMETRYOBJECT_LINK:
 		{
-//			const Point & pointFrom = (( GeometryLink * )geometryObject)->getPointFrom();
-//			const Point & pointTo =   (( GeometryLink * )geometryObject)->getPointTo();
+//			const GeometryPoint & pointFrom = (( GeometryLink * )geometryObject)->getPointFrom();
+//			const GeometryPoint & pointTo =   (( GeometryLink * )geometryObject)->getPointTo();
 //
 //			((GeometryLink &)(* graphicObject )->getGeometryObject()).setPointFrom( pointFrom );
 //			((GeometryLink &)(* graphicObject )->getGeometryObject()).setPointTo( pointTo );
@@ -99,14 +99,14 @@ void GeometryOperationTracking::constructGraphicObject( IGeometryObject * geomet
 
 void GeometryOperationTracking::trackerBegin( int x, int y )
 {
-	Point * point;
+	GeometryPoint * point;
 	IGeometryObject * new_object = NULL;
 	if( false == getPoint( x, y, &point ) )
 	{
-		new_object = (Point *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+		new_object = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
 		m_GeometryObjectTracking = new_object;
 
-		Point * point_object = (Point *)new_object;
+		GeometryPoint * point_object = (GeometryPoint *)new_object;
        
 		GeometryObjectsManager::getInstance().addObject( point_object );
 		point_object->setX( x );
@@ -144,8 +144,8 @@ void GeometryOperationTracking::trackerContinue( int x, int y )
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
 	{
 		GeometryLink & geoLink = *((GeometryLink*)m_GeometryObjectTracking);
-		const Point & pointFrom = geoLink.getPointFrom();
-		Point temp_point;
+		const GeometryPoint & pointFrom = geoLink.getPointFrom();
+		GeometryPoint temp_point;
 		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestPoint( pointFrom, x, y, temp_point );
 		if( foundNearestPoint == true )
 		{
@@ -157,7 +157,7 @@ void GeometryOperationTracking::trackerContinue( int x, int y )
 	}
 	else if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_POINT )
 	{
-		Point * stack_point = (Point*)m_GeometryObjectTracking;
+		GeometryPoint * stack_point = (GeometryPoint*)m_GeometryObjectTracking;
 		stack_point->setX( x );
 		stack_point->setY( y );
 	}
@@ -176,7 +176,7 @@ void GeometryOperationTracking::trackerEnd( int x, int y )
 
 void GeometryOperationTracking::deleteObject( int x, int y )
 {
-	Point * point;
+	GeometryPoint * point;
 	if( false == getPoint( x, y, &point ) )
 	{
 		return;
@@ -191,7 +191,7 @@ void GeometryOperationTracking::deleteObject( int x, int y )
 	m_ViewUpdater.deleteGraphicObject( graphicObject );
 }
 
-bool GeometryOperationTracking::getPoint( int x, int y, Point ** point )
+bool GeometryOperationTracking::getPoint( int x, int y, GeometryPoint ** point )
 {
 	bool found = GeometryObjectsManager::getInstance().getPoint( x, y, point );
 	return found;

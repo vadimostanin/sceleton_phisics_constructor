@@ -9,7 +9,7 @@
 #define GRAPHICPOINT_H_
 
 #include <Evas.h>
-#include "Point.h"
+#include "GeometryPoint.h"
 #include "GraphicObjectBase.h"
 #include <Evas_GL.h>
 #include <vector>
@@ -20,7 +20,7 @@ class GraphicPoint : public GraphicObjectBase, public IGraphicObject
 public:
 	GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glview );
 	GraphicPoint( Evas_Object * glview, int x, int y );
-	GraphicPoint( Evas_Object * glview, const Point & point );
+	GraphicPoint( Evas_Object * glview, const GeometryPoint & point );
 	GraphicPoint( const GraphicPoint & src );
 	virtual ~GraphicPoint();
 	bool operator ==( const GraphicPoint & src );
@@ -33,7 +33,7 @@ public:
 	IGeometryObject & getGeometryObject();
 
 private:
-	Point m_Point;
+	GeometryPoint m_Point;
 
 	GLint m_perspective_idx;
 	GLint m_translate_idx;

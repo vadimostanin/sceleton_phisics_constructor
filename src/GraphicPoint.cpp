@@ -38,10 +38,10 @@ GraphicPoint::GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glvi
 	initVertex();
 	initShaders();
 
-	m_Point = (Point&)( * geometryObject );
+	m_Point = (GeometryPoint&)( * geometryObject );
 }
 
-GraphicPoint::GraphicPoint( Evas_Object * glview, const Point & point ) : GraphicObjectBase( glview ), m_Point( point )
+GraphicPoint::GraphicPoint( Evas_Object * glview, const GeometryPoint & point ) : GraphicObjectBase( glview ), m_Point( point )
 {
 	initVertex();
 	initShaders();

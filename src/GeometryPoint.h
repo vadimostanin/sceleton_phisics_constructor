@@ -1,5 +1,5 @@
 /*
- * Point.h
+ * GeometryPoint.h
  *
  *  Created on: Mar 16, 2015
  *      Author: vostanin
@@ -10,16 +10,16 @@
 
 #include "IGeometryObject.h"
 
-class Point : public IGeometryObject
+class GeometryPoint : public IGeometryObject
 {
 public:
-	Point();
-	Point( int x, int y );
-	Point( const Point & src );
-	bool operator == ( const Point & src ) const;
-	bool operator != ( const Point & src ) const;
-	Point & operator = ( const Point & src );
-	virtual ~Point();
+	GeometryPoint();
+	GeometryPoint( int x, int y );
+	GeometryPoint( const GeometryPoint & src );
+	bool operator == ( const GeometryPoint & src ) const;
+	bool operator != ( const GeometryPoint & src ) const;
+	GeometryPoint & operator = ( const GeometryPoint & src );
+	virtual ~GeometryPoint();
 
 	int getX() const;
 	int getY() const;
