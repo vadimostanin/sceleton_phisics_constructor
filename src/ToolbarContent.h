@@ -8,17 +8,22 @@
 #ifndef TOOLBARCONTENT_H_
 #define TOOLBARCONTENT_H_
 
+#include "ToolbarContentItem.h"
 #include <Evas.h>
 
-class ToolbarContent {
+class ToolbarContent
+{
 public:
 	ToolbarContent( Evas_Object *parent );
 	virtual ~ToolbarContent();
+
+	void addToolbarContentItem( ToolbarContentItem & toolbarItem );
+
 private:
 	void createButtonsLayout();
-	void createButtonsOnButtonsLayout();
 
 	Evas_Object * m_MainLayout;
+	Evas_Object * m_ContainerBox;
 	Evas_Object * m_ButtonsLayout;
 };
 

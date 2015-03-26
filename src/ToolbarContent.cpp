@@ -6,7 +6,7 @@
  */
 
 #include "ToolbarContent.h"
-#include "GeometryObjectsManager.h"
+#include "ToolbarContentButton.h"
 #include <Elementary.h>
 
 #include <iostream>
@@ -14,15 +14,18 @@ using namespace std;
 
 #define MAIN_EDJ "./main.edj"
 
-ToolbarContent::ToolbarContent( Evas_Object *mainLayout ) : m_MainLayout( mainLayout )
+void on_button_click( void * user_data )
 {
-	// TODO Auto-generated constructor stub
-	createButtonsLayout();
-	createButtonsOnButtonsLayout();
+	cout << "on_button_click" << endl << flush;
 }
 
-ToolbarContent::~ToolbarContent() {
-	// TODO Auto-generated destructor stub
+ToolbarContent::ToolbarContent( Evas_Object *mainLayout ) : m_MainLayout( mainLayout )
+{
+	createButtonsLayout();
+}
+
+ToolbarContent::~ToolbarContent()
+{
 }
 
 void ToolbarContent::createButtonsLayout()
@@ -31,19 +34,35 @@ void ToolbarContent::createButtonsLayout()
 	elm_layout_file_set( m_ButtonsLayout, MAIN_EDJ, "group.toolbar_layout");
 	evas_object_size_hint_weight_set( m_ButtonsLayout, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_object_part_content_set( m_MainLayout, "part.main.toolbar", m_ButtonsLayout );
+
+	m_ContainerBox = elm_box_add( m_ButtonsLayout );
+	evas_object_size_hint_align_set( m_ContainerBox, EVAS_HINT_FILL, EVAS_HINT_FILL );
+	evas_object_size_hint_weight_set( m_ContainerBox, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND );
+	elm_object_part_content_set( m_ButtonsLayout, "part.toolbar_layout.main_box", m_ContainerBox );
+	evas_object_show( m_ContainerBox );
 }
 
-void on_save_objects( void *data, Evas_Object *obj, void *event_info )
+void ToolbarContent::addToolbarContentItem( ToolbarContentItem & toolbarItem )
 {
-	GeometryObjectsManager::getInstance().save( "./objects.txt" );
+	toolbarItem.create( m_ButtonsLayout );
+
+	Evas_Object * button = toolbarItem.getEvas();
+	elm_object_text_set( button, "Save objects");
+
+	elm_box_horizontal_set( m_ContainerBox, EINA_TRUE );
+	elm_box_pack_end( m_ContainerBox, button );
+	evas_object_show( m_ContainerBox );
 }
 
-void ToolbarContent::createButtonsOnButtonsLayout()
-{
-	Evas_Object * button = elm_button_add( m_ButtonsLayout );
-	evas_object_size_hint_weight_set( button, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND );
-	elm_object_part_content_set( m_ButtonsLayout, "part.toolbar_layout.button_1", button );
-    elm_object_text_set( button, "Save objects");
-    evas_object_smart_callback_add( button, "clicked", on_save_objects, this);
-	evas_object_show( button);
-}
+
+
+
+
+
+
+
+
+
+
+
+

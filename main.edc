@@ -55,10 +55,31 @@ collections
 		{
 			part
 			{
-				name:"part.toolbar_layout.button_1";
-				type:SWALLOW;
+				name:"part.toolbar_layout.main_box";
+				type: SWALLOW;
 				description
 				{
+					color : 0 255 0 255;
+					fixed: 1 1;
+					align: 0.0 0.0;
+					rel1
+	                {
+	                    relative: 0.0 0.0;
+	                }
+	                rel2
+	                {
+	                    relative: 1.0 1.0;
+	                }
+				}
+			}
+
+			part
+			{
+				name:"part.toolbar_layout.button_1";
+				type: SWALLOW;
+				description
+				{
+				color : 255 0 0 255;
 					fixed: 1 1;
 					//max: 30 50;
 					align: 0.0 0.0;
@@ -72,6 +93,7 @@ collections
                     }
 				}
 			}
+/*
 			part
 			{
 				name:"part.toolbar_layout.button_2";
@@ -92,6 +114,7 @@ collections
                     }
 				}
 			}
+*/
 		}
 	}
 	group

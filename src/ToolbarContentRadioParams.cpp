@@ -1,0 +1,59 @@
+/*
+ * ToolbarContentRadioParams.cpp
+ *
+ *  Created on: Mar 26, 2015
+ *      Author: vostanin
+ */
+
+#include "ToolbarContentRadioParams.h"
+#include <elementary-1/Elementary.h>
+
+ToolbarContentRadioParams::ToolbarContentRadioParams( ToolbarItemCallback callback, void * userData ) : m_Callback( callback ), m_UserData( userData )
+{
+}
+
+ToolbarContentRadioParams::~ToolbarContentRadioParams()
+{
+}
+
+
+ToolbarItemCallback ToolbarContentRadioParams::getCallback() const
+{
+	return m_Callback;
+}
+
+void * ToolbarContentRadioParams::getUserData()
+{
+	return m_UserData;
+}
+
+ToolbarContentRadioParams::ToolbarContentRadioParams( const ToolbarContentRadioParams & src )
+{
+	m_Callback = ((ToolbarContentRadioParams &)src).getCallback();
+	m_UserData = ((ToolbarContentRadioParams &)src).getUserData();
+}
+
+ToolbarContentItemParams & ToolbarContentRadioParams::operator = ( const ToolbarContentItemParams & src )
+{
+	if( this == &src )
+	{
+		return *this;
+	}
+
+	m_Callback = ((ToolbarContentRadioParams &)src).getCallback();
+	m_UserData = ((ToolbarContentRadioParams &)src).getUserData();
+
+	return *this;
+}
+
+
+
+
+
+
+
+
+
+
+
+

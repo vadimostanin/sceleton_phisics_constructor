@@ -21,6 +21,17 @@ using namespace std;
 #include <ctime>
 #include <stdlib.h>
 
+#include "GeometryObjectsManager.h"
+#include "ToolbarContentButton.h"
+#include "ToolbarContentButtonParams.h"
+#include "ToolbarContentRadio.h"
+#include "ToolbarContentRadioParams.h"
+
+void on_save_objects( void * userData )
+{
+	GeometryObjectsManager::getInstance().save( "./objects.txt" );
+}
+
 EAPI_MAIN int elm_main(int argc, char **argv)
 {
 	Window window;
@@ -35,6 +46,16 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	window.setContentLayout( mainContent.getLayout() );
 
 	ToolbarContent toolbar( mainContent.getLayout() );
+	string title( "Save objects" );
+	ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_save_objects, NULL );
+	ToolbarContentItem * item = new ToolbarContentButton( *params );
+
+	ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( on_save_objects, NULL );
+	ToolbarContentItem * item2 = new ToolbarContentRadio( *params2 );
+
+	toolbar.addToolbarContentItem( *item );
+	toolbar.addToolbarContentItem( *item2 );
+
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
 	GeometryOperationTracking geoObjectTracking( drawingContent );
