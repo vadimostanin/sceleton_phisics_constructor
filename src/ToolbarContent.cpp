@@ -19,7 +19,6 @@ ToolbarContent::ToolbarContent( Evas_Object *mainLayout ) : m_MainLayout( mainLa
 	// TODO Auto-generated constructor stub
 	createButtonsLayout();
 	createButtonsOnButtonsLayout();
-
 }
 
 ToolbarContent::~ToolbarContent() {

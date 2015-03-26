@@ -7,11 +7,12 @@
 
 #include "GeometryObjectFactory.h"
 
-#include "GraphicLink.h"
 #include "GeometryPoint.h"
 #include "GeometryLink.h"
+#include "GeometrySpring.h"
 #include "GraphicPoint.h"
 #include "GraphicPointHighlighted.h"
+#include "GraphicLink.h"
 
 GeometryObjectFactory::GeometryObjectFactory()
 {
@@ -33,6 +34,9 @@ IGeometryObject * GeometryObjectFactory::createGeometryObject( GeometryObjectsTy
 			break;
 		case GEOMETRYOBJECT_LINK:
 				object = new GeometryLink();
+			break;
+		case GEOMETRYOBJECT_SPRING:
+				object = new GeometrySpring();
 			break;
 	}
 	return object;
