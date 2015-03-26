@@ -16,6 +16,10 @@ ToolbarContentRadioParams::~ToolbarContentRadioParams()
 {
 }
 
+string ToolbarContentRadioParams::getTitle() const
+{
+    return m_sTitle;
+}
 
 ToolbarItemCallback ToolbarContentRadioParams::getCallback() const
 {

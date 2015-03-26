@@ -47,7 +47,6 @@ void ToolbarContent::addToolbarContentItem( ToolbarContentItem & toolbarItem )
 	toolbarItem.create( m_ButtonsLayout );
 
 	Evas_Object * button = toolbarItem.getEvas();
-	elm_object_text_set( button, "Save objects");
 
 	elm_box_horizontal_set( m_ContainerBox, EINA_TRUE );
 	elm_box_pack_end( m_ContainerBox, button );

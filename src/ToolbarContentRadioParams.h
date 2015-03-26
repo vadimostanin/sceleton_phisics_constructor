@@ -9,6 +9,8 @@
 #define TOOLBARCONTENTRADIOPARAMS_H_
 
 #include "ToolbarContentItemParams.h"
+#include <string>
+using namespace std;
 
 class ToolbarContentRadioParams: public ToolbarContentItemParams
 {
@@ -17,12 +19,14 @@ public:
 	ToolbarContentRadioParams( const ToolbarContentRadioParams & src );
 	virtual ~ToolbarContentRadioParams();
 
+
+    string getTitle() const;
 	ToolbarItemCallback getCallback() const;
 	void * getUserData();
 	ToolbarContentItemParams & operator = ( const ToolbarContentItemParams & src );
 
 private:
-string m_sTitle;
+    string m_sTitle;
 	ToolbarItemCallback m_Callback;
 	void * m_UserData;
 

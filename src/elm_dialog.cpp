@@ -50,7 +50,7 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_save_objects, NULL );
 	ToolbarContentItem * item = new ToolbarContentButton( *params );
 
-	ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( on_save_objects, NULL );
+	ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( title, on_save_objects, NULL );
 	ToolbarContentItem * item2 = new ToolbarContentRadio( *params2 );
 
 	toolbar.addToolbarContentItem( *item );
