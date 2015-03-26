@@ -8,7 +8,7 @@
 #include "ToolbarContentRadioParams.h"
 #include <elementary-1/Elementary.h>
 
-ToolbarContentRadioParams::ToolbarContentRadioParams( ToolbarItemCallback callback, void * userData ) : m_Callback( callback ), m_UserData( userData )
+ToolbarContentRadioParams::ToolbarContentRadioParams( string sTitle, ToolbarItemCallback callback, void * userData ) : m_sTitle( sTitle ), m_Callback( callback ), m_UserData( userData )
 {
 }
 

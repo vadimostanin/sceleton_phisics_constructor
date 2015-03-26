@@ -13,7 +13,7 @@
 class ToolbarContentRadioParams: public ToolbarContentItemParams
 {
 public:
-	ToolbarContentRadioParams( ToolbarItemCallback callback, void * userData );
+	ToolbarContentRadioParams( string sTitle, ToolbarItemCallback callback, void * userData );
 	ToolbarContentRadioParams( const ToolbarContentRadioParams & src );
 	virtual ~ToolbarContentRadioParams();
 
@@ -22,7 +22,7 @@ public:
 	ToolbarContentItemParams & operator = ( const ToolbarContentItemParams & src );
 
 private:
-
+string m_sTitle;
 	ToolbarItemCallback m_Callback;
 	void * m_UserData;
 
