@@ -93,10 +93,10 @@ bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint, 
 			continue;
 		}
 
-		int point_x = point_iter.getX();
-		int point_y = point_iter.getY();
+		int point_iter_x = point_iter.getX();
+		int point_iter_y = point_iter.getY();
 
-		double distance = sqrt( ( point_x - x )*( point_x - x ) + ( point_y - y )*( point_y - y ) );
+		double distance = sqrt( ( point_iter_x - x )*( point_iter_x - x ) + ( point_iter_y - y )*( point_iter_y - y ) );
 
 		if( distance >= min_distance )
 		{
@@ -105,6 +105,52 @@ bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint, 
 		min_distance = distance;
 		found = true;
 		point = point_iter;
+	}
+	if( found == true )
+	{
+		return true;
+	}
+	return false;
+}
+
+bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  int x, int y, GeometryLink & result_link )
+{
+	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
+	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
+	vector<IGeometryObject *>::iterator iter = begin;
+	double min_distance = INT_MAX;
+
+	bool found = false;
+
+//	int link_from_center_x = ( link_from.getPointFrom().getX() - link_from.getPointTo().getX() ) / 2;
+//	int link_from_center_y = ( link_from.getPointFrom().getY() - link_from.getPointTo().getY() ) / 2;
+
+	for( ; iter != end ; iter++ )
+	{
+		if( (*iter)->getType() != GEOMETRYOBJECT_LINK )
+		{
+			continue;
+		}
+
+		const GeometryLink & link_iter = *(GeometryLink *)(*iter);
+
+		if( link_from == link_iter )
+		{
+			continue;
+		}
+
+		int link_iter_center_x = ( link_iter.getPointFrom().getX() - link_iter.getPointTo().getX() ) / 2;
+		int link_iter_center_y = ( link_iter.getPointFrom().getY() - link_iter.getPointTo().getY() ) / 2;
+
+		double distance = sqrt( ( link_iter_center_x - x )*( link_iter_center_x - x ) + ( link_iter_center_y - y )*( link_iter_center_y - y ) );
+
+		if( distance >= min_distance )
+		{
+			continue;
+		}
+		min_distance = distance;
+		found = true;
+		result_link = link_iter;
 	}
 	if( found == true )
 	{

@@ -10,6 +10,7 @@
 
 #include "IGeometryObjectTracker.h"
 #include "DrawingContent.h"
+#include "GeometryLink.h"
 #include <vector>
 using namespace std;
 
@@ -27,11 +28,13 @@ public:
 
 	void deleteObject( int x, int y );
 
-	bool isLinkUnderPoint( int x, int y );
+	bool getLinkUnderPoint( int x, int y, GeometryLink ** result_link );
+	void constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject );
 
 private:
 
 	DrawingContent & m_ViewUpdater;
+	IGeometryObject * m_GeometryObjectTracking;
 
 };
 

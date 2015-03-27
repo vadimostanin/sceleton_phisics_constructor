@@ -67,7 +67,12 @@ GeometryLink & GeometryLink::operator = ( const GeometryLink & src )
 	return *this;
 }
 
-bool GeometryLink::operator == ( const GeometryLink & src )
+bool GeometryLink::operator != ( const GeometryLink & src ) const
+{
+	return ( *this == src ) == false;
+}
+
+bool GeometryLink::operator == ( const GeometryLink & src ) const
 {
 	if( getPointFrom() != src.getPointFrom() )
 	{

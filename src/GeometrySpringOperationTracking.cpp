@@ -7,8 +7,8 @@
 
 #include "GeometrySpringOperationTracking.h"
 #include "GeometryObjectsManager.h"
-#include "GeometryPoint.h"
-#include "GeometryLink.h"
+#include "GeometryObjectFactory.h"
+#include "GeometrySpring.h"
 #include <iostream>
 using namespace std;
 
@@ -25,16 +25,56 @@ GeometryMouseTrackingModes GeometrySpringOperationTracking::getType() const
 	return SPRING_MODE_E;
 }
 
+void GeometrySpringOperationTracking::constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject )
+{
+	*graphicObject = GeometryObjectFactory::getInstance().createGraphicObject( geometryObject, m_ViewUpdater.getDrawingCanvas() );
+}
+
 void GeometrySpringOperationTracking::trackerBegin( int x, int y )
 {
+	GeometryLink * found_link_from = NULL;
+	if( getLinkUnderPoint( x, y, &found_link_from ) == false )
+	{
+		return;
+	}
+
+	GeometrySpring * spring_object = (GeometrySpring *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_SPRING );
+	m_GeometryObjectTracking = spring_object;
+	spring_object->setLinkFrom( *found_link_from );
+	spring_object->setLinkTo( *found_link_from );
+
+	IGraphicObject * graphicObject;
+
+	constructGraphicObject( spring_object, &graphicObject );
+
+	m_ViewUpdater.addGraphicObject( graphicObject );
 }
 
 void GeometrySpringOperationTracking::trackerContinue( int x, int y )
 {
-	if( isLinkUnderPoint( x, y ) == true )
+	GeometryLink * found_link_from = NULL;
+	if( getLinkUnderPoint( x, y, &found_link_from ) == true )
 	{
 		cout << "Found" << endl << flush;
 	}
+
+	GeometrySpring & geoSpring = *((GeometrySpring*)m_GeometryObjectTracking);
+	const GeometryLink & linkFrom = geoSpring.getLinkFrom();
+	GeometryLink temp_link;
+	bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestLink( linkFrom, x, y, temp_link );
+	if( foundNearestPoint == true )
+	{
+		if( geoSpring.getLinkTo() != temp_link )
+		{
+			geoSpring.setLinkTo( temp_link );
+		}
+	}
+
+	IGraphicObject * graphicObject;
+
+	constructGraphicObject( m_GeometryObjectTracking, &graphicObject );
+
+	m_ViewUpdater.changeGraphicObject( graphicObject );
 }
 
 void GeometrySpringOperationTracking::trackerEnd( int x, int y )
@@ -45,7 +85,7 @@ void GeometrySpringOperationTracking::deleteObject( int x, int y )
 {
 }
 
-bool GeometrySpringOperationTracking::isLinkUnderPoint( int x, int y )
+bool GeometrySpringOperationTracking::getLinkUnderPoint( int x, int y, GeometryLink ** result_link )
 {
 	bool found = false;
 
@@ -71,6 +111,7 @@ bool GeometrySpringOperationTracking::isLinkUnderPoint( int x, int y )
 			unsigned int square_diff = abs( square_1 - square_2 );
 			if( square_diff < square_border )
 			{
+				*result_link = (GeometryLink *)(* iter);
 				found = true;
 				break;
 			}

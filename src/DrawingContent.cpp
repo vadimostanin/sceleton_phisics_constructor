@@ -151,6 +151,10 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 
 void DrawingContent::addGraphicObject( IGraphicObject * graphicObject )
 {
+	if( NULL == graphicObject )
+	{
+		return;
+	}
 	m_GraphicObjects.push_back( graphicObject );
 
 	update();

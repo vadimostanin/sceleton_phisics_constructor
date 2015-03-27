@@ -25,6 +25,7 @@ public:
 	void getObjects( vector<IGeometryObject *> & objects );
 	bool getPoint( int x, int y, GeometryPoint ** point );
 	bool getNearestPoint( const GeometryPoint & startPoint, int x, int y, GeometryPoint & point );
+	bool getNearestLink( const GeometryLink & startPoint,  int x, int y, GeometryLink & point );
 
 	void save( string filename );
 

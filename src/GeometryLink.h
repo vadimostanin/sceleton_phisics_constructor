@@ -18,7 +18,8 @@ public:
 	GeometryLink( GeometryPoint & point_1, GeometryPoint & point_2 );
 	virtual ~GeometryLink();
 
-	bool operator == ( const GeometryLink & src );
+	bool operator == ( const GeometryLink & src ) const;
+	bool operator != ( const GeometryLink & src ) const;
 	GeometryLink & operator = ( const GeometryLink & src );
 
 	void setPointFrom( const GeometryPoint & point );
