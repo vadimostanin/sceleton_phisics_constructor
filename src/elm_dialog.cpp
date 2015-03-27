@@ -17,7 +17,7 @@ using namespace std;
 #include "DrawingContent.h"
 #include "WindowListener.h"
 #include "MouseListener.h"
-#include "GeometryOperationTracking.h"
+#include "GeometrySceletonOperationTracking.h"
 #include <ctime>
 #include <stdlib.h>
 
@@ -26,10 +26,21 @@ using namespace std;
 #include "ToolbarContentButtonParams.h"
 #include "ToolbarContentRadio.h"
 #include "ToolbarContentRadioParams.h"
+#include "MouseTrackerManager.h"
 
 void on_save_objects( void * userData )
 {
 	GeometryObjectsManager::getInstance().save( "./objects.txt" );
+}
+
+void on_sceleton_mode( void * userData )
+{
+	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SCELETON_MODE_E );
+}
+
+void on_spring_mode( void * userData )
+{
+	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SPRING_MODE_E );
 }
 
 EAPI_MAIN int elm_main(int argc, char **argv)
@@ -56,13 +67,13 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	{
 		string title( "Sceleton Mode" );
-		ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( title, on_save_objects, NULL, NULL, true );
+		ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( title, on_sceleton_mode, NULL, NULL, true );
 		ToolbarContentItem * item2 = new ToolbarContentRadio( *params2 );
 
 		toolbar.addToolbarContentItem( *item2 );
 
 		title = "Spring Mode";
-		ToolbarContentRadioParams * params3 = new ToolbarContentRadioParams( title, on_save_objects, NULL, item2->getEvas(), false );
+		ToolbarContentRadioParams * params3 = new ToolbarContentRadioParams( title, on_spring_mode, NULL, item2->getEvas(), false );
 		ToolbarContentItem * item3 = new ToolbarContentRadio( *params3 );
 
 		toolbar.addToolbarContentItem( *item3 );
@@ -70,9 +81,14 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
-	GeometryOperationTracking geoObjectTracking( drawingContent );
+	GeometrySceletonOperationTracking geoObjectTracking( drawingContent );
 
-	MouseListener mouseListener( geoObjectTracking, drawingContent.getDrawingCanvas() );
+	MouseListener mouseListener( NULL, drawingContent.getDrawingCanvas() );
+
+	MouseTrackerManager::getInstance().setMouseListener( &mouseListener );
+	MouseTrackerManager::getInstance().addTracker( &geoObjectTracking );
+
+	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SCELETON_MODE_E );
 
 	window.setMaxSize( 800, 600 );
 

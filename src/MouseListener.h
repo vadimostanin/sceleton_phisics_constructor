@@ -9,13 +9,16 @@
 #define MOUSELISTENER_H_
 
 #include <Evas.h>
-#include "GeometryOperationTracking.h"
+#include "GeometrySceletonOperationTracking.h"
 
 class MouseListener
 {
 public:
-	MouseListener( GeometryOperationTracking &geoObjectTracker, Evas_Object *canvas );
+	MouseListener( IGeometryObjectTracker * geoObjectTracker, Evas_Object *canvas );
 	virtual ~MouseListener();
+
+	void setMouseTracker( IGeometryObjectTracker * tracker );
+	IGeometryObjectTracker * getMouseTracker() const;
 
 private:
 
@@ -23,7 +26,7 @@ private:
 	static void	_mouse_move(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_Object *obj,	void *event_info);
 	static void	_mouse_up(void *data EINA_UNUSED, Evas *e EINA_UNUSED, Evas_Object *obj,	void *event_info);
 
-	GeometryOperationTracking & m_GeoObjectTracker;
+	IGeometryObjectTracker * m_Tracker;
 	Evas_Object *m_Canvas;
 };
 

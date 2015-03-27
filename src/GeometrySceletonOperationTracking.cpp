@@ -1,11 +1,11 @@
 /*
- * GeometryOperationTracking.cpp
+ * GeometrySceletonOperationTracking.cpp
  *
  *  Created on: Mar 16, 2015
  *      Author: vostanin
  */
 
-#include "GeometryOperationTracking.h"
+#include "GeometrySceletonOperationTracking.h"
 #include "GeometryObjectsManager.h"
 #include "GeometryObjectFactory.h"
 #include "GraphicLink.h"
@@ -13,16 +13,16 @@
 #include <iostream>
 using namespace std;
 
-GeometryOperationTracking::GeometryOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater ), m_GeometryObjectTracking( 0 )
+GeometrySceletonOperationTracking::GeometrySceletonOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater ), m_GeometryObjectTracking( 0 )
 {
 }
 
-GeometryOperationTracking::~GeometryOperationTracking()
+GeometrySceletonOperationTracking::~GeometrySceletonOperationTracking()
 {
 
 }
 
-void GeometryOperationTracking::constructGraphicObjects( vector<IGraphicObject *> & graphicObjects )
+void GeometrySceletonOperationTracking::constructGraphicObjects( vector<IGraphicObject *> & graphicObjects )
 {
 	vector<IGeometryObject *> objects;
 	GeometryObjectsManager::getInstance().getObjects( objects );
@@ -65,39 +65,17 @@ void GeometryOperationTracking::constructGraphicObjects( vector<IGraphicObject *
 	}
 }
 
-void GeometryOperationTracking::constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject )
+void GeometrySceletonOperationTracking::constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject )
 {
 	*graphicObject = GeometryObjectFactory::getInstance().createGraphicObject( geometryObject, m_ViewUpdater.getDrawingCanvas() );
-
-	switch( geometryObject->getType() )
-	{
-		case GEOMETRYOBJECT_POINT:
-		{
-//			int x = ((GeometryPoint*)geometryObject)->getX();
-//			int y = ((GeometryPoint*)geometryObject)->getY();
-//			((Point &)(* graphicObject )->getGeometryObject()).setX( x );
-//			((Point &)(* graphicObject )->getGeometryObject()).setY( y );
-		}
-		break;
-		case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
-		{
-			((GeometryPoint &)(* graphicObject )->getGeometryObject()).setX( ((GeometryPoint*)geometryObject)->getX() );
-			((GeometryPoint &)(* graphicObject )->getGeometryObject()).setY( ((GeometryPoint*)geometryObject)->getY() );
-		}
-		break;
-		case GEOMETRYOBJECT_LINK:
-		{
-//			const GeometryPoint & pointFrom = (( GeometryLink * )geometryObject)->getPointFrom();
-//			const GeometryPoint & pointTo =   (( GeometryLink * )geometryObject)->getPointTo();
-//
-//			((GeometryLink &)(* graphicObject )->getGeometryObject()).setPointFrom( pointFrom );
-//			((GeometryLink &)(* graphicObject )->getGeometryObject()).setPointTo( pointTo );
-		}
-		break;
-	}
 }
 
-void GeometryOperationTracking::trackerBegin( int x, int y )
+GeometryMouseTrackingModes GeometrySceletonOperationTracking::getType() const
+{
+	return SCELETON_MODE_E;
+}
+
+void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 {
 	GeometryPoint * point;
 	IGeometryObject * new_object = NULL;
@@ -135,7 +113,7 @@ void GeometryOperationTracking::trackerBegin( int x, int y )
 	m_ViewUpdater.addGraphicObject( graphicObject );
 }
 
-void GeometryOperationTracking::trackerContinue( int x, int y )
+void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 {
 	if( m_GeometryObjectTracking == 0 )
 	{
@@ -169,12 +147,12 @@ void GeometryOperationTracking::trackerContinue( int x, int y )
 	m_ViewUpdater.changeGraphicObject( graphicObject );
 }
 
-void GeometryOperationTracking::trackerEnd( int x, int y )
+void GeometrySceletonOperationTracking::trackerEnd( int x, int y )
 {
 	clearTrackingStack();
 }
 
-void GeometryOperationTracking::deleteObject( int x, int y )
+void GeometrySceletonOperationTracking::deleteObject( int x, int y )
 {
 	GeometryPoint * point;
 	if( false == getPoint( x, y, &point ) )
@@ -191,13 +169,13 @@ void GeometryOperationTracking::deleteObject( int x, int y )
 	m_ViewUpdater.deleteGraphicObject( graphicObject );
 }
 
-bool GeometryOperationTracking::getPoint( int x, int y, GeometryPoint ** point )
+bool GeometrySceletonOperationTracking::getPoint( int x, int y, GeometryPoint ** point )
 {
 	bool found = GeometryObjectsManager::getInstance().getPoint( x, y, point );
 	return found;
 }
 
-void GeometryOperationTracking::clearTrackingStack()
+void GeometrySceletonOperationTracking::clearTrackingStack()
 {
 	m_GeometryObjectTracking = 0;
 }
