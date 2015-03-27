@@ -21,10 +21,6 @@ public:
 	GraphicLink( const GeometryLink & src );
 	virtual ~GraphicLink();
 
-	Evas_Object * getEvas() const;
-
-	void setEvas( Evas_Object * evas );
-
 	void draw( Evas * canvas );
 	IGeometryObject & getGeometryObject();
 

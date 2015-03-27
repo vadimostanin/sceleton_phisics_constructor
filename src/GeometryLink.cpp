@@ -38,6 +38,7 @@ int GeometryLink::getId() const
 IGeometryObject * GeometryLink::clone()
 {
 	GeometryLink * newLink = new GeometryLink;
+
 	newLink->setPointFrom( this->getPointFrom() );
 	newLink->setPointTo( this->getPointTo() );
 

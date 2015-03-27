@@ -12,7 +12,7 @@
 #include <iostream>
 using namespace std;
 
-GeometrySpringOperationTracking::GeometrySpringOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater )
+GeometrySpringOperationTracking::GeometrySpringOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater ), m_GeometryObjectTracking( NULL )
 {
 }
 
@@ -52,6 +52,10 @@ void GeometrySpringOperationTracking::trackerBegin( int x, int y )
 
 void GeometrySpringOperationTracking::trackerContinue( int x, int y )
 {
+	if( m_GeometryObjectTracking == 0 )
+	{
+		return;
+	}
 	GeometryLink * found_link_from = NULL;
 	if( getLinkUnderPoint( x, y, &found_link_from ) == true )
 	{

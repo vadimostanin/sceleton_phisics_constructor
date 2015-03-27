@@ -46,8 +46,14 @@ GraphicObjectBase::GraphicObjectBase( const GraphicObjectBase & src )
 
 GraphicObjectBase::~GraphicObjectBase() {
 	// TODO Auto-generated destructor stub
-	m_glApi->glDeleteShader( m_vertexShader );
-	m_glApi->glDeleteShader( m_fragmentShader );
+	if( 0 != m_vertexShader )
+	{
+		m_glApi->glDeleteShader( m_vertexShader );
+	}
+	if( 0 != m_fragmentShader )
+	{
+		m_glApi->glDeleteShader( m_fragmentShader );
+	}
 }
 
 void GraphicObjectBase::init_matrix( GLfloat * result )

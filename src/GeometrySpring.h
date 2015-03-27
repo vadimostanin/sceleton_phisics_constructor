@@ -15,6 +15,7 @@ class GeometrySpring : public IGeometryObject
 {
 public:
 	GeometrySpring();
+	GeometrySpring( const GeometryLink & linkFrom, const GeometryLink & linkTo );
 	GeometrySpring( const GeometrySpring & src );
 	bool operator == ( const GeometrySpring & src ) const;
 	bool operator != ( const GeometrySpring & src ) const;
@@ -25,8 +26,8 @@ public:
 	const GeometryLink & getLinkTo() 	const;
 	const int 		     getLength() 	const;
 
-	void setLinkFrom( GeometryLink & linkFrom );
-	void setLinkTo( GeometryLink & linkTo );
+	void setLinkFrom( const GeometryLink & linkFrom );
+	void setLinkTo( const GeometryLink & linkTo );
 	void setLength( int length );
 
 	GeometryObjectsTypes getType() const;

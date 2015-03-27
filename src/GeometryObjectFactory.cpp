@@ -13,6 +13,7 @@
 #include "GraphicPoint.h"
 #include "GraphicPointHighlighted.h"
 #include "GraphicLink.h"
+#include "GraphicSpring.h"
 
 GeometryObjectFactory::GeometryObjectFactory()
 {
@@ -55,6 +56,9 @@ IGraphicObject * GeometryObjectFactory::createGraphicObject( IGeometryObject * g
 			break;
 		case GEOMETRYOBJECT_LINK:
 				object = new GraphicLink( geometryObject, canvas );
+			break;
+		case GEOMETRYOBJECT_SPRING:
+				object = new GraphicSpring( geometryObject, canvas );
 			break;
 	}
 	return object;
