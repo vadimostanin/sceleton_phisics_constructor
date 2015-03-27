@@ -39,10 +39,10 @@ void GeometrySceletonOperationTracking::constructGraphicObjects( vector<IGraphic
 		{
 			case GEOMETRYOBJECT_POINT:
 			{
-					int x = ((GeometryPoint*)(*iter))->getX();
-					int y = ((GeometryPoint*)(*iter))->getY();
-					((GraphicPoint *)graphicObject)->setX( x );
-					((GraphicPoint *)graphicObject)->setY( y );
+				int x = ((GeometryPoint*)(*iter))->getX();
+				int y = ((GeometryPoint*)(*iter))->getY();
+				((GraphicPoint *)graphicObject)->setX( x );
+				((GraphicPoint *)graphicObject)->setY( y );
 			}
 				break;
 			case GEOMETRYOBJECT_POINT_HIGHLIGHTED:

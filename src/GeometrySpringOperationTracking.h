@@ -27,6 +27,8 @@ public:
 
 	void deleteObject( int x, int y );
 
+	bool isLinkUnderPoint( int x, int y );
+
 private:
 
 	DrawingContent & m_ViewUpdater;
