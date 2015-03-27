@@ -7,7 +7,7 @@
 
 #include "GeometrySpringOperationTracking.h"
 
-GeometrySpringOperationTracking::GeometrySpringOperationTracking()
+GeometrySpringOperationTracking::GeometrySpringOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater )
 {
 }
 

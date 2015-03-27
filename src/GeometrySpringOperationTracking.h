@@ -9,13 +9,14 @@
 #define GEOMETRYSPRINGOPERATIONTRACKING_H_
 
 #include "IGeometryObjectTracker.h"
+#include "DrawingContent.h"
 #include <vector>
 using namespace std;
 
 class GeometrySpringOperationTracking : public IGeometryObjectTracker
 {
 public:
-	GeometrySpringOperationTracking();
+	GeometrySpringOperationTracking( DrawingContent & viewUpdater );
 	virtual ~GeometrySpringOperationTracking();
 
 	GeometryMouseTrackingModes getType() const;
@@ -25,6 +26,11 @@ public:
 	void trackerEnd( int x, int y );
 
 	void deleteObject( int x, int y );
+
+private:
+
+	DrawingContent & m_ViewUpdater;
+
 };
 
 #endif /* GEOMETRYSPRINGOPERATIONTRACKING_H_ */

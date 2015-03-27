@@ -18,6 +18,7 @@ using namespace std;
 #include "WindowListener.h"
 #include "MouseListener.h"
 #include "GeometrySceletonOperationTracking.h"
+#include "GeometrySpringOperationTracking.h"
 #include <ctime>
 #include <stdlib.h>
 
@@ -81,12 +82,14 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
-	GeometrySceletonOperationTracking geoObjectTracking( drawingContent );
+	GeometrySceletonOperationTracking geoSceletonObjectTracking( drawingContent );
+	GeometrySpringOperationTracking   geoSpringObjectTracking( drawingContent );
 
 	MouseListener mouseListener( NULL, drawingContent.getDrawingCanvas() );
 
 	MouseTrackerManager::getInstance().setMouseListener( &mouseListener );
-	MouseTrackerManager::getInstance().addTracker( &geoObjectTracking );
+	MouseTrackerManager::getInstance().addTracker( &geoSceletonObjectTracking );
+	MouseTrackerManager::getInstance().addTracker( &geoSpringObjectTracking );
 
 	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SCELETON_MODE_E );
 
