@@ -7,7 +7,7 @@
 
 #include "ToolbarContentItem.h"
 
-ToolbarContentItem::ToolbarContentItem( ToolbarContentTypes type, ToolbarContentItemParams & params ) : m_Type( type ), m_Params( params )
+ToolbarContentItem::ToolbarContentItem( ToolbarContentTypes type, ToolbarContentItemParams & params ) : m_Type( type ), m_Params( params ), m_Evas( 0 )
 {
 }
 

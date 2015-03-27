@@ -9,7 +9,7 @@
 #include "ToolbarContentTypes.h"
 #include <elementary-1/Elementary.h>
 
-ToolbarContentButton::ToolbarContentButton( ToolbarContentButtonParams & params ) : ToolbarContentItem( TOOLBARCONTENT_BUTTON, params ), m_Evas( 0 )
+ToolbarContentButton::ToolbarContentButton( ToolbarContentButtonParams & params ) : ToolbarContentItem( TOOLBARCONTENT_BUTTON, params )
 {
 }
 
@@ -24,7 +24,7 @@ void ToolbarContentButton::create( Evas_Object * parent )
 	evas_object_size_hint_align_set( m_Evas, EVAS_HINT_FILL, EVAS_HINT_FILL );
     evas_object_size_hint_weight_set( m_Evas, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND );
     string title = ((ToolbarContentButtonParams &)m_Params).getTitle();
-    elm_object_text_set( m_Evas, title );
+    elm_object_text_set( m_Evas, title.c_str() );
 	evas_object_show( m_Evas );
 
 	evas_object_smart_callback_add( m_Evas, "clicked", on_click, &m_callbackData );

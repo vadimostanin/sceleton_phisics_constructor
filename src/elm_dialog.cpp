@@ -46,15 +46,27 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	window.setContentLayout( mainContent.getLayout() );
 
 	ToolbarContent toolbar( mainContent.getLayout() );
-	string title( "Save objects" );
-	ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_save_objects, NULL );
-	ToolbarContentItem * item = new ToolbarContentButton( *params );
+	{
+		string title( "Save objects" );
+		ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_save_objects, NULL );
+		ToolbarContentItem * item = new ToolbarContentButton( *params );
 
-	ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( title, on_save_objects, NULL );
-	ToolbarContentItem * item2 = new ToolbarContentRadio( *params2 );
+		toolbar.addToolbarContentItem( *item );
+	}
 
-	toolbar.addToolbarContentItem( *item );
-	toolbar.addToolbarContentItem( *item2 );
+	{
+		string title( "Sceleton Mode" );
+		ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( title, on_save_objects, NULL, NULL, true );
+		ToolbarContentItem * item2 = new ToolbarContentRadio( *params2 );
+
+		toolbar.addToolbarContentItem( *item2 );
+
+		title = "Spring Mode";
+		ToolbarContentRadioParams * params3 = new ToolbarContentRadioParams( title, on_save_objects, NULL, item2->getEvas(), false );
+		ToolbarContentItem * item3 = new ToolbarContentRadio( *params3 );
+
+		toolbar.addToolbarContentItem( *item3 );
+	}
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 

@@ -21,14 +21,23 @@ void ToolbarContentRadio::create( Evas_Object * parent )
 	m_Evas = elm_radio_add( parent );
 	evas_object_size_hint_align_set( m_Evas, EVAS_HINT_FILL, EVAS_HINT_FILL );
 	evas_object_size_hint_weight_set( m_Evas, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND );
-    string title = ((ToolbarContentRadioParams &)m_Params).getTitle();
-    elm_object_text_set( m_Evas, title );
+	string title = ((ToolbarContentRadioParams &)m_Params).getTitle();
+	bool checked = ((ToolbarContentRadioParams &)m_Params).getChecked();
+	elm_object_text_set( m_Evas, title.c_str() );
+	elm_radio_state_value_set( m_Evas, checked == false );
+
+	Evas_Object * radioGroup = ((ToolbarContentRadioParams &)m_Params).getRadioGroup();
+	if( NULL != radioGroup )
+	{
+		elm_radio_group_add( m_Evas, radioGroup );
+	}
+
 	evas_object_show( m_Evas );
 
-	evas_object_smart_callback_add( m_Evas, "clicked", on_click, &m_callbackData );
+	evas_object_smart_callback_add( m_Evas, "changed", on_click, &m_callbackData );
 
-   m_callbackData.lpThis = this;
-  	m_callbackData.userData = ((ToolbarContentRadioParams &)m_Params).getUserData();
+	m_callbackData.lpThis = this;
+	m_callbackData.userData = ((ToolbarContentRadioParams &)m_Params).getUserData();
 }
 
 Evas_Object * ToolbarContentRadio::getEvas() const

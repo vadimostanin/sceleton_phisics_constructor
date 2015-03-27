@@ -38,17 +38,16 @@ void ToolbarContent::createButtonsLayout()
 	m_ContainerBox = elm_box_add( m_ButtonsLayout );
 	evas_object_size_hint_align_set( m_ContainerBox, EVAS_HINT_FILL, EVAS_HINT_FILL );
 	evas_object_size_hint_weight_set( m_ContainerBox, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND );
+	elm_box_horizontal_set( m_ContainerBox, EINA_TRUE );
 	elm_object_part_content_set( m_ButtonsLayout, "part.toolbar_layout.main_box", m_ContainerBox );
 	evas_object_show( m_ContainerBox );
 }
 
 void ToolbarContent::addToolbarContentItem( ToolbarContentItem & toolbarItem )
 {
-	toolbarItem.create( m_ButtonsLayout );
+	toolbarItem.create( m_ContainerBox );
 
 	Evas_Object * button = toolbarItem.getEvas();
-
-	elm_box_horizontal_set( m_ContainerBox, EINA_TRUE );
 	elm_box_pack_end( m_ContainerBox, button );
 	evas_object_show( m_ContainerBox );
 }
