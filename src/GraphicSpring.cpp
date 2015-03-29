@@ -72,38 +72,90 @@ string GraphicSpring::getFragmentShader()
 void GraphicSpring::initLineVertexes()
 {
 	m_vertexBuffer.clear();
+
+	int canvas_width =  m_DrawCanvasWidth;
+	int canvas_height = m_DrawCanvasHeight;
+
+	int from_x = ( m_geometrySpring.getLinkFrom().getPointFrom().getX() + m_geometrySpring.getLinkFrom().getPointTo().getX() ) / 2;
+	int from_y = ( m_geometrySpring.getLinkFrom().getPointFrom().getY() + m_geometrySpring.getLinkFrom().getPointTo().getY() ) / 2;
+
+	int to_x = ( m_geometrySpring.getLinkTo().getPointFrom().getX() + m_geometrySpring.getLinkTo().getPointTo().getX() ) / 2;
+	int to_y = ( m_geometrySpring.getLinkTo().getPointFrom().getY() + m_geometrySpring.getLinkTo().getPointTo().getY() ) / 2;
+
+	const unsigned int segment_length_min = 50;
+
+	int katet_width = ( from_x - to_x );
+	int katet_height = ( from_y - to_y );
+
+	if( katet_width == 0 && katet_height == 0 )
 	{
-		int x = ( m_geometrySpring.getLinkFrom().getPointFrom().getX() + m_geometrySpring.getLinkFrom().getPointTo().getX() ) / 2;
-		int y = ( m_geometrySpring.getLinkFrom().getPointFrom().getY() + m_geometrySpring.getLinkFrom().getPointTo().getY() ) / 2;
+		return;
+	}
 
-		int width =  m_DrawCanvasWidth;
-		int height = m_DrawCanvasHeight;
+	unsigned int hypotenuze = sqrt( katet_width * katet_width + katet_height * katet_height );
 
-		float translate_x =  ( x - width/  2.0 );
-		translate_x  /= (float)( width / 2 );
-		float translate_y = ( height / 2.0 - y + 60 );
-		translate_y /=  (float)( height / 2 );
+	int segments_count = ( hypotenuze / segment_length_min ) + 1;
+	int segment_length = hypotenuze / segments_count;
+	int segment_x_length = katet_width / segments_count;
+	int segment_y_length = katet_height / segments_count;
+
+
+	double spring_angle = asin( katet_width / hypotenuze );
+	const float ortho_angle = M_PI / 2;
+
+	float curve_angle = spring_angle + ortho_angle;
+
+	const unsigned int curve_side_lenght = 20;
+
+	float last_x = 0;
+	float last_y = 0;
+
+	{
+		float translate_x =  ( from_x - canvas_width /  2.0 );
+		translate_x  /= (float)( canvas_width / 2 );
+		float translate_y = ( canvas_height / 2.0 - from_y + 60 );
+		translate_y /=  (float)( canvas_height / 2 );
 
 		m_vertexBuffer.push_back( translate_x );
 		m_vertexBuffer.push_back( translate_y );
-//		m_vertexBuffer.push_back( 0.0 );
+	}
+
+	for( int segment_i = 0 ; segment_i < segments_count ; segment_i++ )
+	{
+		unsigned int segment_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
+		unsigned int segment_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
+		int curve_x = segment_point_x + curve_side_lenght * cos( curve_angle );
+		int curve_y = segment_point_y + curve_side_lenght * sin( curve_angle );
+
+		float translate_x =  ( curve_x - canvas_width /  2.0 );
+		translate_x  /= (float)( canvas_width / 2 );
+		float translate_y = ( canvas_height / 2.0 - curve_y + 60 );
+		translate_y /=  (float)( canvas_height / 2 );
+
+		m_vertexBuffer.push_back( translate_x );
+		m_vertexBuffer.push_back( translate_y );
+
+		if( last_x != 0 && last_y != 0 && ( segment_i + 1 ) < segments_count )
+		{
+			m_vertexBuffer.push_back( last_x );
+			m_vertexBuffer.push_back( last_y );
+		}
+		last_x = translate_x;
+		last_y = translate_y;
 	}
 
 	{
-		int x = ( m_geometrySpring.getLinkTo().getPointFrom().getX() + m_geometrySpring.getLinkTo().getPointTo().getX() ) / 2;
-		int y = ( m_geometrySpring.getLinkTo().getPointFrom().getY() + m_geometrySpring.getLinkTo().getPointTo().getY() ) / 2;
-
-		int width =  m_DrawCanvasWidth;
-		int height = m_DrawCanvasHeight;
-
-		float translate_x =  ( x - width /  2.0 );
-		translate_x  /= (float)( width / 2 );
-		float translate_y = ( height / 2.0 - y + 60 );
-		translate_y /=  (float)( height / 2 );
+		m_vertexBuffer.push_back( last_x );
+		m_vertexBuffer.push_back( last_y );
+	}
+	{
+		float translate_x =  ( to_x - canvas_width /  2.0 );
+		translate_x  /= (float)( canvas_width / 2 );
+		float translate_y = ( canvas_height / 2.0 - to_y + 60 );
+		translate_y /=  (float)( canvas_height / 2 );
 
 		m_vertexBuffer.push_back( translate_x );
 		m_vertexBuffer.push_back( translate_y );
-//		m_vertexBuffer.push_back( 0.0 );
 	}
 }
 

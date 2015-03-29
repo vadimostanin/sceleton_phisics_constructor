@@ -44,16 +44,16 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
 
    __evas_gl_glapi->glClearColor( 0.0, 0.0, 0.0, 1.0 );
 
-   __evas_gl_glapi->glEnable( GL_CULL_FACE );
-   __evas_gl_glapi->glEnable( GL_POINT_SMOOTH );
-   __evas_gl_glapi->glLineWidth( 4.0f );
-   __evas_gl_glapi->glHint( GL_LINE_SMOOTH_HINT, GL_FASTEST );
-   __evas_gl_glapi->glEnable( GL_BLEND );
-   __evas_gl_glapi->glEnable( GL_LINE_SMOOTH );
-   __evas_gl_glapi->glCullFace( GL_BACK );
-
-   __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
-   __evas_gl_glapi->glDepthFunc( GL_EQUAL );
+//   __evas_gl_glapi->glEnable( GL_CULL_FACE );
+//   __evas_gl_glapi->glEnable( GL_POINT_SMOOTH );
+//   __evas_gl_glapi->glLineWidth( 1.0f );
+//   __evas_gl_glapi->glHint( GL_LINE_SMOOTH_HINT, GL_FASTEST );
+//   __evas_gl_glapi->glEnable( GL_BLEND );
+//   __evas_gl_glapi->glEnable( GL_LINE_SMOOTH );
+//   __evas_gl_glapi->glCullFace( GL_BACK );
+//
+//   __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
+//   __evas_gl_glapi->glDepthFunc( GL_EQUAL );
 
    elm_glview_size_get( glview, &w, &h );
 
