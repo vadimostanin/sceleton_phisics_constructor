@@ -84,8 +84,8 @@ void GraphicSpring::initLineVertexes()
 
 	const unsigned int segment_length_min = 50;
 
-	int katet_width = ( from_x - to_x );
-	int katet_height = ( from_y - to_y );
+	int katet_width = ( to_x - from_x );
+	int katet_height = ( to_y -  from_y );
 
 	if( katet_width == 0 && katet_height == 0 )
 	{
@@ -103,8 +103,6 @@ void GraphicSpring::initLineVertexes()
 	double spring_angle = asin( katet_width / hypotenuze );
 	const float ortho_angle = M_PI / 2;
 
-	float curve_angle = spring_angle + ortho_angle;
-
 	const unsigned int curve_side_lenght = 20;
 
 	float last_x = 0;
@@ -120,8 +118,20 @@ void GraphicSpring::initLineVertexes()
 		m_vertexBuffer.push_back( translate_y );
 	}
 
+    bool left = true;
+
 	for( int segment_i = 0 ; segment_i < segments_count ; segment_i++ )
 	{
+       float curve_angle = 0;
+       if( true == left )
+       {
+            curve_angle = ortho_angle - spring_angle;
+       }
+       else
+       {
+            curve_angle = spring_angle + ortho_angle;
+        }
+
 		unsigned int segment_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
 		unsigned int segment_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
 		int curve_x = segment_point_x + curve_side_lenght * cos( curve_angle );
@@ -132,14 +142,16 @@ void GraphicSpring::initLineVertexes()
 		float translate_y = ( canvas_height / 2.0 - curve_y + 60 );
 		translate_y /=  (float)( canvas_height / 2 );
 
-		m_vertexBuffer.push_back( translate_x );
-		m_vertexBuffer.push_back( translate_y );
-
-		if( last_x != 0 && last_y != 0 && ( segment_i + 1 ) < segments_count )
+       if( last_x != 0 && last_y != 0 && ( segment_i + 1 ) < segments_count )
 		{
 			m_vertexBuffer.push_back( last_x );
 			m_vertexBuffer.push_back( last_y );
 		}
+
+		m_vertexBuffer.push_back( translate_x );
+		m_vertexBuffer.push_back( translate_y );
+
+		
 		last_x = translate_x;
 		last_y = translate_y;
 	}
