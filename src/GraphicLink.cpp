@@ -12,8 +12,6 @@ using namespace std;
 
 GraphicLink::GraphicLink( IGeometryObject * geometryObject, Evas_Object * glview ) : GraphicObjectBase( glview )
 {
-	initShaders();
-
 	m_geometryLink = *geometryObject;
 }
 
@@ -27,8 +25,6 @@ GraphicLink::GraphicLink( const GraphicLink & src )
 
 GraphicLink::GraphicLink( const GeometryLink & src )
 {
-	initShaders();
-
 	m_geometryLink = src;
 }
 
@@ -96,13 +92,10 @@ void GraphicLink::initLineVertexes()
 	}
 }
 
-#define SHADER(shader) #shader
-
-// Initialize the shader and program object
-int GraphicLink::initShaders()
+string GraphicLink::getVertexShader()
 {
-	Evas_GL_API * __evas_gl_glapi = m_glApi;
-	GLbyte vShaderStr[] = SHADER(
+	string shader = SHADER(
+
 		attribute vec3 vPosition;
 		uniform mat4 perspective;
 		uniform mat4 translate;
@@ -111,70 +104,29 @@ int GraphicLink::initShaders()
 		{
 		   gl_Position = perspective * translate * scale * vec4( vPosition, 1.0 );
 		}
-		);
 
-	GLbyte fShaderStr[] = SHADER(void main()\n
-								{\n
-									gl_FragColor = vec4( 0.5, 0.5, 1.0, 1.0 );\n
-								}\n
-		   );
+						);
 
-	GLint linked;
+	return shader;
+}
 
-	// Load the vertex/fragment shaders
-	m_vertexShader  = loadShader( GL_VERTEX_SHADER, (const char*)vShaderStr);
-	m_fragmentShader = loadShader( GL_FRAGMENT_SHADER, (const char*)fShaderStr);
+string GraphicLink::getFragmentShader()
+{
+	string shader =	SHADER(
 
-	// Create the program object
-	m_Program = __evas_gl_glapi->glCreateProgram( );
-	if( m_Program == 0 )
-	{
-		return 0;
-	}
-
-	__evas_gl_glapi->glAttachShader( m_Program,  m_vertexShader);
-	__evas_gl_glapi->glAttachShader( m_Program,  m_fragmentShader);
-
-	__evas_gl_glapi->glLinkProgram( m_Program );
-	__evas_gl_glapi->glGetProgramiv( m_Program, GL_LINK_STATUS, &linked );
-
-	if( 0 == linked )
-	{
-		GLint info_len = 0;
-		__evas_gl_glapi->glGetProgramiv( m_Program, GL_INFO_LOG_LENGTH, &info_len);
-		if (info_len > 1)
+		void main()
 		{
-			char* info_log = (char *)malloc(sizeof(char) * info_len);
-
-			__evas_gl_glapi->glGetProgramInfoLog( m_Program, info_len, NULL, info_log );
-			printf( "Error linking program:\n%s\n", info_log );
-			free( info_log );
+			gl_FragColor = vec4( 0.5, 0.5, 1.0, 1.0 );
 		}
-		__evas_gl_glapi->glDeleteProgram( m_Program );
-		return 0;
-	}
 
-	m_positionIdx = 	__evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
-	m_perspective_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "perspective" );
-	m_translate_idx = 	__evas_gl_glapi->glGetUniformLocation( m_Program, "translate" );
-	m_scale_idx = 		__evas_gl_glapi->glGetUniformLocation( m_Program, "scale" );
+						);
 
-	return 1;
+	return shader;
 }
 
 void GraphicLink::draw_line_2d()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
-
-	int x = m_geometryLink.getPointFrom().getX();
-	int y = m_geometryLink.getPointFrom().getY();
-
-	float dimension = (float) m_DrawCanvasWidth / (float) m_DrawCanvasHeight;
-
-	float translate_x =  ( x - m_DrawCanvasWidth / 2.0 );
-	translate_x  /= (float)( m_DrawCanvasWidth / 2 );
-	float translate_y = ( m_DrawCanvasHeight / 2.0 - y + 60 );
-	translate_y /=  (float)( m_DrawCanvasHeight / 2 );
 
 	GLfloat translateMatrix[16];
 	GLfloat scaleMatrix[16];

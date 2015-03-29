@@ -32,17 +32,15 @@ public:
 	void draw( Evas * canvas );
 	IGeometryObject & getGeometryObject();
 
+	virtual string getVertexShader();
+	virtual string getFragmentShader();
+
 private:
 	GeometryPoint m_Point;
-
-	GLint m_perspective_idx;
-	GLint m_translate_idx;
-	GLint m_scale_idx;
 
 	void initCircleVertex();
 	void initQuadVertex();
 	void initVertex();
-	int initShaders();
 
 	void draw_circle_2d();
 };

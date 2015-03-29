@@ -26,16 +26,14 @@ public:
 
 	GraphicLink & operator = ( const GeometryLink & src );
 
+	string getVertexShader();
+	string getFragmentShader();
+
 private:
 
 	GeometryLink m_geometryLink;
 
-	GLint m_perspective_idx;
-	GLint m_translate_idx;
-	GLint m_scale_idx;
-
 	void initLineVertexes();
-	int initShaders();
 	void draw_line_2d();
 };
 

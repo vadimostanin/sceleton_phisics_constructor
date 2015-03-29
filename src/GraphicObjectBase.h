@@ -13,6 +13,8 @@
 #include <vector>
 using namespace std;
 
+#define SHADER(shader) #shader
+
 class GraphicObjectBase
 {
 protected:
@@ -28,9 +30,13 @@ protected:
 	void view_set_ortho( GLfloat* result, const float left, const float right, const float bottom, const float top, const float near, const float far );
 	void view_set_perspective( GLfloat* result, const float fovy, const float aspect, const float near, const float far );
 
+	int initShaders();
 	GLuint loadShader( GLenum type, const char *shader_src );
 
 	void initProjectionMatrix( GLfloat * result );
+
+	virtual string getVertexShader();
+	virtual string getFragmentShader();
 
 protected:
 
@@ -48,6 +54,10 @@ protected:
 
 	int 			m_DrawCanvasHeight;
 	int 			m_DrawCanvasWidth;
+
+	GLint m_perspective_idx;
+	GLint m_translate_idx;
+	GLint m_scale_idx;
 
 };
 

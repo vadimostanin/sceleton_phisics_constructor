@@ -36,7 +36,6 @@ void GraphicPoint::initVertex()
 GraphicPoint::GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glview ) : GraphicObjectBase( glview )
 {
 	initVertex();
-	initShaders();
 
 	m_Point = (GeometryPoint&)( * geometryObject );
 }
@@ -44,7 +43,6 @@ GraphicPoint::GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glvi
 GraphicPoint::GraphicPoint( Evas_Object * glview, const GeometryPoint & point ) : GraphicObjectBase( glview ), m_Point( point )
 {
 	initVertex();
-	initShaders();
 }
 
 GraphicPoint::GraphicPoint( Evas_Object * glview, int x, int y ) : GraphicObjectBase( glview )//GraphicPoint( glview, Point( x, y ) )//delegating constructors only available with -std=c++11 or -std=gnu++11 [enabled by default]
@@ -53,7 +51,6 @@ GraphicPoint::GraphicPoint( Evas_Object * glview, int x, int y ) : GraphicObject
 	m_Point.setY( y );
 
 	initVertex();
-	initShaders();
 }
 
 GraphicPoint::GraphicPoint( const GraphicPoint & src )
@@ -137,75 +134,36 @@ void GraphicPoint::initCircleVertex()
 	}
 }
 
-#define SHADER(shader) #shader
-
-// Initialize the shader and program object
-int GraphicPoint::initShaders()
+string GraphicPoint::getVertexShader()
 {
-	Evas_GL_API * __evas_gl_glapi = m_glApi;
-   GLbyte vShaderStr[] = SHADER(
-								attribute vec2 vPosition;
-								uniform mat4 perspective;
-								uniform mat4 translate;
-								uniform mat4 scale;
-								void main()
-								{
-									gl_Position = perspective * translate * scale * vec4( vPosition.x, vPosition.y, 0.0, 1.0 );
-								}
+	string shader = SHADER(
+
+attribute vec3 vPosition;
+uniform mat4 perspective;
+uniform mat4 translate;
+uniform mat4 scale;
+void main()
+{
+   gl_Position = perspective * translate * scale * vec4( vPosition, 1.0 );
+}
+
 						);
 
-   GLbyte fShaderStr[] = SHADER(
-								precision mediump float;\n
-								void main()\n
-								{\n
-									gl_FragColor = vec4 ( 0.5, 0.5, 1.0, 1.0 );\n
-								}\n
-		   );
+	return shader;
+}
 
-   GLint linked;
+string GraphicPoint::getFragmentShader()
+{
+	string shader =	SHADER(
 
-   // Load the vertex/fragment shaders
-   m_vertexShader  = loadShader( GL_VERTEX_SHADER, (const char*)vShaderStr);
-   m_fragmentShader = loadShader( GL_FRAGMENT_SHADER, (const char*)fShaderStr);
+void main()
+{
+	gl_FragColor = vec4( 0.5, 0.5, 1.0, 1.0 );
+}
 
-   // Create the program object
-   m_Program = __evas_gl_glapi->glCreateProgram( );
-   if( m_Program == 0 )
-   {
-	   return 0;
-   }
+						);
 
-   __evas_gl_glapi->glAttachShader( m_Program,  m_vertexShader);
-   __evas_gl_glapi->glAttachShader( m_Program,  m_fragmentShader);
-
-   __evas_gl_glapi->glLinkProgram( m_Program );
-   __evas_gl_glapi->glGetProgramiv( m_Program, GL_LINK_STATUS, &linked );
-
-	if( 0 == linked )
-	{
-		GLint info_len = 0;
-		__evas_gl_glapi->glGetProgramiv( m_Program, GL_INFO_LOG_LENGTH, &info_len);
-		if (info_len > 1)
-		{
-			char* info_log = (char *)malloc(sizeof(char) * info_len);
-
-			__evas_gl_glapi->glGetProgramInfoLog( m_Program, info_len, NULL, info_log );
-			printf( "Error linking program:\n%s\n", info_log );
-			free( info_log );
-		}
-		__evas_gl_glapi->glDeleteProgram( m_Program );
-		return 0;
-	}
-
-
-	m_positionIdx = 	__evas_gl_glapi->glGetAttribLocation( m_Program, "vPosition" );
-	m_perspective_idx = __evas_gl_glapi->glGetUniformLocation( m_Program, "perspective" );
-	m_translate_idx = 	__evas_gl_glapi->glGetUniformLocation( m_Program, "translate" );
-	m_scale_idx = 		__evas_gl_glapi->glGetUniformLocation( m_Program, "scale" );
-
-//	__evas_gl_glapi->glGenBuffers( 1, &m_vertexesBufferObject );
-
-	return 1;
+	return shader;
 }
 
 bool GraphicPoint::operator ==( const GraphicPoint & src )

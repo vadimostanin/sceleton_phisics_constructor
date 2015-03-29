@@ -21,7 +21,14 @@ public:
 	void draw( Evas * canvas );
 	IGeometryObject & getGeometryObject();
 
+	string getVertexShader();
+	string getFragmentShader();
+
 private:
+
+	void initLineVertexes();
+	void draw_line_2d();
+
 	GeometrySpring m_geometrySpring;
 };
 
