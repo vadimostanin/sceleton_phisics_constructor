@@ -102,6 +102,7 @@ void GraphicSpring::initLineVertexes()
 
 	double spring_angle = asin( katet_width / hypotenuze );
 	const float ortho_angle = M_PI / 2;
+    const float angles_max = M_PI;
 
 	const unsigned int curve_side_lenght = 20;
 
