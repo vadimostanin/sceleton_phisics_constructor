@@ -274,33 +274,48 @@ void GraphicSpring::initLineVertexes()
 		float curve_angle_left = ( -1 ) * ortho_angle;
 		float curve_angle_rigth = ortho_angle;
 
-		unsigned int segment_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
-		unsigned int segment_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
+		unsigned int segment_middle_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
+		unsigned int segment_middle_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
+       unsigned int segment_end_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
+		unsigned int segment_end_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
 
 		int curve_left_x = segment_point_x + curve_side_lenght * cos( curve_angle_left );
 		int curve_left_y = segment_point_y + curve_side_lenght * sin( curve_angle_left );
 
-		int curve_right_x = segment_point_x + curve_side_lenght * cos( curve_angle_rigth );
-		int curve_right_y = segment_point_y + curve_side_lenght * sin( curve_angle_rigth );
+		int curve_right_x = segment_middle_point_x + curve_side_lenght * cos( curve_angle_rigth );
+		int curve_right_y = segment_middle_point_y + curve_side_lenght * sin( curve_angle_rigth );
 
-		m_vertexBuffer.push_back( last_x );
-		m_vertexBuffer.push_back( last_y );
+		m_vertexBuffer.push_back( stack_last_points[0] );
+		m_vertexBuffer.push_back( stack_last_points[1] );
 
 		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_x ) );
 		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_y ) );
 
 
-		last_x = pixels_to_coords_x( curve_left_x );
-		last_y = pixels_to_coords_x( curve_left_y );
-	}
+       m_vertexBuffer.push_back( stack_last_points[2] );
+		m_vertexBuffer.push_back( stack_last_points[3] );
 
-	{
-		m_vertexBuffer.push_back( last_x );
-		m_vertexBuffer.push_back( last_y );
-	}
-	{
-		m_vertexBuffer.push_back( pixels_to_coords_x( to_x ) );
-		m_vertexBuffer.push_back( pixels_to_coords_y( to_y ) );
+		m_vertexBuffer.push_back( pixels_to_coords_x( curve_right_x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_x( curve_right_y ) );
+
+		stack_last_points[0] = pixels_to_coords_x( curve_left_x ) ;
+       stack_last_points[1] = pixels_to_coords_x( curve_left_y );
+       stack_last_points[2] = pixels_to_coords_x( curve_right_x );
+       stack_last_points[3] = pixels_to_coords_x( curve_right_y );
+
+
+       m_vertexBuffer.push_back( stack_last_points[0] );
+		m_vertexBuffer.push_back( stack_last_points[1] );
+
+		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_y ) );
+
+
+       m_vertexBuffer.push_back( stack_last_points[2] );
+		m_vertexBuffer.push_back( stack_last_points[3] );
+
+		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_y ) );
 	}
 
 	size_t vertex_count = m_vertexBuffer.size() / 2;
