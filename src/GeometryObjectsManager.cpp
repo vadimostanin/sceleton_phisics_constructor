@@ -122,9 +122,6 @@ bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  in
 
 	bool found = false;
 
-//	int link_from_center_x = ( link_from.getPointFrom().getX() - link_from.getPointTo().getX() ) / 2;
-//	int link_from_center_y = ( link_from.getPointFrom().getY() - link_from.getPointTo().getY() ) / 2;
-
 	for( ; iter != end ; iter++ )
 	{
 		if( (*iter)->getType() != GEOMETRYOBJECT_LINK )
@@ -139,8 +136,8 @@ bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  in
 			continue;
 		}
 
-		int link_iter_center_x = ( link_iter.getPointFrom().getX() - link_iter.getPointTo().getX() ) / 2;
-		int link_iter_center_y = ( link_iter.getPointFrom().getY() - link_iter.getPointTo().getY() ) / 2;
+		int link_iter_center_x = ( link_iter.getPointFrom().getX() + link_iter.getPointTo().getX() ) / 2;
+		int link_iter_center_y = ( link_iter.getPointFrom().getY() + link_iter.getPointTo().getY() ) / 2;
 
 		double distance = sqrt( ( link_iter_center_x - x )*( link_iter_center_x - x ) + ( link_iter_center_y - y )*( link_iter_center_y - y ) );
 

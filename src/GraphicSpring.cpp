@@ -165,11 +165,11 @@ string GraphicSpring::getFragmentShader()
 //		}
 //
 //		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_x ) );
-//		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_y ) );
+//		m_vertexBuffer.push_back( pixels_to_coords_y( curve_left_y ) );
 //
 //
 //		last_x = pixels_to_coords_x( curve_left_x );
-//		last_y = pixels_to_coords_x( curve_left_y );
+//		last_y = pixels_to_coords_y( curve_left_y );
 //	}
 //
 //	{
@@ -204,7 +204,7 @@ void GraphicSpring::initLineVertexes()
 	int to_x = ( m_geometrySpring.getLinkTo().getPointFrom().getX() + m_geometrySpring.getLinkTo().getPointTo().getX() ) / 2;
 	int to_y = ( m_geometrySpring.getLinkTo().getPointFrom().getY() + m_geometrySpring.getLinkTo().getPointTo().getY() ) / 2;
 
-	const unsigned int segment_length_min = 20;
+	const unsigned int segment_length_min = 50;
 
 	int katet_width = ( to_x - from_x );
 	int katet_height = ( to_y -  from_y );
@@ -218,8 +218,8 @@ void GraphicSpring::initLineVertexes()
 
 	int segments_count = ( hypotenuze / segment_length_min ) + 1;
 	int segment_length = hypotenuze / segments_count;
-	int segment_x_length = katet_width / segments_count;
-	int segment_y_length = katet_height / segments_count;
+	int segment_x_length = hypotenuze / segments_count;
+	int segment_y_length = hypotenuze / segments_count;
 
 	bool left = true;
 	float direction_angle_delta = 0.0;
@@ -244,78 +244,106 @@ void GraphicSpring::initLineVertexes()
 		direction_angle_delta = M_PI * 3.0 / 2.0;
 	}
 
-	float spring_angle_sin = katet_width / hypotenuze;
-	spring_angle_sin = spring_angle_sin > 1.0 ? 1.0 : ( spring_angle_sin < -1.0 ? -1.0 : spring_angle_sin );
-	double spring_angle = asin( spring_angle_sin );
-	const float ortho_angle = M_PI / 2;
-    const float angles_max = M_PI;
+	float spring_angle_sin = (katet_width * 1.0) / ( hypotenuze * 1.0 );
+
+	double spring_angle_radian = asin( spring_angle_sin );
+	int dec_angle = ( spring_angle_radian / M_PI * 180 );
 
 	const unsigned int curve_side_lenght = 20;
 
-	float last_x = 0;
-	float last_y = 0;
+	const int coords_in_two_points = 4;
 
-	m_vertexBuffer.push_back( pixels_to_coords_x( from_x ) );
-	m_vertexBuffer.push_back( pixels_to_coords_y( from_y ) );
+	vector<float> stack_last_points( coords_in_two_points, 0.0 ); //[i+0]=x, [i+1]=y
 
-	last_x = pixels_to_coords_x( from_x );
-	last_y = pixels_to_coords_x( from_y );
+	stack_last_points[0] = pixels_to_coords_x( from_x );
+	stack_last_points[1] = pixels_to_coords_y( from_y );
 
-	vector<unsigned int> stack_last_points; //[i+0]=x, [i+1]=y
-
-	stack_last_points.push_back( last_x );
-	stack_last_points.push_back( last_y );
-
-	stack_last_points.push_back( last_x );
-	stack_last_points.push_back( last_y );
+	stack_last_points[2] = pixels_to_coords_x( from_x );
+	stack_last_points[3] = pixels_to_coords_y( from_y );
 
 	for( int segment_i = 0 ; segment_i < segments_count ; segment_i++ )
 	{
-		float curve_angle_left = ( -1 ) * ortho_angle;
-		float curve_angle_rigth = ortho_angle;
+		float spring_angle_cos = 0.0;
+		if( katet_width > 0 )
+		{
+			spring_angle_cos = cos( M_PI / 2 - spring_angle_radian );
+		}
+		else
+		{
+			spring_angle_cos = cos( M_PI / 2 + spring_angle_radian );
+		}
+		float rotate_x = spring_angle_cos;
 
-		unsigned int segment_middle_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
-		unsigned int segment_middle_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
-       unsigned int segment_end_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
-		unsigned int segment_end_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
+		float spring_angle_sin = 0;
+		if( katet_height < 0 )
+		{
+			spring_angle_sin = sin( M_PI / 2 - spring_angle_radian );
+		}
+		else
+		{
+			spring_angle_sin = sin( M_PI + spring_angle_radian );
+		}
+		float rotate_y = (-1) * spring_angle_sin;
 
-		int curve_left_x = segment_point_x + curve_side_lenght * cos( curve_angle_left );
-		int curve_left_y = segment_point_y + curve_side_lenght * sin( curve_angle_left );
+		double tempsegment_delta = (double)( segment_x_length * segment_i + segment_x_length / 2 );
+		double rotated_delta_x = tempsegment_delta * (double)rotate_x;
+		unsigned int segment_middle_point_x = from_x + rotated_delta_x;
 
-		int curve_right_x = segment_middle_point_x + curve_side_lenght * cos( curve_angle_rigth );
-		int curve_right_y = segment_middle_point_y + curve_side_lenght * sin( curve_angle_rigth );
+		double rotated_delta_y = tempsegment_delta * (double)rotate_y;
+		unsigned int segment_middle_point_y = from_y + rotated_delta_y;
+
+
+		unsigned int segment_end_point_x = from_x + (double)( segment_x_length * ( segment_i + 1 ) ) * (double)rotate_x;
+		unsigned int segment_end_point_y = from_y + (double)( segment_y_length * ( segment_i + 1 ) ) * (double)rotate_y;
+
+		segment_middle_point_x = ( -1 ) * spring_angle_sin * tempsegment_delta + spring_angle_cos * tempsegment_delta  + from_x;
+		segment_middle_point_y = spring_angle_cos * tempsegment_delta + spring_angle_sin * tempsegment_delta + from_y;
+
+		segment_end_point_x = ( -1 ) * spring_angle_sin * ( segment_y_length * ( segment_i + 1 ) ) + spring_angle_cos * ( segment_y_length * ( segment_i + 1 ) )  + from_x;
+		segment_end_point_y = spring_angle_cos * ( segment_y_length * ( segment_i + 1 ) ) + spring_angle_sin * ( segment_y_length * ( segment_i + 1 ) ) + from_y;
+
+		int curve_left_x = segment_middle_point_x - curve_side_lenght;
+		int curve_left_y = segment_middle_point_y;
+
+		int curve_right_x = segment_middle_point_x + curve_side_lenght;
+		int curve_right_y = segment_middle_point_y;
 
 		m_vertexBuffer.push_back( stack_last_points[0] );
 		m_vertexBuffer.push_back( stack_last_points[1] );
 
 		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_x ) );
-		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_y ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( curve_left_y ) );
 
-
-       m_vertexBuffer.push_back( stack_last_points[2] );
+		m_vertexBuffer.push_back( stack_last_points[2] );
 		m_vertexBuffer.push_back( stack_last_points[3] );
 
 		m_vertexBuffer.push_back( pixels_to_coords_x( curve_right_x ) );
-		m_vertexBuffer.push_back( pixels_to_coords_x( curve_right_y ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( curve_right_y ) );
 
 		stack_last_points[0] = pixels_to_coords_x( curve_left_x ) ;
-       stack_last_points[1] = pixels_to_coords_x( curve_left_y );
-       stack_last_points[2] = pixels_to_coords_x( curve_right_x );
-       stack_last_points[3] = pixels_to_coords_x( curve_right_y );
+		stack_last_points[1] = pixels_to_coords_y( curve_left_y );
+		stack_last_points[2] = pixels_to_coords_x( curve_right_x );
+		stack_last_points[3] = pixels_to_coords_y( curve_right_y );
 
 
-       m_vertexBuffer.push_back( stack_last_points[0] );
+
+		m_vertexBuffer.push_back( stack_last_points[0] );
 		m_vertexBuffer.push_back( stack_last_points[1] );
 
 		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_x ) );
-		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_y ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( segment_end_point_y ) );
 
 
-       m_vertexBuffer.push_back( stack_last_points[2] );
+		m_vertexBuffer.push_back( stack_last_points[2] );
 		m_vertexBuffer.push_back( stack_last_points[3] );
 
 		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_x ) );
-		m_vertexBuffer.push_back( pixels_to_coords_x( segment_end_point_y ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( segment_end_point_y ) );
+
+		stack_last_points[0] = pixels_to_coords_x( segment_end_point_x ) ;
+		stack_last_points[1] = pixels_to_coords_y( segment_end_point_y );
+		stack_last_points[2] = pixels_to_coords_x( segment_end_point_x );
+		stack_last_points[3] = pixels_to_coords_y( segment_end_point_y );
 	}
 
 	size_t vertex_count = m_vertexBuffer.size() / 2;

@@ -40,6 +40,7 @@ void ToolbarContent::createButtonsLayout()
 	evas_object_size_hint_weight_set( m_ContainerBox, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND );
 	elm_box_horizontal_set( m_ContainerBox, EINA_TRUE );
 	elm_object_part_content_set( m_ButtonsLayout, "part.toolbar_layout.main_box", m_ContainerBox );
+//	m_ContainerBox = elm_object_part_content_get( m_ButtonsLayout, "part.toolbar_layout.main_box" );//Work
 	evas_object_show( m_ContainerBox );
 }
 
