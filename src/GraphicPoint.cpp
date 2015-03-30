@@ -215,15 +215,12 @@ void GraphicPoint::draw_circle_2d()
 	const int coordinates_in_point = 2;
 	int x = getX();
 	int y = getY();
-	float translate_x =  ( x - m_DrawCanvasWidth / 2.0 );
-	translate_x  /= (float)( m_DrawCanvasWidth / 2 );
-	float translate_y = ( m_DrawCanvasHeight / 2.0 - y + 60 );
-	translate_y /=  (float)( m_DrawCanvasHeight / 2 );
+
 
 	float dimension = m_DrawCanvasWidth / (float)m_DrawCanvasHeight;
 
-	GLfloat offset_x = translate_x;
-	GLfloat offset_y = translate_y;
+	GLfloat offset_x = pixels_to_coords_x( x );
+	GLfloat offset_y = pixels_to_coords_y( y );
 
 	GLfloat translateMatrix[16];
 	GLfloat scaleMatrix[16];

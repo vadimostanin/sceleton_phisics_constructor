@@ -1,5 +1,28 @@
+#define BUTTON_CIRCLE_STYLES(style_name, button_circle_normal, button_circle_press) \
+   group { name: "elm/button/base/"style_name; \
+      images { \
+         image: button_circle_normal COMP; \
+         image: button_circle_press COMP; \
+      } \
+      parts { \
+         part { name: "button_image"; \
+            description { state: "default" 0.0; \
+               image.normal: button_circle_normal; \
+            } \
+            description { \
+               state: "clicked" 0.0; \
+               inherit: "default" 0.0; \
+               image.normal: button_circle_press; \
+            } \
+			\
+         } \
+      } \
+   }
+
 collections
 {
+	BUTTON_CIRCLE_STYLES( "button_custom_my", "M02_rich_text_bar_bold.png", "M02_rich_text_bar_bold.png" )
+
 	group
 	{
 		name:"main_layout";
@@ -60,7 +83,6 @@ collections
 				description
 				{
 					color : 0 255 0 255;
-					fixed: 1 1;
 					align: 0.0 0.0;
 					rel1
 	                {

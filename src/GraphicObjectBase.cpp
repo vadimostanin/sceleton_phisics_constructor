@@ -379,14 +379,14 @@ string GraphicObjectBase::getVertexShader()
 {
 	string shader = SHADER(
 
-attribute vec3 vPosition;
-uniform mat4 perspective;
-uniform mat4 translate;
-uniform mat4 scale;
-void main()
-{
-   gl_Position = perspective * translate * scale * vec4( vPosition, 1.0 );
-}
+							attribute vec3 vPosition;
+							uniform mat4 perspective;
+							uniform mat4 translate;
+							uniform mat4 scale;
+							void main()
+							{
+							   gl_Position = perspective * translate * scale * vec4( vPosition, 1.0 );
+							}
 
 						);
 
@@ -397,13 +397,29 @@ string GraphicObjectBase::getFragmentShader()
 {
 	string shader =	SHADER(
 
-void main()
-{
-	gl_FragColor = vec4( 0.5, 0.5, 1.0, 1.0 );
-}
+							void main()
+							{
+								gl_FragColor = vec4( 0.5, 0.5, 1.0, 1.0 );
+							}
 
 						);
 
 	return shader;
+}
+
+float GraphicObjectBase::pixels_to_coords_x( unsigned int x )
+{
+	float translate_x =  ( x - m_DrawCanvasWidth /  2.0 );
+	translate_x  /= (float)( m_DrawCanvasWidth / 2 );
+
+	return translate_x;
+}
+
+float GraphicObjectBase::pixels_to_coords_y( unsigned int y )
+{
+	float translate_y = ( m_DrawCanvasHeight / 2.0 - y + 60 );
+	translate_y /=  (float)( m_DrawCanvasHeight / 2 );
+
+	return translate_y;
 }
 

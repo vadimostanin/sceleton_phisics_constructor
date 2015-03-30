@@ -61,16 +61,8 @@ void GraphicLink::initLineVertexes()
 		int x = m_geometryLink.getPointFrom().getX();
 		int y = m_geometryLink.getPointFrom().getY();
 
-		int width =  m_DrawCanvasWidth;
-		int height = m_DrawCanvasHeight;
-
-		float translate_x =  ( x - width/  2.0 );
-		translate_x  /= (float)( width / 2 );
-		float translate_y = ( height / 2.0 - y + 60 );
-		translate_y /=  (float)( height / 2 );
-
-		m_vertexBuffer.push_back( translate_x );
-		m_vertexBuffer.push_back( translate_y );
+		m_vertexBuffer.push_back( pixels_to_coords_x( x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( y ) );
 //		m_vertexBuffer.push_back( 0.0 );
 	}
 
@@ -78,16 +70,8 @@ void GraphicLink::initLineVertexes()
 		int x = m_geometryLink.getPointTo().getX();
 		int y = m_geometryLink.getPointTo().getY();
 
-		int width =  m_DrawCanvasWidth;
-		int height = m_DrawCanvasHeight;
-
-		float translate_x =  ( x - width /  2.0 );
-		translate_x  /= (float)( width / 2 );
-		float translate_y = ( height / 2.0 - y + 60 );
-		translate_y /=  (float)( height / 2 );
-
-		m_vertexBuffer.push_back( translate_x );
-		m_vertexBuffer.push_back( translate_y );
+		m_vertexBuffer.push_back( pixels_to_coords_x( x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( y ) );
 //		m_vertexBuffer.push_back( 0.0 );
 	}
 }

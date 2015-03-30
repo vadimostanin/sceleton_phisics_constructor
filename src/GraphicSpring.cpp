@@ -69,6 +69,128 @@ string GraphicSpring::getFragmentShader()
 	return shader;
 }
 
+//void GraphicSpring::initLineVertexes()
+//{
+//	m_vertexBuffer.clear();
+//
+//	int canvas_width =  m_DrawCanvasWidth;
+//	int canvas_height = m_DrawCanvasHeight;
+//
+//	int from_x = ( m_geometrySpring.getLinkFrom().getPointFrom().getX() + m_geometrySpring.getLinkFrom().getPointTo().getX() ) / 2;
+//	int from_y = ( m_geometrySpring.getLinkFrom().getPointFrom().getY() + m_geometrySpring.getLinkFrom().getPointTo().getY() ) / 2;
+//
+//	int to_x = ( m_geometrySpring.getLinkTo().getPointFrom().getX() + m_geometrySpring.getLinkTo().getPointTo().getX() ) / 2;
+//	int to_y = ( m_geometrySpring.getLinkTo().getPointFrom().getY() + m_geometrySpring.getLinkTo().getPointTo().getY() ) / 2;
+//
+//	const unsigned int segment_length_min = 20;
+//
+//	int katet_width = ( to_x - from_x );
+//	int katet_height = ( to_y -  from_y );
+//
+//	if( katet_width == 0 && katet_height == 0 )
+//	{
+//		return;
+//	}
+//
+//	unsigned int hypotenuze = sqrt( katet_width * katet_width + katet_height * katet_height );
+//
+//	int segments_count = ( hypotenuze / segment_length_min ) + 1;
+//	int segment_length = hypotenuze / segments_count;
+//	int segment_x_length = katet_width / segments_count;
+//	int segment_y_length = katet_height / segments_count;
+//
+//	bool left = true;
+//	float direction_angle_delta = 0.0;
+//	if( katet_height > 0 && katet_width < 0 )
+//	{
+//		left = true;
+//		direction_angle_delta = 0.0;
+//	}
+//	else if( katet_height < 0 && katet_width < 0 )
+//	{
+//		left = true;
+//		direction_angle_delta = M_PI / 2;
+//	}
+//	else if( katet_height < 0 && katet_width > 0 )
+//	{
+//		left = true;
+//		direction_angle_delta = M_PI;
+//	}
+//	else if( katet_height > 0 && katet_width > 0 )
+//	{
+//		left = false;
+//		direction_angle_delta = M_PI * 3.0 / 2.0;
+//	}
+//
+//	float spring_angle_sin = katet_width / hypotenuze;
+//	spring_angle_sin = spring_angle_sin > 1.0 ? 1.0 : ( spring_angle_sin < -1.0 ? -1.0 : spring_angle_sin );
+//	double spring_angle = asin( spring_angle_sin );
+//	const float ortho_angle = M_PI / 2;
+//    const float angles_max = M_PI;
+//
+//	const unsigned int curve_side_lenght = 20;
+//
+//	float last_x = 0;
+//	float last_y = 0;
+//
+//	{
+//		float translate_x =  ( from_x - canvas_width /  2.0 );
+//		translate_x  /= (float)( canvas_width / 2 );
+//		float translate_y = ( canvas_height / 2.0 - from_y + 60 );
+//		translate_y /=  (float)( canvas_height / 2 );
+//
+//		m_vertexBuffer.push_back( translate_x );
+//		m_vertexBuffer.push_back( translate_y );
+//	}
+//
+//	for( int segment_i = 0 ; segment_i < segments_count ; segment_i++ )
+//	{
+//		float curve_angle_left = ortho_angle + direction_angle_delta - spring_angle;
+//		float curve_angle_rigth = spring_angle + direction_angle_delta + ortho_angle;
+//
+//
+//		unsigned int segment_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
+//		unsigned int segment_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
+//
+//		int curve_left_x = segment_point_x + curve_side_lenght * cos( curve_angle_left );
+//		int curve_left_y = segment_point_y + curve_side_lenght * sin( curve_angle_left );
+//
+//		int curve_right_x = segment_point_x + curve_side_lenght * cos( curve_angle_rigth );
+//		int curve_right_y = segment_point_y + curve_side_lenght * sin( curve_angle_rigth );
+//
+//		if( last_x != 0 && last_y != 0 && ( segment_i ) < segments_count )
+//		{
+//			m_vertexBuffer.push_back( last_x );
+//			m_vertexBuffer.push_back( last_y );
+//		}
+//
+//		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_x ) );
+//		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_y ) );
+//
+//
+//		last_x = pixels_to_coords_x( curve_left_x );
+//		last_y = pixels_to_coords_x( curve_left_y );
+//	}
+//
+//	{
+//		m_vertexBuffer.push_back( last_x );
+//		m_vertexBuffer.push_back( last_y );
+//	}
+//	{
+//		float translate_x =  ( to_x - canvas_width /  2.0 );
+//		translate_x  /= (float)( canvas_width / 2 );
+//		float translate_y = ( canvas_height / 2.0 - to_y + 60 );
+//		translate_y /=  (float)( canvas_height / 2 );
+//
+//		m_vertexBuffer.push_back( translate_x );
+//		m_vertexBuffer.push_back( translate_y );
+//	}
+//
+//	size_t vertex_count = m_vertexBuffer.size() / 2;
+//	int a = 0;
+//	a++;
+//}
+
 void GraphicSpring::initLineVertexes()
 {
 	m_vertexBuffer.clear();
@@ -82,7 +204,7 @@ void GraphicSpring::initLineVertexes()
 	int to_x = ( m_geometrySpring.getLinkTo().getPointFrom().getX() + m_geometrySpring.getLinkTo().getPointTo().getX() ) / 2;
 	int to_y = ( m_geometrySpring.getLinkTo().getPointFrom().getY() + m_geometrySpring.getLinkTo().getPointTo().getY() ) / 2;
 
-	const unsigned int segment_length_min = 50;
+	const unsigned int segment_length_min = 20;
 
 	int katet_width = ( to_x - from_x );
 	int katet_height = ( to_y -  from_y );
@@ -99,8 +221,32 @@ void GraphicSpring::initLineVertexes()
 	int segment_x_length = katet_width / segments_count;
 	int segment_y_length = katet_height / segments_count;
 
+	bool left = true;
+	float direction_angle_delta = 0.0;
+	if( katet_height > 0 && katet_width < 0 )
+	{
+		left = true;
+		direction_angle_delta = 0.0;
+	}
+	else if( katet_height < 0 && katet_width < 0 )
+	{
+		left = true;
+		direction_angle_delta = M_PI / 2;
+	}
+	else if( katet_height < 0 && katet_width > 0 )
+	{
+		left = true;
+		direction_angle_delta = M_PI;
+	}
+	else if( katet_height > 0 && katet_width > 0 )
+	{
+		left = false;
+		direction_angle_delta = M_PI * 3.0 / 2.0;
+	}
 
-	double spring_angle = asin( katet_width / hypotenuze );
+	float spring_angle_sin = katet_width / hypotenuze;
+	spring_angle_sin = spring_angle_sin > 1.0 ? 1.0 : ( spring_angle_sin < -1.0 ? -1.0 : spring_angle_sin );
+	double spring_angle = asin( spring_angle_sin );
 	const float ortho_angle = M_PI / 2;
     const float angles_max = M_PI;
 
@@ -109,52 +255,43 @@ void GraphicSpring::initLineVertexes()
 	float last_x = 0;
 	float last_y = 0;
 
-	{
-		float translate_x =  ( from_x - canvas_width /  2.0 );
-		translate_x  /= (float)( canvas_width / 2 );
-		float translate_y = ( canvas_height / 2.0 - from_y + 60 );
-		translate_y /=  (float)( canvas_height / 2 );
+	m_vertexBuffer.push_back( pixels_to_coords_x( from_x ) );
+	m_vertexBuffer.push_back( pixels_to_coords_y( from_y ) );
 
-		m_vertexBuffer.push_back( translate_x );
-		m_vertexBuffer.push_back( translate_y );
-	}
+	last_x = pixels_to_coords_x( from_x );
+	last_y = pixels_to_coords_x( from_y );
 
-    bool left = true;
+	vector<unsigned int> stack_last_points; //[i+0]=x, [i+1]=y
+
+	stack_last_points.push_back( last_x );
+	stack_last_points.push_back( last_y );
+
+	stack_last_points.push_back( last_x );
+	stack_last_points.push_back( last_y );
 
 	for( int segment_i = 0 ; segment_i < segments_count ; segment_i++ )
 	{
-       float curve_angle = 0;
-       if( true == left )
-       {
-            curve_angle = ortho_angle - spring_angle;
-       }
-       else
-       {
-            curve_angle = spring_angle + ortho_angle;
-        }
+		float curve_angle_left = ( -1 ) * ortho_angle;
+		float curve_angle_rigth = ortho_angle;
 
 		unsigned int segment_point_x = ( from_x + segment_x_length * segment_i + segment_x_length / 2 );
 		unsigned int segment_point_y = ( from_y + segment_y_length * segment_i + segment_y_length / 2 );
-		int curve_x = segment_point_x + curve_side_lenght * cos( curve_angle );
-		int curve_y = segment_point_y + curve_side_lenght * sin( curve_angle );
 
-		float translate_x =  ( curve_x - canvas_width /  2.0 );
-		translate_x  /= (float)( canvas_width / 2 );
-		float translate_y = ( canvas_height / 2.0 - curve_y + 60 );
-		translate_y /=  (float)( canvas_height / 2 );
+		int curve_left_x = segment_point_x + curve_side_lenght * cos( curve_angle_left );
+		int curve_left_y = segment_point_y + curve_side_lenght * sin( curve_angle_left );
 
-       if( last_x != 0 && last_y != 0 && ( segment_i + 1 ) < segments_count )
-		{
-			m_vertexBuffer.push_back( last_x );
-			m_vertexBuffer.push_back( last_y );
-		}
+		int curve_right_x = segment_point_x + curve_side_lenght * cos( curve_angle_rigth );
+		int curve_right_y = segment_point_y + curve_side_lenght * sin( curve_angle_rigth );
 
-		m_vertexBuffer.push_back( translate_x );
-		m_vertexBuffer.push_back( translate_y );
+		m_vertexBuffer.push_back( last_x );
+		m_vertexBuffer.push_back( last_y );
 
-		
-		last_x = translate_x;
-		last_y = translate_y;
+		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_x( curve_left_y ) );
+
+
+		last_x = pixels_to_coords_x( curve_left_x );
+		last_y = pixels_to_coords_x( curve_left_y );
 	}
 
 	{
@@ -162,14 +299,13 @@ void GraphicSpring::initLineVertexes()
 		m_vertexBuffer.push_back( last_y );
 	}
 	{
-		float translate_x =  ( to_x - canvas_width /  2.0 );
-		translate_x  /= (float)( canvas_width / 2 );
-		float translate_y = ( canvas_height / 2.0 - to_y + 60 );
-		translate_y /=  (float)( canvas_height / 2 );
-
-		m_vertexBuffer.push_back( translate_x );
-		m_vertexBuffer.push_back( translate_y );
+		m_vertexBuffer.push_back( pixels_to_coords_x( to_x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( to_y ) );
 	}
+
+	size_t vertex_count = m_vertexBuffer.size() / 2;
+	int a = 0;
+	a++;
 }
 
 void GraphicSpring::draw_line_2d()

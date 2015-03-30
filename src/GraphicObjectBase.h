@@ -30,6 +30,9 @@ protected:
 	void view_set_ortho( GLfloat* result, const float left, const float right, const float bottom, const float top, const float near, const float far );
 	void view_set_perspective( GLfloat* result, const float fovy, const float aspect, const float near, const float far );
 
+	float pixels_to_coords_x( unsigned int x );
+	float pixels_to_coords_y( unsigned int y );
+
 	int initShaders();
 	GLuint loadShader( GLenum type, const char *shader_src );
 
