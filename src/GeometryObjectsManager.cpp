@@ -37,7 +37,28 @@ void GeometryObjectsManager::removeObject( IGeometryObject * object )
 	{
 		return;
 	}
+    IGeometryObject * point_ptr = (* found_iter);
 	m_geometryObjects.erase( found_iter );
+    delete point_ptr;
+    new(point_ptr) GeometryDummy;
+
+    bool valid_all = true;
+    do
+    {
+        vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
+	     vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
+	     vector<IGeometryObject *>::iterator iter = begin;
+        for( ; iter != end ; iter++ )
+	    {
+          IGeometryObject * object_ptr = (* iter);
+          valid_all = object_ptr->isValid();
+          if( false == valid_all )
+          {
+              delete object_ptr;
+              new( object_ptr ) GeometryDummy;
+           }
+        }
+    }while( true == valid_all );
 }
 
 void GeometryObjectsManager::getObjects( vector<IGeometryObject *> & objects )
