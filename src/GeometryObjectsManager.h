@@ -10,6 +10,7 @@
 
 #include "GeometryPoint.h"
 #include "GeometryLink.h"
+#include "GeometrySpring.h"
 
 #include <vector>
 using namespace std;
@@ -30,6 +31,8 @@ public:
 	void save( string filename );
 
 	static GeometryObjectsManager & getInstance();
+
+	void initTestingState();
 
 private:
 

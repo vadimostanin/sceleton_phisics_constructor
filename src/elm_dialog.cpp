@@ -82,6 +82,8 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
+	GeometryObjectsManager::getInstance().initTestingState();
+
 	GeometrySceletonOperationTracking geoSceletonObjectTracking( drawingContent );
 	GeometrySpringOperationTracking   geoSpringObjectTracking( drawingContent );
 

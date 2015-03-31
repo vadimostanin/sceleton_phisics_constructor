@@ -15,6 +15,7 @@ using namespace std;
 
 GeometrySceletonOperationTracking::GeometrySceletonOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater ), m_GeometryObjectTracking( 0 )
 {
+
 }
 
 GeometrySceletonOperationTracking::~GeometrySceletonOperationTracking()
@@ -35,32 +36,6 @@ void GeometrySceletonOperationTracking::constructGraphicObjects( vector<IGraphic
 	{
 		IGraphicObject * graphicObject = GeometryObjectFactory::getInstance().createGraphicObject( (*iter), m_ViewUpdater.getDrawingCanvas() );
 
-		switch( (*iter)->getType() )
-		{
-			case GEOMETRYOBJECT_POINT:
-			{
-				int x = ((GeometryPoint*)(*iter))->getX();
-				int y = ((GeometryPoint*)(*iter))->getY();
-				((GraphicPoint *)graphicObject)->setX( x );
-				((GraphicPoint *)graphicObject)->setY( y );
-			}
-				break;
-			case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
-			{
-				((GraphicPointHighlighted *)graphicObject)->setX( ((GeometryPoint*)(*iter))->getX() );
-				((GraphicPointHighlighted *)graphicObject)->setY( ((GeometryPoint*)(*iter))->getY() );
-			}
-				break;
-			case GEOMETRYOBJECT_LINK:
-			{
-				const GeometryPoint & pointFrom = (( GeometryLink * )( * iter ))->getPointFrom();
-				const GeometryPoint & pointTo = (( GeometryLink * )( * iter ))->getPointTo();
-
-				((GeometryLink &)graphicObject->getGeometryObject()).setPointFrom( pointFrom );
-				((GeometryLink &)graphicObject->getGeometryObject()).setPointTo( pointTo );
-			}
-				break;
-		}
 		graphicObjects.push_back( graphicObject );
 	}
 }
@@ -106,11 +81,17 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		GeometryObjectsManager::getInstance().addObject( link_object );
 	}
 
-	IGraphicObject * graphicObject;
+	vector<IGraphicObject *> graphicObjects;
 
-	constructGraphicObject( new_object, &graphicObject );
+	constructGraphicObjects( graphicObjects );
 
-	m_ViewUpdater.addGraphicObject( graphicObject );
+	m_ViewUpdater.setGraphicObjects( graphicObjects );
+//
+//	IGraphicObject * graphicObject;
+//
+//	constructGraphicObject( new_object, &graphicObject );
+//
+//	m_ViewUpdater.addGraphicObject( graphicObject );
 }
 
 void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
@@ -140,11 +121,17 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 		stack_point->setY( y );
 	}
 
-	IGraphicObject * graphicObject;
+//	IGraphicObject * graphicObject;
+//
+//	constructGraphicObject( m_GeometryObjectTracking, &graphicObject );
+//
+//	m_ViewUpdater.changeGraphicObject( graphicObject );
 
-	constructGraphicObject( m_GeometryObjectTracking, &graphicObject );
+	vector<IGraphicObject *> graphicObjects;
 
-	m_ViewUpdater.changeGraphicObject( graphicObject );
+	constructGraphicObjects( graphicObjects );
+
+	m_ViewUpdater.setGraphicObjects( graphicObjects );
 }
 
 void GeometrySceletonOperationTracking::trackerEnd( int x, int y )

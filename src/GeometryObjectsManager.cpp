@@ -7,6 +7,7 @@
 
 #include "GeometryObjectsManager.h"
 #include "GeometryObjectFindPredicate.h"
+#include "GeometryObjectFactory.h"
 #include <cmath>
 #include <limits.h>
 #include <iostream>
@@ -174,6 +175,37 @@ void GeometryObjectsManager::save( string filename )
 	{
 		file << (*iter)->toString() << endl;
 	}
+}
+
+void GeometryObjectsManager::initTestingState()
+{
+	GeometryPoint * point_1 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+	point_1->setX( 400 );
+	point_1->setY( 400 );
+	GeometryPoint * point_2 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+	point_2->setX( 400 );
+	point_2->setY( 200 );
+	GeometryPoint * point_3 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+	point_3->setX( 600 );
+	point_3->setY( 200 );
+	GeometryLink * link_1 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
+	link_1->setPointFrom( *point_1 );
+	link_1->setPointTo( *point_2 );
+	GeometryLink * link_2 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
+	link_2->setPointFrom( *point_2 );
+	link_2->setPointTo( *point_3 );
+	GeometrySpring * spring_1 = (GeometrySpring *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_SPRING );
+	spring_1->setLinkFrom( *link_1 );
+	spring_1->setLinkTo( *link_2 );
+
+	addObject( point_1 );
+	addObject( point_2 );
+	addObject( point_3 );
+
+	addObject( link_1 );
+	addObject( link_2 );
+
+	addObject( spring_1 );
 }
 
 GeometryObjectsManager & GeometryObjectsManager::getInstance()
