@@ -100,32 +100,24 @@ IGeometryObject & GeometryLink::operator = ( IGeometryObject & src )
 	return *this;
 }
 
-void GeometryLink::setPointFrom( const GeometryPoint & point )
+void GeometryLink::setPointFrom( const GeometryPoint * point )
 {
 	m_Points[0] = point;
 }
 
-void GeometryLink::setPointTo( const GeometryPoint & point )
+void GeometryLink::setPointTo( const GeometryPoint * point )
 {
 	m_Points[1] = point;
 }
 
-const GeometryPoint & GeometryLink::getPointFrom() const
+const GeometryPoint * GeometryLink::getPointFrom() const
 {
-	const GeometryPoint & p = m_Points[0];
+	const GeometryPoint * p = m_Points[0];
 	return p;
 }
 
-const GeometryPoint & GeometryLink::getPointTo() const
+const GeometryPoint * GeometryLink::getPointTo() const
 {
-	const GeometryPoint & p = m_Points[1];
+	const GeometryPoint * p = m_Points[1];
 	return p;
 }
-
-
-
-
-
-
-
-

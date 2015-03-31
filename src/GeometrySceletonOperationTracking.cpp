@@ -60,8 +60,8 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		GeometrySpring * spring_object = (GeometrySpring *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_SPRING );
 		new_object = spring_object;
 		m_GeometryObjectTracking = spring_object;
-		spring_object->setLinkFrom( *found_link_from );
-		spring_object->setLinkTo( *found_link_from );
+		spring_object->setLinkFrom( found_link_from );
+		spring_object->setLinkTo( found_link_from );
 
 		cout << "add spring from:" << found_link_from->getId() << "; to:" << found_link_from->getId() << endl << flush;
 	}
@@ -71,8 +71,8 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		m_GeometryObjectTracking = new_object;
 		GeometryLink * link_object = (GeometryLink *)new_object;
 
-		link_object->setPointFrom( *point );
-		link_object->setPointTo( *point );
+		link_object->setPointFrom( point );
+		link_object->setPointTo( point );
 
 		cout << "add link from:" << link_object->getPointFrom().getX() << "x" << link_object->getPointFrom().getY() << "; to:" <<
 				link_object->getPointTo().getX() << "x" << link_object->getPointTo().getY() << endl << flush;
@@ -110,13 +110,13 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 	{
 		GeometrySpring & geoSpring = *((GeometrySpring*)m_GeometryObjectTracking);
 		const GeometryLink & linkFrom = geoSpring.getLinkFrom();
-		GeometryLink temp_link;
-		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestLink( linkFrom, x, y, temp_link );
+		GeometryLink * link_to;
+		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestLink( linkFrom, x, y, link_to );
 		if( foundNearestPoint == true )
 		{
-			if( geoSpring.getLinkTo() != temp_link )
+			if( geoSpring.getLinkTo() != link_to )
 			{
-				geoSpring.setLinkTo( temp_link );
+				geoSpring.setLinkTo( link_to );
 			}
 		}
 	}

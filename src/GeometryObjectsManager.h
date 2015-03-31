@@ -25,8 +25,8 @@ public:
 	void removeObject( IGeometryObject * object );
 	void getObjects( vector<IGeometryObject *> & objects );
 	bool getPoint( int x, int y, GeometryPoint *& point );
-	bool getNearestPoint( const GeometryPoint & startPoint, int x, int y, GeometryPoint & point );
-	bool getNearestLink( const GeometryLink & startPoint,  int x, int y, GeometryLink & point );
+	bool getNearestPoint( const GeometryPoint & startPoint, int x, int y, GeometryPoint * & point );
+	bool getNearestLink( const GeometryLink & startLink,  int x, int y, GeometryLink * link );
 	bool getLinkUnderPoint( int x, int y, GeometryLink ** result_link );
 
 	void save( string filename );

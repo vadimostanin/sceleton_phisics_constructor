@@ -22,8 +22,8 @@ public:
 	bool operator != ( const GeometryLink & src ) const;
 	GeometryLink & operator = ( const GeometryLink & src );
 
-	void setPointFrom( const GeometryPoint & point );
-	void setPointTo( const GeometryPoint & point );
+	void setPointFrom( const GeometryPoint * point );
+	void setPointTo( const GeometryPoint * point );
 
 	const GeometryPoint & getPointFrom() const;
 	const GeometryPoint & getPointTo() const;
@@ -35,7 +35,7 @@ public:
 	IGeometryObject & operator = ( IGeometryObject & src );
 
 private:
-	GeometryPoint m_Points[2];
+	GeometryPoint * m_Points[2];
 	int m_Id;
 };
 

@@ -15,19 +15,19 @@ class GeometrySpring : public IGeometryObject
 {
 public:
 	GeometrySpring();
-	GeometrySpring( const GeometryLink & linkFrom, const GeometryLink & linkTo );
+	GeometrySpring( const GeometryLink * linkFrom, const GeometryLink * linkTo );
 	GeometrySpring( const GeometrySpring & src );
 	bool operator == ( const GeometrySpring & src ) const;
 	bool operator != ( const GeometrySpring & src ) const;
 	GeometrySpring & operator = ( const GeometrySpring & src );
 	virtual ~GeometrySpring();
 
-	const GeometryLink & getLinkFrom() 	const;
-	const GeometryLink & getLinkTo() 	const;
+	const GeometryLink * getLinkFrom() 	const;
+	const GeometryLink * getLinkTo() 	const;
 	const int 		     getLength() 	const;
 
-	void setLinkFrom( const GeometryLink & linkFrom );
-	void setLinkTo( const GeometryLink & linkTo );
+	void setLinkFrom( const GeometryLink * linkFrom );
+	void setLinkTo( const GeometryLink * linkTo );
 	void setLength( int length );
 
 	GeometryObjectsTypes getType() const;
@@ -39,7 +39,7 @@ public:
 
 private:
 
-	GeometryLink m_geometryLinks[2];
+	GeometryLink * m_geometryLinks[2];
 
 	int m_Id;
 

@@ -71,7 +71,7 @@ bool GeometryObjectsManager::getPoint( int x, int y, GeometryPoint *& point )
 	return false;
 }
 
-bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint,  int x, int y, GeometryPoint & point )
+bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint,  int x, int y, GeometryPoint * & point )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -87,15 +87,15 @@ bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint, 
 			continue;
 		}
 
-		const GeometryPoint & point_iter = *(GeometryPoint *)(*iter);
+		const GeometryPoint * point_iter = (GeometryPoint *)(*iter);
 
-		if( startPoint == point_iter )
+		if( startPoint == *point_iter )
 		{
 			continue;
 		}
 
-		int point_iter_x = point_iter.getX();
-		int point_iter_y = point_iter.getY();
+		int point_iter_x = point_iter->getX();
+		int point_iter_y = point_iter->getY();
 
 		double distance = sqrt( ( point_iter_x - x )*( point_iter_x - x ) + ( point_iter_y - y )*( point_iter_y - y ) );
 
@@ -114,7 +114,7 @@ bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint, 
 	return false;
 }
 
-bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  int x, int y, GeometryLink & result_link )
+bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  int x, int y, GeometryLink * & result_link )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -130,9 +130,9 @@ bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  in
 			continue;
 		}
 
-		const GeometryLink & link_iter = *(GeometryLink *)(*iter);
+		const GeometryLink * link_iter = (GeometryLink *)(*iter);
 
-		if( link_from == link_iter )
+		if( link_from == *link_iter )
 		{
 			continue;
 		}

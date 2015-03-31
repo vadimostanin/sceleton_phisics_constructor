@@ -14,7 +14,7 @@ GeometrySpring::GeometrySpring() : m_Id( rand() ), m_Length( 0 )
 {
 }
 
-GeometrySpring::GeometrySpring( const GeometryLink & linkFrom, const GeometryLink & linkTo ) : m_Id( rand() ), m_Length( 0 )
+GeometrySpring::GeometrySpring( const GeometryLink * linkFrom, const GeometryLink * linkTo ) : m_Id( rand() ), m_Length( 0 )
 {
 	m_geometryLinks[0] = linkFrom;
 	m_geometryLinks[1] = linkTo;
@@ -52,12 +52,12 @@ bool GeometrySpring::operator != ( const GeometrySpring & src ) const
 	return true;
 }
 
-const GeometryLink & GeometrySpring::getLinkFrom() const
+const GeometryLink * GeometrySpring::getLinkFrom() const
 {
 	return m_geometryLinks[0];
 }
 
-const GeometryLink & GeometrySpring::getLinkTo() const
+const GeometryLink * GeometrySpring::getLinkTo() const
 {
 	return m_geometryLinks[1];
 }
@@ -67,12 +67,12 @@ const int GeometrySpring::getLength() const
 	return m_Length;
 }
 
-void GeometrySpring::setLinkFrom( const GeometryLink & linkFrom )
+void GeometrySpring::setLinkFrom( const GeometryLink * linkFrom )
 {
 	m_geometryLinks[0] = linkFrom;
 }
 
-void GeometrySpring::setLinkTo( const GeometryLink & linkTo )
+void GeometrySpring::setLinkTo( const GeometryLink * linkTo )
 {
 	m_geometryLinks[1] = linkTo;
 }
