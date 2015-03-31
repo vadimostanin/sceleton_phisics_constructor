@@ -43,6 +43,8 @@ void GeometrySpringOperationTracking::trackerBegin( int x, int y )
 	spring_object->setLinkFrom( *found_link_from );
 	spring_object->setLinkTo( *found_link_from );
 
+	cout << "add link from:" << spring_object->getId() << "; to:" << spring_object->getId() << endl << flush;
+
 	IGraphicObject * graphicObject;
 
 	constructGraphicObject( spring_object, &graphicObject );

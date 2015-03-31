@@ -26,6 +26,7 @@ protected:
 	void init_matrix( GLfloat * result );
 	void translate_xyz( GLfloat* result, const float translatex, const float translatey, const float translatez );
 	void scale_xyz( GLfloat* result, const float scale_x, const float scale_y, const float scale_z );
+	void rotate_xyz( GLfloat* result, const GLfloat anglex, const GLfloat angley, const GLfloat anglez );
 	void multiply_matrix( GLfloat* result, const float *matrix0, const float *matrix1 );
 	void view_set_ortho( GLfloat* result, const float left, const float right, const float bottom, const float top, const float near, const float far );
 	void view_set_perspective( GLfloat* result, const float fovy, const float aspect, const float near, const float far );
@@ -61,6 +62,9 @@ protected:
 	GLint m_perspective_idx;
 	GLint m_translate_idx;
 	GLint m_scale_idx;
+	GLint m_rotate_idx;
+
+	GLint m_color_idx;
 
 };
 

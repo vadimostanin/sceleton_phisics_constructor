@@ -18,9 +18,6 @@ GraphicLink::GraphicLink( IGeometryObject * geometryObject, Evas_Object * glview
 GraphicLink::GraphicLink( const GraphicLink & src )
 {
 	m_geometryLink = src.m_geometryLink;
-	m_perspective_idx = src.m_perspective_idx;
-	m_translate_idx = src.m_translate_idx;
-	m_scale_idx = src.m_scale_idx;
 }
 
 GraphicLink::GraphicLink( const GeometryLink & src )
@@ -114,11 +111,14 @@ void GraphicLink::draw_line_2d()
 
 	GLfloat translateMatrix[16];
 	GLfloat scaleMatrix[16];
+	GLfloat rotateMatrix[16];
+	GLfloat v_color[4] = { 0.5, 0.5, 1.0, 1.0 };
 
 	GLfloat perspective[16];
 	init_matrix( perspective );
 	init_matrix( translateMatrix );
 	init_matrix( scaleMatrix );
+	init_matrix( rotateMatrix );
 
 	scale_xyz( scaleMatrix, 1.0, 1.0, 1.0 );
 
@@ -137,6 +137,8 @@ void GraphicLink::draw_line_2d()
 	__evas_gl_glapi->glUniformMatrix4fv( m_perspective_idx, matrixCount, GL_FALSE, perspective );
 	__evas_gl_glapi->glUniformMatrix4fv( m_translate_idx, matrixCount, GL_FALSE, translateMatrix );
 	__evas_gl_glapi->glUniformMatrix4fv( m_scale_idx, matrixCount, GL_FALSE, scaleMatrix );
+	__evas_gl_glapi->glUniformMatrix4fv( m_rotate_idx, matrixCount, GL_FALSE, rotateMatrix );
+	__evas_gl_glapi->glUniform4f( m_color_idx, v_color[0], v_color[1], v_color[2], v_color[3] );
 
 	__evas_gl_glapi->glDrawArrays( GL_LINES, 0, vertixesCount );
 

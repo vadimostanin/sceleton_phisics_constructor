@@ -30,6 +30,7 @@ private:
 	void draw_line_2d();
 
 	GeometrySpring m_geometrySpring;
+	unsigned int m_springRotateAngle;
 };
 
 #endif /* GRAPHICSPRING_H_ */

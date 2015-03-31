@@ -224,14 +224,18 @@ void GraphicPoint::draw_circle_2d()
 
 	GLfloat translateMatrix[16];
 	GLfloat scaleMatrix[16];
+	GLfloat rotateMatrix[16];
 
 	GLfloat perspective[16];
 	init_matrix( perspective );
 	init_matrix( translateMatrix );
 	init_matrix( scaleMatrix );
+	init_matrix( rotateMatrix );
 
 	translate_xyz( translateMatrix, offset_x, offset_y, 0.0f );
 	scale_xyz( scaleMatrix, 0.025 / dimension, 0.025, 1.0 );
+//	rotate_xyz( rotateMatrix, 0.0, 0.0, 0.0 );
+	GLfloat v_color[4] = { 0.5, 0.5, 1.0, 1.0 };
 
 	size_t vertixesCount = m_vertexBuffer.size() / coordinates_in_point;
 
@@ -250,6 +254,10 @@ void GraphicPoint::draw_circle_2d()
 	__evas_gl_glapi->glUniformMatrix4fv( m_perspective_idx, 1, GL_FALSE, perspective );
 	__evas_gl_glapi->glUniformMatrix4fv( m_translate_idx, 1, GL_FALSE, translateMatrix );
 	__evas_gl_glapi->glUniformMatrix4fv( m_scale_idx, 1, GL_FALSE, scaleMatrix );
+	__evas_gl_glapi->glUniformMatrix4fv( m_rotate_idx, 1, GL_FALSE, rotateMatrix );
+	__evas_gl_glapi->glUniform4f( m_color_idx, v_color[0], v_color[1], v_color[2], v_color[3] );
+
+
 
 	__evas_gl_glapi->glDrawArrays( GL_TRIANGLE_FAN, 0, vertixesCount );
 
