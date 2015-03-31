@@ -176,24 +176,16 @@ void DrawingContent::deleteGraphicObject( IGraphicObject * graphicObject )
 
 void DrawingContent::changeGraphicObject( IGraphicObject * graphicObject )
 {
-//	cout << "changeGraphicObject enter" << endl << flush;
 	GraphicObjectFindPredicate predicate( graphicObject );
-//	cout << "count=" << m_GraphicObjects.size() << endl << flush;
 	vector<IGraphicObject *>::iterator foundIter = find_if( m_GraphicObjects.begin(), m_GraphicObjects.end(), predicate );
 	if( foundIter != m_GraphicObjects.end() )
 	{
-//		cout << "YES found" << endl << flush;
 		delete (*foundIter);
 		m_GraphicObjects.erase( foundIter );
-	}
-	else
-	{
-//		cout << "NOT found" << endl << flush;
 	}
 	m_GraphicObjects.push_back( graphicObject );
 
 	update();
-//	cout << "changeGraphicObject leave" << endl << flush;
 }
 
 void DrawingContent::drawObjects()

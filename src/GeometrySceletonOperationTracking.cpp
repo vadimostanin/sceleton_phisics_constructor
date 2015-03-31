@@ -53,20 +53,19 @@ GeometryMouseTrackingModes GeometrySceletonOperationTracking::getType() const
 void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 {
 	GeometryPoint * point;
+	GeometryLink * found_link_from;
 	IGeometryObject * new_object = NULL;
-	if( false == getPoint( x, y, &point ) )
+	if( true == GeometryObjectsManager::getInstance().getLinkUnderPoint( x, y, &found_link_from ) )
 	{
-		new_object = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
-		m_GeometryObjectTracking = new_object;
+		GeometrySpring * spring_object = (GeometrySpring *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_SPRING );
+		new_object = spring_object;
+		m_GeometryObjectTracking = spring_object;
+		spring_object->setLinkFrom( *found_link_from );
+		spring_object->setLinkTo( *found_link_from );
 
-		GeometryPoint * point_object = (GeometryPoint *)new_object;
-       
-		GeometryObjectsManager::getInstance().addObject( point_object );
-		point_object->setX( x );
-		point_object->setY( y );
-	    cout << "add point:" << point_object->getX() << "x" << point_object->getY() << endl << flush;
+		cout << "add spring from:" << found_link_from->getId() << "; to:" << found_link_from->getId() << endl << flush;
 	}
-	else
+	else if( true == GeometryObjectsManager::getInstance().getPoint( x, y, point ) )
 	{
 		new_object = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
 		m_GeometryObjectTracking = new_object;
@@ -80,18 +79,25 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 
 		GeometryObjectsManager::getInstance().addObject( link_object );
 	}
+	else
+	{
+		new_object = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+		m_GeometryObjectTracking = new_object;
 
-	vector<IGraphicObject *> graphicObjects;
+		GeometryPoint * point_object = (GeometryPoint *)new_object;
 
-	constructGraphicObjects( graphicObjects );
+		GeometryObjectsManager::getInstance().addObject( point_object );
+		point_object->setX( x );
+		point_object->setY( y );
+		cout << "add point:" << point_object->getX() << "x" << point_object->getY() << endl << flush;
+		printf( "new_object=%p\n", m_GeometryObjectTracking ); fflush( stdout );
+	}
 
-	m_ViewUpdater.setGraphicObjects( graphicObjects );
-//
-//	IGraphicObject * graphicObject;
-//
-//	constructGraphicObject( new_object, &graphicObject );
-//
-//	m_ViewUpdater.addGraphicObject( graphicObject );
+	IGraphicObject * graphicObject;
+
+	constructGraphicObject( new_object, &graphicObject );
+
+	m_ViewUpdater.addGraphicObject( graphicObject );
 }
 
 void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
@@ -99,6 +105,20 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 	if( m_GeometryObjectTracking == 0 )
 	{
 		return;
+	}
+	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_SPRING )
+	{
+		GeometrySpring & geoSpring = *((GeometrySpring*)m_GeometryObjectTracking);
+		const GeometryLink & linkFrom = geoSpring.getLinkFrom();
+		GeometryLink temp_link;
+		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestLink( linkFrom, x, y, temp_link );
+		if( foundNearestPoint == true )
+		{
+			if( geoSpring.getLinkTo() != temp_link )
+			{
+				geoSpring.setLinkTo( temp_link );
+			}
+		}
 	}
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
 	{
@@ -121,17 +141,11 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 		stack_point->setY( y );
 	}
 
-//	IGraphicObject * graphicObject;
-//
-//	constructGraphicObject( m_GeometryObjectTracking, &graphicObject );
-//
-//	m_ViewUpdater.changeGraphicObject( graphicObject );
+	IGraphicObject * graphicObject;
 
-	vector<IGraphicObject *> graphicObjects;
+	constructGraphicObject( m_GeometryObjectTracking, &graphicObject );
 
-	constructGraphicObjects( graphicObjects );
-
-	m_ViewUpdater.setGraphicObjects( graphicObjects );
+	m_ViewUpdater.changeGraphicObject( graphicObject );
 }
 
 void GeometrySceletonOperationTracking::trackerEnd( int x, int y )
@@ -142,7 +156,7 @@ void GeometrySceletonOperationTracking::trackerEnd( int x, int y )
 void GeometrySceletonOperationTracking::deleteObject( int x, int y )
 {
 	GeometryPoint * point;
-	if( false == getPoint( x, y, &point ) )
+	if( false == GeometryObjectsManager::getInstance().getPoint( x, y, point ) )
 	{
 		return;
 	}
@@ -154,12 +168,6 @@ void GeometrySceletonOperationTracking::deleteObject( int x, int y )
 	constructGraphicObject( point, &graphicObject );
 
 	m_ViewUpdater.deleteGraphicObject( graphicObject );
-}
-
-bool GeometrySceletonOperationTracking::getPoint( int x, int y, GeometryPoint ** point )
-{
-	bool found = GeometryObjectsManager::getInstance().getPoint( x, y, point );
-	return found;
 }
 
 void GeometrySceletonOperationTracking::clearTrackingStack()

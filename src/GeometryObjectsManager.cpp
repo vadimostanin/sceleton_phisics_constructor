@@ -45,7 +45,7 @@ void GeometryObjectsManager::getObjects( vector<IGeometryObject *> & objects )
 	objects = m_geometryObjects;
 }
 
-bool GeometryObjectsManager::getPoint( int x, int y, GeometryPoint ** point )
+bool GeometryObjectsManager::getPoint( int x, int y, GeometryPoint *& point )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -65,7 +65,7 @@ bool GeometryObjectsManager::getPoint( int x, int y, GeometryPoint ** point )
 		{
 			continue;
 		}
-		*point = (GeometryPoint *)(*point_iter).clone();
+		point = point_iter;
 		return true;
 	}
 	return false;
@@ -155,6 +155,54 @@ bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  in
 		return true;
 	}
 	return false;
+}
+
+bool GeometryObjectsManager::getLinkUnderPoint( int x, int y, GeometryLink ** result_link )
+{
+	bool found = false;
+
+	const unsigned int square_border = 1000;
+
+	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
+	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
+	vector<IGeometryObject *>::iterator iter = begin;
+
+	const unsigned int border = 0;
+
+	for(  ; iter != end ; iter ++ )
+	{
+		if( (*iter)->getType() == GEOMETRYOBJECT_LINK )
+		{
+			const GeometryPoint & pointFrom = ((GeometryLink &)*(*iter)).getPointFrom();
+			const GeometryPoint & pointTo = ((GeometryLink &)*(*iter)).getPointTo();
+
+			int min_x = pointFrom.getX() <= pointTo.getX() ? pointFrom.getX() : pointTo.getX();
+			int max_x = pointFrom.getX() > pointTo.getX() ? pointFrom.getX() : pointTo.getX();
+
+			int min_y = pointFrom.getY() <= pointTo.getY() ? pointFrom.getY() : pointTo.getY();
+			int max_y = pointFrom.getY() > pointTo.getY() ? pointFrom.getY() : pointTo.getY();
+
+			if( x < ( min_x + border ) || x > ( max_x - border ) || y < ( min_y + border ) || y > ( max_y - border ) )
+			{
+				continue;
+			}
+
+			int square_full = ( pointFrom.getX() - pointTo.getX() ) * ( pointFrom.getY() - pointTo.getY() );
+
+			int square_1 = ( pointFrom.getX() - pointTo.getX() ) * ( y - pointTo.getY() );
+			int square_2 = ( pointFrom.getY() - pointTo.getY() ) * ( x - pointTo.getX() );
+
+			unsigned int square_diff = abs( square_1 - square_2 );
+			if( square_diff < square_border )
+			{
+				*result_link = (GeometryLink *)(* iter);
+				found = true;
+				break;
+			}
+		}
+	}
+
+	return found;
 }
 
 void GeometryObjectsManager::save( string filename )

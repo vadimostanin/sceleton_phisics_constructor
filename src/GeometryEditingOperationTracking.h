@@ -1,27 +1,24 @@
 /*
- * GeometrySceletonOperationTracking.h
+ * GeometryEditingOperationTracking.h
  *
- *  Created on: Mar 16, 2015
+ *  Created on: Mar 27, 2015
  *      Author: vostanin
  */
 
-#ifndef GEOMETRYSCELETONOPERATIONTRACKING_H_
-#define GEOMETRYSCELETONOPERATIONTRACKING_H_
+#ifndef GEOMETRYEDITINGOPERATIONTRACKING_H_
+#define GEOMETRYEDITINGOPERATIONTRACKING_H_
 
 #include "IGeometryObjectTracker.h"
-#include "ObjectOperationStatus.h"
-#include "GeometryMouseTrackingModes.h"
 #include "DrawingContent.h"
-#include "GeometryPoint.h"
-
+#include "GeometryLink.h"
 #include <vector>
 using namespace std;
 
-class GeometrySceletonOperationTracking : public IGeometryObjectTracker
+class GeometryEditingOperationTracking : public IGeometryObjectTracker
 {
 public:
-	GeometrySceletonOperationTracking( DrawingContent & viewUpdater );
-	virtual ~GeometrySceletonOperationTracking();
+	GeometryEditingOperationTracking( DrawingContent & viewUpdater );
+	virtual ~GeometryEditingOperationTracking();
 
 	GeometryMouseTrackingModes getType() const;
 
@@ -33,13 +30,12 @@ public:
 
 private:
 
-	void clearTrackingStack();
-
 	void constructGraphicObjects( vector<IGraphicObject *> & graphicObjects );
 	void constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject );
 
 	DrawingContent & m_ViewUpdater;
 	IGeometryObject * m_GeometryObjectTracking;
+
 };
 
-#endif /* GEOMETRYSCELETONOPERATIONTRACKING_H_ */
+#endif /* GEOMETRYEDITINGOPERATIONTRACKING_H_ */

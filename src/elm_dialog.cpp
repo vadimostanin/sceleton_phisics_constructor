@@ -18,7 +18,7 @@ using namespace std;
 #include "WindowListener.h"
 #include "MouseListener.h"
 #include "GeometrySceletonOperationTracking.h"
-#include "GeometrySpringOperationTracking.h"
+#include "GeometryEditingOperationTracking.h"
 #include <ctime>
 #include <stdlib.h>
 
@@ -41,7 +41,7 @@ void on_sceleton_mode( void * userData )
 
 void on_spring_mode( void * userData )
 {
-	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SPRING_MODE_E );
+	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( EDITING_MODE_E );
 }
 
 EAPI_MAIN int elm_main(int argc, char **argv)
@@ -73,7 +73,7 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 		toolbar.addToolbarContentItem( *item2 );
 
-		title = "Spring Mode";
+		title = "Editing Mode";
 		ToolbarContentRadioParams * params3 = new ToolbarContentRadioParams( title, on_spring_mode, NULL, item2->getEvas(), false );
 		ToolbarContentItem * item3 = new ToolbarContentRadio( *params3 );
 
@@ -82,16 +82,16 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
-	GeometryObjectsManager::getInstance().initTestingState();
+//	GeometryObjectsManager::getInstance().initTestingState();
 
 	GeometrySceletonOperationTracking geoSceletonObjectTracking( drawingContent );
-	GeometrySpringOperationTracking   geoSpringObjectTracking( drawingContent );
+	GeometryEditingOperationTracking   geoEditingObjectTracking( drawingContent );
 
 	MouseListener mouseListener( NULL, drawingContent.getDrawingCanvas() );
 
 	MouseTrackerManager::getInstance().setMouseListener( &mouseListener );
 	MouseTrackerManager::getInstance().addTracker( &geoSceletonObjectTracking );
-	MouseTrackerManager::getInstance().addTracker( &geoSpringObjectTracking );
+	MouseTrackerManager::getInstance().addTracker( &geoEditingObjectTracking );
 
 	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SCELETON_MODE_E );
 

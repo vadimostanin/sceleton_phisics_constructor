@@ -12,7 +12,7 @@
 typedef enum
 {
 	SCELETON_MODE_E,
-	SPRING_MODE_E,
+	EDITING_MODE_E,
 
 }GeometryMouseTrackingModes;
 
