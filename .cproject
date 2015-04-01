@@ -48,6 +48,7 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="ecore"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="evas"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="ecore_x"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="chipmunk"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1277436186" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-zmuldefs" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1508405349" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -57,7 +58,7 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.archiver.541998145" name="Cross GCC Archiver" superClass="cdt.managedbuild.tool.gnu.cross.archiver"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.assembler.263369025" name="Cross GCC Assembler" superClass="cdt.managedbuild.tool.gnu.cross.assembler">
-								<option id="gnu.both.asm.option.include.paths.952700236" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath"/>
+								<option id="gnu.both.asm.option.include.paths.952700236" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2019586759" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
