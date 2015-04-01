@@ -34,6 +34,10 @@ void on_save_objects( void * userData )
 	GeometryObjectsManager::getInstance().save( "./objects.txt" );
 }
 
+void on_run_simulation( void * userData )
+{
+}
+
 void on_sceleton_mode( void * userData )
 {
 	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SCELETON_MODE_E );
@@ -78,6 +82,13 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 		ToolbarContentItem * item3 = new ToolbarContentRadio( *params3 );
 
 		toolbar.addToolbarContentItem( *item3 );
+	}
+	{
+		string title( "Run simulating" );
+		ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_run_simulation, NULL );
+		ToolbarContentItem * item = new ToolbarContentButton( *params );
+
+		toolbar.addToolbarContentItem( *item );
 	}
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );

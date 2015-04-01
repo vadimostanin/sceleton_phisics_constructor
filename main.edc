@@ -21,13 +21,30 @@
 
 collections
 {
-	BUTTON_CIRCLE_STYLES( "button_custom_my", "M02_rich_text_bar_bold.png", "M02_rich_text_bar_bold.png" )
+//	BUTTON_CIRCLE_STYLES( "button_custom_my", "M02_rich_text_bar_bold.png", "M02_rich_text_bar_bold.png" )
 
 	group
 	{
 		name:"main_layout";
 		parts
 		{
+			part
+			{
+				name:"part.toolbar_layout.bg";
+				type: RECT;
+				description
+				{
+					color : 64 64 64 128;
+					rel1
+                    {
+                        relative: 0.0 0.0;
+                    }
+                    rel2
+                    {
+                        relative: 1.0 1.0;
+                    }
+				}
+			}
 			part
 			{
 				name:"part.main.toolbar";
@@ -94,49 +111,6 @@ collections
 	                }
 				}
 			}
-
-			part
-			{
-				name:"part.toolbar_layout.button_1";
-				type: SWALLOW;
-				description
-				{
-				color : 255 0 0 255;
-					fixed: 1 1;
-					//max: 30 50;
-					align: 0.0 0.0;
-					rel1
-                    {
-                        relative: 0.0 0.0;
-                    }
-                    rel2
-                    {
-                        relative: 1.0 1.0;
-                    }
-				}
-			}
-/*
-			part
-			{
-				name:"part.toolbar_layout.button_2";
-				type:SWALLOW;
-				description
-				{
-					fixed: 1 1;
-					//max: 30 50;
-					align: 0.0 0.0;
-					rel1
-                    {
-                        relative: 1.0 0.0;
-                         to_x: "part.toolbar_layout.button_1";
-                    }
-                    rel2
-                    {
-                        relative: 1.0 1.0;
-                    }
-				}
-			}
-*/
 		}
 	}
 	group
