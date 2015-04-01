@@ -17,35 +17,22 @@
 
 GeometryObjectFactory::GeometryObjectFactory()
 {
-	unsigned int maxSize = sizeof( GeometryPoint );
-	if( maxSize < sizeof( GeometryLink ) )
-	{
-		maxSize = sizeof( GeometryLink );
-	}
-	if( maxSize < sizeof( GeometrySpring ) )
-	{
-		maxSize = sizeof( GeometrySpring );
-	}
-	if( maxSize < sizeof( GeometryDummy ) )
-	{
-		maxSize = sizeof( GeometryDummy );
-	}
-	m_allocBufferSize = maxSize;
+
 }
 
 GeometryObjectFactory::~GeometryObjectFactory()
 {
 }
 
-void GeometryObjectFactory::deleteGeometryObject( IGeometryObject * geometryObject )
+void GeometryObjectFactory::deleteGeometryObject( IGeometryObject * bufferObject )
 {
-	free( geometryObject );
+	m_bufferObjectAllocator.deallocObjectBuffer( bufferObject );
 }
 
 IGeometryObject * GeometryObjectFactory::createGeometryObject( GeometryObjectsTypes type )
 {
 	IGeometryObject * object = 0;
-	void * objectBuffer = calloc( 1, m_allocBufferSize );
+	void * objectBuffer = m_bufferObjectAllocator.allocObjectBuffer();
 	switch( type )
 	{
 		case GEOMETRYOBJECT_POINT:

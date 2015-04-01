@@ -11,6 +11,7 @@
 #include "IGeometryObject.h"
 #include "IGraphicObject.h"
 #include "GeometryObjectsTypes.h"
+#include "GeometryObjectBufferAllocator.h"
 
 class GeometryObjectFactory
 {
@@ -27,7 +28,7 @@ public:
 
 private:
 
-	unsigned int m_allocBufferSize;
+	GeometryObjectBufferAllocator m_bufferObjectAllocator;
 };
 
 #endif /* GEOMETRYOBJECTFACTORY_H_ */
