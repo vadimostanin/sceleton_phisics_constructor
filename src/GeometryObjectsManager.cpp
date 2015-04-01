@@ -38,45 +38,46 @@ void GeometryObjectsManager::removeObject( IGeometryObject * object )
 		return;
 	}
     IGeometryObject * point_ptr = (* found_iter);
-    delete point_ptr;
+
     new(point_ptr) GeometryDummy;
 
     bool valid_all = true;
     do
     {
-        vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
-	     vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
-	     vector<IGeometryObject *>::iterator iter = begin;
-        for( ; iter != end ; iter++ )
-	    {
-          IGeometryObject * object_ptr = (* iter);
-          valid_all = object_ptr->isValid();
-          if( false == valid_all )
-          {
-              delete object_ptr;
-              new( object_ptr ) GeometryDummy;
-              break;
-           }
-        }
-    }while( true == valid_all );
+		vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
+		vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
+		vector<IGeometryObject *>::iterator iter = begin;
+		for( ; iter != end ; iter++ )
+		{
+			IGeometryObject * object_ptr = (* iter);
+			valid_all = object_ptr->isValid();
+			if( false == valid_all )
+			{
+				new( object_ptr ) GeometryDummy;
+				valid_all = false;
+				break;
+			}
+		}
+    }while( false == valid_all );
     removeDummyObjects();
 }
 
 void GeometryObjectsManager::removeDummyObjects()
 {
-    vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
-	     vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
-	     vector<IGeometryObject *>::iterator iter = begin;
-        for( ; iter != end ; iter++ )
-	    {
-          IGeometryObject * object_ptr = (* iter);
-          valid_all = object_ptr->isValid();
-          if( (* iter)->getType() == GEOMETRYOBJECT_DUMMY )
-          {
-              delete object_ptr;
-              iter = m_geometryObjects.erase( iter );
-           }
-        }
+	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
+	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
+	vector<IGeometryObject *>::iterator iter = begin;
+	for( ; iter != end ; iter++ )
+	{
+		IGeometryObject * object_ptr = (* iter);
+		if( object_ptr->getType() == GEOMETRYOBJECT_DUMMY )
+		{
+			GeometryObjectFactory::getInstance().deleteGeometryObject( object_ptr );
+			m_geometryObjects.erase( iter );
+			iter = m_geometryObjects.begin();
+			end = m_geometryObjects.end();
+		}
+	}
 }
 
 void GeometryObjectsManager::getObjects( vector<IGeometryObject *> & objects )

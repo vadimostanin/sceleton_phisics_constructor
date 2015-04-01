@@ -7,36 +7,57 @@
 
 #include "GeometryObjectFactory.h"
 
+#include "GeometryDummy.h"
 #include "GeometryPoint.h"
 #include "GeometryLink.h"
 #include "GeometrySpring.h"
 #include "GraphicPoint.h"
-#include "GraphicPointHighlighted.h"
 #include "GraphicLink.h"
 #include "GraphicSpring.h"
 
 GeometryObjectFactory::GeometryObjectFactory()
 {
-
+	unsigned int maxSize = sizeof( GeometryPoint );
+	if( maxSize < sizeof( GeometryLink ) )
+	{
+		maxSize = sizeof( GeometryLink );
+	}
+	if( maxSize < sizeof( GeometrySpring ) )
+	{
+		maxSize = sizeof( GeometrySpring );
+	}
+	if( maxSize < sizeof( GeometryDummy ) )
+	{
+		maxSize = sizeof( GeometryDummy );
+	}
+	m_allocBufferSize = maxSize;
 }
 
 GeometryObjectFactory::~GeometryObjectFactory()
 {
 }
 
+void GeometryObjectFactory::deleteGeometryObject( IGeometryObject * geometryObject )
+{
+	free( geometryObject );
+}
+
 IGeometryObject * GeometryObjectFactory::createGeometryObject( GeometryObjectsTypes type )
 {
 	IGeometryObject * object = 0;
+	void * objectBuffer = calloc( 1, m_allocBufferSize );
 	switch( type )
 	{
 		case GEOMETRYOBJECT_POINT:
-				object = new GeometryPoint();
+				object = new(objectBuffer) GeometryPoint();
 			break;
 		case GEOMETRYOBJECT_LINK:
-				object = new GeometryLink();
+				object = new(objectBuffer) GeometryLink();
 			break;
 		case GEOMETRYOBJECT_SPRING:
-				object = new GeometrySpring();
+				object = new(objectBuffer) GeometrySpring();
+			break;
+		default:
 			break;
 	}
 	return object;
@@ -55,6 +76,8 @@ IGraphicObject * GeometryObjectFactory::createGraphicObject( IGeometryObject * g
 			break;
 		case GEOMETRYOBJECT_SPRING:
 				object = new GraphicSpring( geometryObject, canvas );
+			break;
+		default:
 			break;
 	}
 	return object;

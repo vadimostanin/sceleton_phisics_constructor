@@ -21,7 +21,13 @@ public:
 	IGeometryObject * createGeometryObject( GeometryObjectsTypes type );
 	IGraphicObject * createGraphicObject( IGeometryObject * geometryObject, Evas_Object * canvas );
 
+	void deleteGeometryObject( IGeometryObject * geometryObject );
+
 	static GeometryObjectFactory & getInstance();
+
+private:
+
+	unsigned int m_allocBufferSize;
 };
 
 #endif /* GEOMETRYOBJECTFACTORY_H_ */

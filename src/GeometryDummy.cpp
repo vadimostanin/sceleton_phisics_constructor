@@ -59,7 +59,7 @@ IGeometryObject & GeometryDummy::operator = ( IGeometryObject & src )
 
 GeometryObjectsTypes GeometryDummy::getType() const
 {
-	return GEOMETRYOBJECT_POINT;
+	return GEOMETRYOBJECT_DUMMY;
 }
 
 bool GeometryDummy::isValid()

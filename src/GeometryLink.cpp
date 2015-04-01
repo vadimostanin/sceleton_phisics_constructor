@@ -102,11 +102,11 @@ IGeometryObject & GeometryLink::operator = ( IGeometryObject & src )
 
 bool GeometryLink::isValid()
 {
-    if ( getPointFrom()->getType() == GEOMETRYOBJECT_DUMMY )
+    if ( ((IGeometryObject *)getPointFrom())->getType() == GEOMETRYOBJECT_DUMMY )
     {
         return false;
     }
-    if ( getPointTo()->getType() == GEOMETRYOBJECT_DUMMY )
+    if ( ((IGeometryObject *)getPointTo())->getType() == GEOMETRYOBJECT_DUMMY )
     {
         return false;
     }

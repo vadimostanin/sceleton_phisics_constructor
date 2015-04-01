@@ -163,11 +163,9 @@ void GeometrySceletonOperationTracking::deleteObject( int x, int y )
 
 	GeometryObjectsManager::getInstance().removeObject( point );
 
-	IGraphicObject * graphicObject;
-
-	constructGraphicObject( point, &graphicObject );
-
-	m_ViewUpdater.deleteGraphicObject( graphicObject );
+	vector<IGraphicObject *> graphicObjects;
+	constructGraphicObjects( graphicObjects );
+	m_ViewUpdater.setGraphicObjects( graphicObjects );
 }
 
 void GeometrySceletonOperationTracking::clearTrackingStack()

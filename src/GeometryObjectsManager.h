@@ -29,6 +29,7 @@ public:
 	bool getNearestPoint( const GeometryPoint & startPoint, int x, int y, const GeometryPoint * & point );
 	bool getNearestLink( const GeometryLink & startLink,  int x, int y, const GeometryLink * & link );
 	bool getLinkUnderPoint( int x, int y, GeometryLink ** result_link );
+	void removeDummyObjects();
 
 	void save( string filename );
 
