@@ -64,18 +64,16 @@ void GeometryObjectsManager::removeObject( IGeometryObject * object )
 
 void GeometryObjectsManager::removeDummyObjects()
 {
-	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
-	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
-	vector<IGeometryObject *>::iterator iter = begin;
-	for( ; iter != end ; iter++ )
+	size_t count = m_geometryObjects.size();
+	for( size_t object_i = 0 ; object_i < count ; object_i++ )
 	{
-		IGeometryObject * object_ptr = (* iter);
+		IGeometryObject * object_ptr = m_geometryObjects[object_i];
 		if( object_ptr->getType() == GEOMETRYOBJECT_DUMMY )
 		{
 			GeometryObjectFactory::getInstance().deleteGeometryObject( object_ptr );
-			m_geometryObjects.erase( iter );
-			iter = m_geometryObjects.begin();
-			end = m_geometryObjects.end();
+			m_geometryObjects.erase( m_geometryObjects.begin() + object_i );
+			count = m_geometryObjects.size();
+			object_i = 0;
 		}
 	}
 }
