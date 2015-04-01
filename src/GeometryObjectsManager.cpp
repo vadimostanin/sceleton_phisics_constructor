@@ -73,7 +73,7 @@ bool GeometryObjectsManager::getPoint( int x, int y, GeometryPoint *& point )
 	vector<IGeometryObject *>::iterator iter = begin;
 	for( ; iter != end ; iter++ )
 	{
-		if( (*iter)->getType() != GEOMETRYOBJECT_POINT && (*iter)->getType() != GEOMETRYOBJECT_POINT_HIGHLIGHTED )
+		if( (*iter)->getType() != GEOMETRYOBJECT_POINT )
 		{
 			continue;
 		}
@@ -92,7 +92,7 @@ bool GeometryObjectsManager::getPoint( int x, int y, GeometryPoint *& point )
 	return false;
 }
 
-bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint,  int x, int y, GeometryPoint * & point )
+bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint,  int x, int y, const GeometryPoint * & point )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -103,7 +103,7 @@ bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint, 
 
 	for( ; iter != end ; iter++ )
 	{
-		if( (*iter)->getType() != GEOMETRYOBJECT_POINT && (*iter)->getType() != GEOMETRYOBJECT_POINT_HIGHLIGHTED )
+		if( (*iter)->getType() != GEOMETRYOBJECT_POINT )
 		{
 			continue;
 		}
@@ -135,7 +135,7 @@ bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint, 
 	return false;
 }
 
-bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  int x, int y, GeometryLink * & result_link )
+bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  int x, int y, const GeometryLink * & result_link )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -158,8 +158,8 @@ bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  in
 			continue;
 		}
 
-		int link_iter_center_x = ( link_iter.getPointFrom().getX() + link_iter.getPointTo().getX() ) / 2;
-		int link_iter_center_y = ( link_iter.getPointFrom().getY() + link_iter.getPointTo().getY() ) / 2;
+		int link_iter_center_x = ( link_iter->getPointFrom()->getX() + link_iter->getPointTo()->getX() ) / 2;
+		int link_iter_center_y = ( link_iter->getPointFrom()->getY() + link_iter->getPointTo()->getY() ) / 2;
 
 		double distance = sqrt( ( link_iter_center_x - x )*( link_iter_center_x - x ) + ( link_iter_center_y - y )*( link_iter_center_y - y ) );
 
@@ -188,30 +188,30 @@ bool GeometryObjectsManager::getLinkUnderPoint( int x, int y, GeometryLink ** re
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
 	vector<IGeometryObject *>::iterator iter = begin;
 
-	const unsigned int border = 0;
+	const int border = 0;
 
 	for(  ; iter != end ; iter ++ )
 	{
 		if( (*iter)->getType() == GEOMETRYOBJECT_LINK )
 		{
-			const GeometryPoint & pointFrom = ((GeometryLink &)*(*iter)).getPointFrom();
-			const GeometryPoint & pointTo = ((GeometryLink &)*(*iter)).getPointTo();
+			const GeometryPoint * pointFrom = ((GeometryLink &)*(*iter)).getPointFrom();
+			const GeometryPoint * pointTo = ((GeometryLink &)*(*iter)).getPointTo();
 
-			int min_x = pointFrom.getX() <= pointTo.getX() ? pointFrom.getX() : pointTo.getX();
-			int max_x = pointFrom.getX() > pointTo.getX() ? pointFrom.getX() : pointTo.getX();
+			int min_x = pointFrom->getX() <= pointTo->getX() ? pointFrom->getX() : pointTo->getX();
+			int max_x = pointFrom->getX() > pointTo->getX() ? pointFrom->getX() : pointTo->getX();
 
-			int min_y = pointFrom.getY() <= pointTo.getY() ? pointFrom.getY() : pointTo.getY();
-			int max_y = pointFrom.getY() > pointTo.getY() ? pointFrom.getY() : pointTo.getY();
+			int min_y = pointFrom->getY() <= pointTo->getY() ? pointFrom->getY() : pointTo->getY();
+			int max_y = pointFrom->getY() > pointTo->getY() ? pointFrom->getY() : pointTo->getY();
 
 			if( x < ( min_x + border ) || x > ( max_x - border ) || y < ( min_y + border ) || y > ( max_y - border ) )
 			{
 				continue;
 			}
 
-			int square_full = ( pointFrom.getX() - pointTo.getX() ) * ( pointFrom.getY() - pointTo.getY() );
+//			int square_full = ( pointFrom->getX() - pointTo->getX() ) * ( pointFrom->getY() - pointTo->getY() );
 
-			int square_1 = ( pointFrom.getX() - pointTo.getX() ) * ( y - pointTo.getY() );
-			int square_2 = ( pointFrom.getY() - pointTo.getY() ) * ( x - pointTo.getX() );
+			int square_1 = ( pointFrom->getX() - pointTo->getX() ) * ( y - pointTo->getY() );
+			int square_2 = ( pointFrom->getY() - pointTo->getY() ) * ( x - pointTo->getX() );
 
 			unsigned int square_diff = abs( square_1 - square_2 );
 			if( square_diff < square_border )
@@ -258,14 +258,14 @@ void GeometryObjectsManager::initTestingState()
 	point_3->setX( 600 );
 	point_3->setY( 200 );
 	GeometryLink * link_1 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
-	link_1->setPointFrom( *point_1 );
-	link_1->setPointTo( *point_2 );
+	link_1->setPointFrom( point_1 );
+	link_1->setPointTo( point_2 );
 	GeometryLink * link_2 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
-	link_2->setPointFrom( *point_2 );
-	link_2->setPointTo( *point_3 );
+	link_2->setPointFrom( point_2 );
+	link_2->setPointTo( point_3 );
 	GeometrySpring * spring_1 = (GeometrySpring *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_SPRING );
-	spring_1->setLinkFrom( *link_1 );
-	spring_1->setLinkTo( *link_2 );
+	spring_1->setLinkFrom( link_1 );
+	spring_1->setLinkTo( link_2 );
 
 	addObject( point_1 );
 	addObject( point_2 );

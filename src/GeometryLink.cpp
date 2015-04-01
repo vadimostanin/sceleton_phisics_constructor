@@ -15,7 +15,7 @@ GeometryLink::GeometryLink() : m_Id( rand() )
 
 }
 
-GeometryLink::GeometryLink( GeometryPoint & point_1, GeometryPoint & point_2 ) : m_Id( rand() )
+GeometryLink::GeometryLink( GeometryPoint * point_1, GeometryPoint * point_2 ) : m_Id( rand() )
 {
 	m_Points[0] = point_1;
 	m_Points[1] = point_2;
@@ -51,7 +51,7 @@ string GeometryLink::toString()
 {
 	stringstream stream;
 
-	stream << getType() << " " << getId() << " " << getPointFrom().getId() << " " << getPointTo().getId() << flush;
+	stream << getType() << " " << getId() << " " << getPointFrom()->getId() << " " << getPointTo()->getId() << flush;
 
 	return stream.str();
 }
@@ -62,7 +62,7 @@ GeometryLink & GeometryLink::operator = ( const GeometryLink & src )
 	{
 		return *this;
 	}
-	const GeometryPoint & point = src.getPointFrom();
+	const GeometryPoint * point = src.getPointFrom();
 	setPointFrom( point );
 	setPointTo( src.getPointTo() );
 	return *this;
@@ -98,6 +98,11 @@ IGeometryObject & GeometryLink::operator = ( IGeometryObject & src )
 	m_Id = ((GeometryLink &)src).m_Id;
 
 	return *this;
+}
+
+bool GeometryLink::isValid()
+{
+	return true;
 }
 
 void GeometryLink::setPointFrom( const GeometryPoint * point )

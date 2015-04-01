@@ -15,7 +15,7 @@ class GeometryLink : public IGeometryObject
 {
 public:
 	GeometryLink();
-	GeometryLink( GeometryPoint & point_1, GeometryPoint & point_2 );
+	GeometryLink( GeometryPoint * point_1, GeometryPoint * point_2 );
 	virtual ~GeometryLink();
 
 	bool operator == ( const GeometryLink & src ) const;
@@ -25,17 +25,18 @@ public:
 	void setPointFrom( const GeometryPoint * point );
 	void setPointTo( const GeometryPoint * point );
 
-	const GeometryPoint & getPointFrom() const;
-	const GeometryPoint & getPointTo() const;
+	const GeometryPoint * getPointFrom() const;
+	const GeometryPoint * getPointTo() const;
 
 	int getId() const;
 	GeometryObjectsTypes getType() const;
 	IGeometryObject * clone();
 	string toString();
 	IGeometryObject & operator = ( IGeometryObject & src );
+	bool isValid();
 
 private:
-	GeometryPoint * m_Points[2];
+	const GeometryPoint * m_Points[2];
 	int m_Id;
 };
 

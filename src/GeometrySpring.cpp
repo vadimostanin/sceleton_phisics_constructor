@@ -30,7 +30,7 @@ GeometrySpring & GeometrySpring::operator = ( const GeometrySpring & src )
 	{
 		return *this;
 	}
-	const GeometryLink & link = src.getLinkFrom();
+	const GeometryLink * link = src.getLinkFrom();
 	setLinkFrom( link );
 	setLinkTo( src.getLinkTo() );
 	m_Length = src.getLength();
@@ -110,7 +110,7 @@ string GeometrySpring::toString()
 {
 	stringstream stream;
 
-	stream << getType() << " " << getId() << " " << getLinkFrom().getId() << " " << getLinkTo().getId() << flush;
+	stream << getType() << " " << getId() << " " << getLinkFrom()->getId() << " " << getLinkTo()->getId() << flush;
 
 	return stream.str();
 }
@@ -122,13 +122,18 @@ IGeometryObject & GeometrySpring::operator = ( IGeometryObject & src )
 		return *this;
 	}
 
-	const GeometryLink & link = ((GeometrySpring &)src).getLinkFrom();
+	const GeometryLink * link = ((GeometrySpring &)src).getLinkFrom();
 	setLinkFrom( link );
 	setLinkTo( ((GeometrySpring &)src).getLinkTo() );
 	m_Length = ((GeometrySpring &)src).getLength();
 	m_Id = ((GeometrySpring &)src).getId();
 
 	return *this;
+}
+
+bool GeometrySpring::isValid()
+{
+	return true;
 }
 
 GeometryObjectsTypes GeometrySpring::getType() const

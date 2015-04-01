@@ -30,7 +30,6 @@ IGeometryObject * GeometryObjectFactory::createGeometryObject( GeometryObjectsTy
 	switch( type )
 	{
 		case GEOMETRYOBJECT_POINT:
-		case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
 				object = new GeometryPoint();
 			break;
 		case GEOMETRYOBJECT_LINK:
@@ -50,9 +49,6 @@ IGraphicObject * GeometryObjectFactory::createGraphicObject( IGeometryObject * g
 	{
 		case GEOMETRYOBJECT_POINT:
 				object = new GraphicPoint( geometryObject, canvas );
-			break;
-		case GEOMETRYOBJECT_POINT_HIGHLIGHTED:
-				object = new GraphicPointHighlighted( geometryObject, canvas );
 			break;
 		case GEOMETRYOBJECT_LINK:
 				object = new GraphicLink( geometryObject, canvas );

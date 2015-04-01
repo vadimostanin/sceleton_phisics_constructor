@@ -36,10 +36,11 @@ public:
 	IGeometryObject * clone();
 	string toString();
 	IGeometryObject & operator = ( IGeometryObject & src );
+	bool isValid();
 
 private:
 
-	GeometryLink * m_geometryLinks[2];
+	const GeometryLink * m_geometryLinks[2];
 
 	int m_Id;
 

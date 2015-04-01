@@ -246,11 +246,11 @@ void GraphicSpring::initLineVertexes()
 	int canvas_width =  m_DrawCanvasWidth;
 	int canvas_height = m_DrawCanvasHeight;
 
-	int from_x = ( m_geometrySpring.getLinkFrom().getPointFrom().getX() + m_geometrySpring.getLinkFrom().getPointTo().getX() ) / 2;
-	int from_y = ( m_geometrySpring.getLinkFrom().getPointFrom().getY() + m_geometrySpring.getLinkFrom().getPointTo().getY() ) / 2;
+	int from_x = ( m_geometrySpring.getLinkFrom()->getPointFrom()->getX() + m_geometrySpring.getLinkFrom()->getPointTo()->getX() ) / 2;
+	int from_y = ( m_geometrySpring.getLinkFrom()->getPointFrom()->getY() + m_geometrySpring.getLinkFrom()->getPointTo()->getY() ) / 2;
 
-	int to_x = ( m_geometrySpring.getLinkTo().getPointFrom().getX() + m_geometrySpring.getLinkTo().getPointTo().getX() ) / 2;
-	int to_y = ( m_geometrySpring.getLinkTo().getPointFrom().getY() + m_geometrySpring.getLinkTo().getPointTo().getY() ) / 2;
+	int to_x = ( m_geometrySpring.getLinkTo()->getPointFrom()->getX() + m_geometrySpring.getLinkTo()->getPointTo()->getX() ) / 2;
+	int to_y = ( m_geometrySpring.getLinkTo()->getPointFrom()->getY() + m_geometrySpring.getLinkTo()->getPointTo()->getY() ) / 2;
 
 	m_vertexBuffer.push_back( pixels_to_coords_x( from_x ) );
 	m_vertexBuffer.push_back( pixels_to_coords_y( from_y ) );

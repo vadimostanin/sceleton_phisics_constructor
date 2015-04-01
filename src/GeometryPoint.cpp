@@ -99,6 +99,16 @@ IGeometryObject & GeometryPoint::operator = ( IGeometryObject & src )
 	return *this;
 }
 
+GeometryObjectsTypes GeometryPoint::getType() const
+{
+	return GEOMETRYOBJECT_POINT;
+}
+
+bool GeometryPoint::isValid()
+{
+	return true;
+}
+
 GeometryPoint::~GeometryPoint()
 {
 }
@@ -121,11 +131,6 @@ void GeometryPoint::setX( int x )
 void GeometryPoint::setY( int y )
 {
 	m_y = y;
-}
-
-GeometryObjectsTypes GeometryPoint::getType() const
-{
-	return GEOMETRYOBJECT_POINT;
 }
 
 

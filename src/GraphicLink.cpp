@@ -55,8 +55,8 @@ void GraphicLink::initLineVertexes()
 {
 	m_vertexBuffer.clear();
 	{
-		int x = m_geometryLink.getPointFrom().getX();
-		int y = m_geometryLink.getPointFrom().getY();
+		int x = m_geometryLink.getPointFrom()->getX();
+		int y = m_geometryLink.getPointFrom()->getY();
 
 		m_vertexBuffer.push_back( pixels_to_coords_x( x ) );
 		m_vertexBuffer.push_back( pixels_to_coords_y( y ) );
@@ -64,8 +64,8 @@ void GraphicLink::initLineVertexes()
 	}
 
 	{
-		int x = m_geometryLink.getPointTo().getX();
-		int y = m_geometryLink.getPointTo().getY();
+		int x = m_geometryLink.getPointTo()->getX();
+		int y = m_geometryLink.getPointTo()->getY();
 
 		m_vertexBuffer.push_back( pixels_to_coords_x( x ) );
 		m_vertexBuffer.push_back( pixels_to_coords_y( y ) );

@@ -28,14 +28,13 @@ public:
 	void setY( int y );
 
 	GeometryObjectsTypes getType() const;
-
 	int getId() const;
 	void setId( int id);
-
 	IGeometryObject * clone();
 	string toString();
-
+	bool isValid();
 	IGeometryObject & operator = ( IGeometryObject & src );
+
 private:
 	int m_x;
 	int m_y;

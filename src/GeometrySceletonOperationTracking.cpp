@@ -74,8 +74,8 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		link_object->setPointFrom( point );
 		link_object->setPointTo( point );
 
-		cout << "add link from:" << link_object->getPointFrom().getX() << "x" << link_object->getPointFrom().getY() << "; to:" <<
-				link_object->getPointTo().getX() << "x" << link_object->getPointTo().getY() << endl << flush;
+		cout << "add link from:" << link_object->getPointFrom()->getX() << "x" << link_object->getPointFrom()->getY() << "; to:" <<
+				link_object->getPointTo()->getX() << "x" << link_object->getPointTo()->getY() << endl << flush;
 
 		GeometryObjectsManager::getInstance().addObject( link_object );
 	}
@@ -109,9 +109,9 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_SPRING )
 	{
 		GeometrySpring & geoSpring = *((GeometrySpring*)m_GeometryObjectTracking);
-		const GeometryLink & linkFrom = geoSpring.getLinkFrom();
-		GeometryLink * link_to;
-		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestLink( linkFrom, x, y, link_to );
+		const GeometryLink * linkFrom = geoSpring.getLinkFrom();
+		const GeometryLink * link_to = NULL;
+		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestLink( *linkFrom, x, y, link_to );
 		if( foundNearestPoint == true )
 		{
 			if( geoSpring.getLinkTo() != link_to )
@@ -123,14 +123,14 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
 	{
 		GeometryLink & geoLink = *((GeometryLink*)m_GeometryObjectTracking);
-		const GeometryPoint & pointFrom = geoLink.getPointFrom();
-		GeometryPoint temp_point;
-		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestPoint( pointFrom, x, y, temp_point );
+		const GeometryPoint * pointFrom = geoLink.getPointFrom();
+		const GeometryPoint * point_to;
+		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestPoint( *pointFrom, x, y, point_to );
 		if( foundNearestPoint == true )
 		{
-			if( geoLink.getPointTo() != temp_point )
+			if( geoLink.getPointTo() != point_to )
 			{
-				geoLink.setPointTo( temp_point );
+				geoLink.setPointTo( point_to );
 			}
 		}
 	}
