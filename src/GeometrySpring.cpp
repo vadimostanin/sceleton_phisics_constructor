@@ -133,6 +133,14 @@ IGeometryObject & GeometrySpring::operator = ( IGeometryObject & src )
 
 bool GeometrySpring::isValid()
 {
+    if ( getLinkFrom()->getType() == GEOMETRYOBJECT_DUMMY )
+    {
+        return false;
+    }
+    if ( getLinkTo()->getType() == GEOMETRYOBJECT_DUMMY )
+    {
+        return false;
+    }
 	return true;
 }
 
