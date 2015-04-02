@@ -54,8 +54,6 @@ private:
 
 	vector<IGraphicObject *> m_GraphicObjects;
 
-	vector<GraphicPoint> m_GraphicPoints;
-	vector<GraphicPoint> m_HighlightedPoints;
 };
 
 #endif /* DRAWINGCONTENT_H_ */

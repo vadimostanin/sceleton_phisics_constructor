@@ -5,13 +5,13 @@
  *      Author: vostanin
  */
 
-#include "Window.h"
+#include "Window.h" 
 #include "DrawingContent.h"
 #include "GeometryObjectsManager.h"
 #include "GraphicObjectFindPredicate.h"
 #include <Elementary.h>
 #include <iostream>
-#include <vector>
+#include <vector> 
 #include <algorithm>
 #include <GL/gl.h>
 using namespace std;
@@ -209,7 +209,7 @@ void DrawingContent::clearObjects()
 	{
 		delete (*iter);
 	}
-	m_GraphicPoints.clear();
+	m_GraphicObjects.clear();
 }
 
 
