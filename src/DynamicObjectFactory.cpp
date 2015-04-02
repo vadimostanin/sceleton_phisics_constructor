@@ -7,6 +7,7 @@
 
 #include "DynamicObjectFactory.h"
 #include "GeometryPointDynamic.h"
+#include "GraphicPointDynamic.h"
 
 DynamicObjectFactory::DynamicObjectFactory()
 {
@@ -38,9 +39,9 @@ void DynamicObjectFactory::initGround()
 	cpSpaceAddShape( m_Space, ground);
 }
 
-IDynamicGeometryObject * DynamicObjectFactory::createObject( GeometryObjectsTypes type )
+IDynamicObject * DynamicObjectFactory::createObject( GeometryObjectsTypes type )
 {
-	IDynamicGeometryObject * object = NULL;
+	IDynamicObject * object = NULL;
 
 	switch( type )
 	{
@@ -55,6 +56,21 @@ IDynamicGeometryObject * DynamicObjectFactory::createObject( GeometryObjectsType
 			break;
 	}
 
+	return object;
+}
+
+
+IGraphicObject * DynamicObjectFactory::createGraphicObject( IGeometryObject * geometryObject, Evas_Object * canvas )
+{
+	IGraphicObject * object = 0;
+	switch( geometryObject->getType() )
+	{
+		case GEOMETRYOBJECT_POINT:
+				object = new GraphicPointDynamic( geometryObject, canvas );
+			break;
+		default:
+			break;
+	}
 	return object;
 }
 

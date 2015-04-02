@@ -27,13 +27,13 @@ public:
 	void setX( int x );
 	void setY( int y );
 
-	GeometryObjectsTypes getType() const;
-	int getId() const;
-	void setId( int id);
-	IGeometryObject * clone();
-	string toString();
-	bool isValid();
-	IGeometryObject & operator = ( IGeometryObject & src );
+	virtual GeometryObjectsTypes getType() const;
+	virtual int getId() const;
+	virtual void setId( int id);
+	virtual IGeometryObject * clone();
+	virtual string toString();
+	virtual bool isValid();
+	virtual IGeometryObject & operator = ( IGeometryObject & src );
 
 private:
 	int m_x;

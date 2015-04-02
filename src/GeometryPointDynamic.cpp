@@ -7,6 +7,10 @@
 
 #include "GeometryPointDynamic.h"
 
+//GeometryPointDynamic::GeometryPointDynamic() : m_Space( NULL ), m_BallBody( NULL ), m_Radius( 5 ), m_Mass( 1 )
+//{
+//}
+
 GeometryPointDynamic::GeometryPointDynamic( cpSpace * space ) : m_Space( space ), m_Radius( 5 ), m_Mass( 1 )
 {
 	initPoint();
@@ -16,10 +20,42 @@ GeometryPointDynamic::~GeometryPointDynamic()
 {
 }
 
+IGeometryObject * GeometryPointDynamic::clone()
+{
+	IGeometryObject * new_object = new GeometryPointDynamic( m_Space );
+
+	return new_object;
+}
+
+IGeometryObject & GeometryPointDynamic::operator = ( IGeometryObject & src )
+{
+	return GeometryPoint::operator =( src );
+}
+
+GeometryObjectsTypes GeometryPointDynamic::getType() const
+{
+	return GeometryPoint::getType();
+}
+
+int GeometryPointDynamic::getId() const
+{
+	return GeometryPoint::getId();
+}
+
+string GeometryPointDynamic::toString()
+{
+	return GeometryPoint::toString();
+}
+
+bool GeometryPointDynamic::isValid()
+{
+	return GeometryPoint::isValid();
+}
+
 void GeometryPointDynamic::update()
 {
 	cpVect pos = cpBodyGetPosition( m_BallBody );
-	cpVect vel = cpBodyGetVelocity( m_BallBody );
+//	cpVect vel = cpBodyGetVelocity( m_BallBody );
 //	printf(
 //	  "Time is %5.2f. ballBody is at (%5.2f, %5.2f). It's velocity is (%5.2f, %5.2f)\n",
 //	  time, pos.x, pos.y, vel.x, vel.y

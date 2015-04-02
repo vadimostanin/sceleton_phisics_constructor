@@ -8,7 +8,8 @@
 #ifndef DYNAMICOBJECTFACTORY_H_
 #define DYNAMICOBJECTFACTORY_H_
 
-#include "IDynamicGeometryObject.h"
+#include "IDynamicObject.h"
+#include "IGraphicObject.h"
 #include "GeometryObjectsTypes.h"
 #include <chipmunk/chipmunk.h>
 
@@ -18,7 +19,8 @@ public:
 	DynamicObjectFactory();
 	virtual ~DynamicObjectFactory();
 
-	IDynamicGeometryObject * createObject( GeometryObjectsTypes type );
+	IDynamicObject * createObject( GeometryObjectsTypes type );
+	IGraphicObject * createGraphicObject( IGeometryObject * geometryObject, Evas_Object * canvas );
 
 	static DynamicObjectFactory & getInstance();
 

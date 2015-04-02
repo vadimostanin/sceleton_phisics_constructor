@@ -1,0 +1,6 @@
+<map id="GeometryOperationTracking::trackerBegin" name="GeometryOperationTracking::trackerBegin">
+<area shape="rect" id="node2" href="$class_geometry_object_factory.html#a517fdd10bb45b6d7cf924d9cbacca6d1" title="GeometryObjectFactory\l::getInstance" alt="" coords="245,5,406,46"/>
+<area shape="rect" id="node3" href="$class_point.html#a0b82a4aa9614c11854abc507d89a70a9" title="Point::getX" alt="" coords="282,71,369,97"/>
+<area shape="rect" id="node4" href="$class_point.html#a3770f321c49dfe7ca463900fddc2e2bc" title="Point::getY" alt="" coords="282,121,369,148"/>
+<area shape="rect" id="node5" href="$class_i_view_updatable.html#aaf59f7e755222be617f6d24da32b7c47" title="IViewUpdatable::highlight\lBegin" alt="" coords="240,173,411,214"/>
+</map>

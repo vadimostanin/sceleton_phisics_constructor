@@ -9,7 +9,6 @@
 #include "GeometryObjectsManager.h"
 #include "GeometryObjectFactory.h"
 #include "GraphicLink.h"
-#include "GraphicPointHighlighted.h"
 #include <iostream>
 using namespace std;
 

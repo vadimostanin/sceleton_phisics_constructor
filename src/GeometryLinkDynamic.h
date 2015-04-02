@@ -9,9 +9,9 @@
 #define GEOMETRYLINKDYNAMIC_H_
 
 #include "GeometryLink.h"
-#include "IDynamicGeometryObject.h"
+#include "IDynamicObject.h"
 
-class GeometryLinkDynamic: public GeometryLink, public IDynamicGeometryObject {
+class GeometryLinkDynamic: public GeometryLink, public IDynamicObject {
 public:
 	GeometryLinkDynamic();
 	virtual ~GeometryLinkDynamic();

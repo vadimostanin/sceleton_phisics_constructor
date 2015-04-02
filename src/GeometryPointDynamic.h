@@ -9,14 +9,21 @@
 #define GEOMETRYPOINTDYNAMIC_H_
 
 #include "GeometryPoint.h"
-#include "IDynamicGeometryObject.h"
+#include "IDynamicObject.h"
 #include <chipmunk/chipmunk.h>
 
-class GeometryPointDynamic: public GeometryPoint, public IDynamicGeometryObject {
+class GeometryPointDynamic: virtual public GeometryPoint, public IDynamicObject {
 public:
+//	GeometryPointDynamic();
 	GeometryPointDynamic( cpSpace * space );
 	virtual ~GeometryPointDynamic();
 
+	IGeometryObject * clone();
+	bool isValid();
+	string toString();
+	int getId() const;
+	GeometryObjectsTypes getType() const;
+	IGeometryObject & operator = ( IGeometryObject & src );
 	void update();
 private:
 

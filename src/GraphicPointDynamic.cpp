@@ -7,7 +7,7 @@
 
 #include "GraphicPointDynamic.h"
 
-GraphicPointDynamic::GraphicPointDynamic( IGeometryObject * geometryObject, Evas_Object * glview ) : GraphicPoint( geometryObject, glview )
+GraphicPointDynamic::GraphicPointDynamic( IDynamicObject * geometryObject, Evas_Object * glview ) : GraphicPoint( geometryObject, glview )
 {
 
 }

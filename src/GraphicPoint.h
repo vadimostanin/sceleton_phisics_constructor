@@ -20,7 +20,7 @@ class GraphicPoint : public GraphicObjectBase, public IGraphicObject
 public:
 	GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glview );
 	GraphicPoint( Evas_Object * glview, int x, int y );
-	GraphicPoint( Evas_Object * glview, const GeometryPoint & point );
+	GraphicPoint( Evas_Object * glview, GeometryPoint * point );
 	GraphicPoint( const GraphicPoint & src );
 	virtual ~GraphicPoint();
 	bool operator ==( const GraphicPoint & src );
@@ -29,14 +29,14 @@ public:
 	void setX( int x );
 	void setY( int y );
 
-	virtual void draw( Evas * canvas );
+	virtual void draw();
 	IGeometryObject & getGeometryObject();
 
 	virtual string getVertexShader();
 	virtual string getFragmentShader();
 
 private:
-	GeometryPoint m_Point;
+	GeometryPoint * m_Point;
 
 	void initCircleVertex();
 	void initQuadVertex();

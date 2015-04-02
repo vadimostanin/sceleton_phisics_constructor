@@ -1,0 +1,20 @@
+var searchData=
+[
+  ['geometryobjectfactory',['GeometryObjectFactory',['../class_geometry_object_factory.html#a759b281e3db965d1517d1490ef6d715d',1,'GeometryObjectFactory']]],
+  ['geometryobjectsmanager',['GeometryObjectsManager',['../class_geometry_objects_manager.html#ac1847098c6290faaef1f64b1bb9f7163',1,'GeometryObjectsManager']]],
+  ['geometryoperationtracking',['GeometryOperationTracking',['../class_geometry_operation_tracking.html#a527a60065b436171371c23e39ed8ebbd',1,'GeometryOperationTracking']]],
+  ['getdrawingcanvas',['getDrawingCanvas',['../class_drawing_content.html#ade92d7e68527c0df61b085d1808ee182',1,'DrawingContent']]],
+  ['getevas',['getEvas',['../class_window.html#a6392b9bfee006c3152e053c998c89f85',1,'Window']]],
+  ['getevasobject',['getEvasObject',['../class_window.html#a241ade30878ce1086b5cf31d117bbdc8',1,'Window']]],
+  ['gethostlayout',['getHostLayout',['../class_window.html#a42320edec04f8ac1d2d30c1e825ba54b',1,'Window']]],
+  ['getinstance',['getInstance',['../class_geometry_object_factory.html#a517fdd10bb45b6d7cf924d9cbacca6d1',1,'GeometryObjectFactory::getInstance()'],['../class_geometry_objects_manager.html#a34e70b86d34d51108132414cd0a57ab8',1,'GeometryObjectsManager::getInstance()']]],
+  ['getlayout',['getLayout',['../class_main_content.html#aa1917c663a7d5721e3f868eb6ae3ebe0',1,'MainContent']]],
+  ['getlinks',['getLinks',['../class_geometry_objects_manager.html#af6ec7cbc6947a1fe9d32861cefb3515e',1,'GeometryObjectsManager']]],
+  ['getmainlayout',['getMainLayout',['../class_base_view.html#a4a09f445d9eb27d674382189f4ae7e14',1,'BaseView']]],
+  ['getparentlayout',['getParentLayout',['../class_base_view.html#a11e9825ed7ba6af5ad721acdbbe2762b',1,'BaseView']]],
+  ['getpoint',['getPoint',['../class_drawing_content.html#a991ef6e99883102af69b1af56b662be8',1,'DrawingContent::getPoint()'],['../class_geometry_objects_manager.html#a4c9b1d61333a56175336d6d12f9e0b0c',1,'GeometryObjectsManager::getPoint()']]],
+  ['getpoints',['getPoints',['../class_geometry_objects_manager.html#a7023c883729a9301d4e11a3bce43f8dd',1,'GeometryObjectsManager']]],
+  ['gettype',['getType',['../class_i_geometry_object.html#ae88064004986a5d599f5794fc3eefca3',1,'IGeometryObject::getType()'],['../class_point.html#a87134ba772c2c01168a996a849214955',1,'Point::getType()'],['../class_points_link.html#a75fcf55b27002a8f1a8db18007fc85b1',1,'PointsLink::getType()']]],
+  ['getx',['getX',['../class_point.html#a0b82a4aa9614c11854abc507d89a70a9',1,'Point']]],
+  ['gety',['getY',['../class_point.html#a3770f321c49dfe7ca463900fddc2e2bc',1,'Point']]]
+];

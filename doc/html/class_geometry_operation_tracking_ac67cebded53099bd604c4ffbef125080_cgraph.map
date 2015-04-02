@@ -1,0 +1,6 @@
+<map id="GeometryOperationTracking::trackerEnd" name="GeometryOperationTracking::trackerEnd">
+<area shape="rect" id="node2" href="$class_geometry_objects_manager.html#a34e70b86d34d51108132414cd0a57ab8" title="GeometryObjectsManager\l::getInstance" alt="" coords="250,5,425,46"/>
+<area shape="rect" id="node3" href="$class_geometry_objects_manager.html#ab929b8e262f10bc34cf8f296794f19c2" title="GeometryObjectsManager\l::addPoint" alt="" coords="250,70,425,111"/>
+<area shape="rect" id="node4" href="$class_i_view_updatable.html#a3c3f25cec4eb59d005aa229b60dc0bdf" title="IViewUpdatable::highlightEnd" alt="" coords="241,136,434,163"/>
+<area shape="rect" id="node5" href="$class_i_view_updatable.html#a7bb2c3735909fe059e5030ad3dde42ff" title="IViewUpdatable::update" alt="" coords="257,187,418,213"/>
+</map>

@@ -12,43 +12,22 @@
 #include <fstream>
 using namespace std;
 
-static void dump( vector<float> & input, int split_count )
-{
-	ofstream file( "dump.txt", ios_base::app );
-
-	for( size_t input_i = 0 ; input_i < input.size() ; input_i++ )
-	{
-		if( input_i != 0 && input_i % split_count == 0 )
-		{
-			file << endl << flush;
-		}
-		file << input[input_i] << " " << flush;
-	}
-	file << endl;
-	file.close();
-}
-
-void GraphicPoint::initVertex()
-{
-	initCircleVertex();
-}
-
 GraphicPoint::GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glview ) : GraphicObjectBase( glview )
 {
 	initVertex();
 
-	m_Point = (GeometryPoint&)( * geometryObject );
+	m_Point = (GeometryPoint *)geometryObject;
 }
 
-GraphicPoint::GraphicPoint( Evas_Object * glview, const GeometryPoint & point ) : GraphicObjectBase( glview ), m_Point( point )
+GraphicPoint::GraphicPoint( Evas_Object * glview, GeometryPoint * point ) : GraphicObjectBase( glview ), m_Point( point )
 {
 	initVertex();
 }
 
 GraphicPoint::GraphicPoint( Evas_Object * glview, int x, int y ) : GraphicObjectBase( glview )//GraphicPoint( glview, Point( x, y ) )//delegating constructors only available with -std=c++11 or -std=gnu++11 [enabled by default]
 {
-	m_Point.setX( x );
-	m_Point.setY( y );
+	m_Point->setX( x );
+	m_Point->setY( y );
 
 	initVertex();
 }
@@ -63,9 +42,14 @@ GraphicPoint::~GraphicPoint()
 {
 }
 
+void GraphicPoint::initVertex()
+{
+	initCircleVertex();
+}
+
 IGeometryObject & GraphicPoint::getGeometryObject()
 {
-	return m_Point;
+	return *m_Point;
 }
 
 void GraphicPoint::initQuadVertex()
@@ -112,7 +96,7 @@ void GraphicPoint::initCircleVertex()
 
 	float ang = 0;
 	float da = (float) (M_PI / 180 * (360.0f / vertexNumber));
-	const unsigned int coordinates_in_point = 2;
+//	const unsigned int coordinates_in_point = 2;
 
 
 	{//Circle Points
@@ -177,22 +161,22 @@ bool GraphicPoint::operator ==( const GraphicPoint & src )
 
 int GraphicPoint::getX()
 {
-	return m_Point.getX();
+	return m_Point->getX();
 }
 
 int GraphicPoint::getY()
 {
-	return m_Point.getY();
+	return m_Point->getY();
 }
 
 void GraphicPoint::setX( int x )
 {
-	m_Point.setX( x );
+	m_Point->setX( x );
 }
 
 void GraphicPoint::setY( int y )
 {
-	m_Point.setY( y );
+	m_Point->setY( y );
 }
 
 void dump_mat4( float mat4[16] )

@@ -1,0 +1,4 @@
+<map id="IGeometryObject" name="IGeometryObject">
+<area shape="rect" id="node2" href="$class_point.html" title="{Point\n||+ Point()\l+ Point()\l+ Point()\l+ operator==()\l+ ~Point()\l+ getX()\l+ getY()\l+ setX()\l+ setY()\l+ getType()\l}" alt="" coords="5,147,109,357"/>
+<area shape="rect" id="node3" href="$class_points_link.html" title="{PointsLink\n||+ PointsLink()\l+ PointsLink()\l+ ~PointsLink()\l+ getType()\l+ setPointFrom()\l+ setPointTo()\l}" alt="" coords="135,177,255,327"/>
+</map>

@@ -18,7 +18,7 @@ public:
 	GraphicSpring( const GraphicSpring & src );
 	virtual ~GraphicSpring();
 
-	void draw( Evas * canvas );
+	void draw();
 	IGeometryObject & getGeometryObject();
 
 	string getVertexShader();

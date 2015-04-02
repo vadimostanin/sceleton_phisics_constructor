@@ -1,0 +1,245 @@
+\hypertarget{class_base_view}{\section{Base\-View Class Reference}
+\label{class_base_view}\index{Base\-View@{Base\-View}}
+}
+
+
+{\ttfamily \#include $<$Base\-View.\-h$>$}
+
+
+
+Inheritance diagram for Base\-View\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=188pt]{class_base_view__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Base\-View\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{class_base_view__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_base_view_a0ea730b39012b33298fd37fa1d2c28b4}{Base\-View} (\hyperlink{class_base_view}{Base\-View} \&parent)
+\item 
+\hyperlink{class_base_view_ad88b86000a86a321ec237fc11eb21f00}{Base\-View} (Evas\-\_\-\-Object $\ast$parent)
+\item 
+virtual \hyperlink{class_base_view_a0b87986502d132344f08be851cdb15d2}{$\sim$\-Base\-View} ()
+\item 
+virtual void \hyperlink{class_base_view_a3fb4396cd7133b73f113251c3828538a}{set\-Visibility} (bool val)
+\item 
+virtual void \hyperlink{class_base_view_afa1b6656ef2b8eff83dd476e8b1e1200}{move} (int x, int y)
+\item 
+virtual void \hyperlink{class_base_view_a4737f13d8c9c17ecd2748e46e9f075b0}{set\-Max\-Size} (int width, int height)
+\item 
+virtual void \hyperlink{class_base_view_a41a081c844838223e991bfe2d1220090}{set\-Size} (int width, int height)
+\item 
+virtual Evas\-\_\-\-Object $\ast$ \hyperlink{class_base_view_a11e9825ed7ba6af5ad721acdbbe2762b}{get\-Parent\-Layout} () const 
+\item 
+virtual Evas\-\_\-\-Object $\ast$ \hyperlink{class_base_view_a4a09f445d9eb27d674382189f4ae7e14}{get\-Main\-Layout} () const 
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Evas\-\_\-\-Object $\ast$ \hyperlink{class_base_view_af2e9d5f37dc60430d28cebcb55ffe2b4}{m\-\_\-p\-Parent}
+\item 
+Evas\-\_\-\-Object $\ast$ \hyperlink{class_base_view_a27bf1606488064c17a4fad81b0feb61f}{m\-\_\-p\-Main\-Layout}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+Definition at line 27 of file Base\-View.\-h.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_base_view_a0ea730b39012b33298fd37fa1d2c28b4}{\index{Base\-View@{Base\-View}!Base\-View@{Base\-View}}
+\index{Base\-View@{Base\-View}!BaseView@{Base\-View}}
+\subsubsection[{Base\-View}]{\setlength{\rightskip}{0pt plus 5cm}Base\-View\-::\-Base\-View (
+\begin{DoxyParamCaption}
+\item[{{\bf Base\-View} \&}]{parent}
+\end{DoxyParamCaption}
+)}}\label{class_base_view_a0ea730b39012b33298fd37fa1d2c28b4}
+Constructor 
+\begin{DoxyParams}{Parameters}
+{\em ref.} & to parent parent view \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 24 of file Base\-View.\-cpp.
+
+\hypertarget{class_base_view_ad88b86000a86a321ec237fc11eb21f00}{\index{Base\-View@{Base\-View}!Base\-View@{Base\-View}}
+\index{Base\-View@{Base\-View}!BaseView@{Base\-View}}
+\subsubsection[{Base\-View}]{\setlength{\rightskip}{0pt plus 5cm}Base\-View\-::\-Base\-View (
+\begin{DoxyParamCaption}
+\item[{Evas\-\_\-\-Object $\ast$}]{parent}
+\end{DoxyParamCaption}
+)}}\label{class_base_view_ad88b86000a86a321ec237fc11eb21f00}
+Constructor 
+\begin{DoxyParams}{Parameters}
+{\em pointer} & to parent Evas\-\_\-\-Object \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 31 of file Base\-View.\-cpp.
+
+\hypertarget{class_base_view_a0b87986502d132344f08be851cdb15d2}{\index{Base\-View@{Base\-View}!$\sim$\-Base\-View@{$\sim$\-Base\-View}}
+\index{$\sim$\-Base\-View@{$\sim$\-Base\-View}!BaseView@{Base\-View}}
+\subsubsection[{$\sim$\-Base\-View}]{\setlength{\rightskip}{0pt plus 5cm}Base\-View\-::$\sim$\-Base\-View (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_base_view_a0b87986502d132344f08be851cdb15d2}
+Destructor 
+
+Definition at line 38 of file Base\-View.\-cpp.
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_base_view_a4a09f445d9eb27d674382189f4ae7e14}{\index{Base\-View@{Base\-View}!get\-Main\-Layout@{get\-Main\-Layout}}
+\index{get\-Main\-Layout@{get\-Main\-Layout}!BaseView@{Base\-View}}
+\subsubsection[{get\-Main\-Layout}]{\setlength{\rightskip}{0pt plus 5cm}Evas\-\_\-\-Object $\ast$ Base\-View\-::get\-Main\-Layout (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_base_view_a4a09f445d9eb27d674382189f4ae7e14}
+Get main layout of view \begin{DoxyReturn}{Returns}
+pointer to layout 
+\end{DoxyReturn}
+
+
+Definition at line 59 of file Base\-View.\-cpp.
+
+\hypertarget{class_base_view_a11e9825ed7ba6af5ad721acdbbe2762b}{\index{Base\-View@{Base\-View}!get\-Parent\-Layout@{get\-Parent\-Layout}}
+\index{get\-Parent\-Layout@{get\-Parent\-Layout}!BaseView@{Base\-View}}
+\subsubsection[{get\-Parent\-Layout}]{\setlength{\rightskip}{0pt plus 5cm}Evas\-\_\-\-Object $\ast$ Base\-View\-::get\-Parent\-Layout (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_base_view_a11e9825ed7ba6af5ad721acdbbe2762b}
+Get parent layout \begin{DoxyReturn}{Returns}
+pointer to layout 
+\end{DoxyReturn}
+
+
+Definition at line 54 of file Base\-View.\-cpp.
+
+\hypertarget{class_base_view_afa1b6656ef2b8eff83dd476e8b1e1200}{\index{Base\-View@{Base\-View}!move@{move}}
+\index{move@{move}!BaseView@{Base\-View}}
+\subsubsection[{move}]{\setlength{\rightskip}{0pt plus 5cm}void Base\-View\-::move (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_base_view_afa1b6656ef2b8eff83dd476e8b1e1200}
+Move view 
+\begin{DoxyParams}{Parameters}
+{\em x} & position to move the object to, in canvas. \\
+\hline
+{\em y} & position to move the object to, in canvas. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 64 of file Base\-View.\-cpp.
+
+\hypertarget{class_base_view_a4737f13d8c9c17ecd2748e46e9f075b0}{\index{Base\-View@{Base\-View}!set\-Max\-Size@{set\-Max\-Size}}
+\index{set\-Max\-Size@{set\-Max\-Size}!BaseView@{Base\-View}}
+\subsubsection[{set\-Max\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Base\-View\-::set\-Max\-Size (
+\begin{DoxyParamCaption}
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_base_view_a4737f13d8c9c17ecd2748e46e9f075b0}
+Set max size of view 
+\begin{DoxyParams}{Parameters}
+{\em width} & max width \\
+\hline
+{\em height} & max height \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 70 of file Base\-View.\-cpp.
+
+
+
+Here is the caller graph for this function\-:\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=296pt]{class_base_view_a4737f13d8c9c17ecd2748e46e9f075b0_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_base_view_a41a081c844838223e991bfe2d1220090}{\index{Base\-View@{Base\-View}!set\-Size@{set\-Size}}
+\index{set\-Size@{set\-Size}!BaseView@{Base\-View}}
+\subsubsection[{set\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Base\-View\-::set\-Size (
+\begin{DoxyParamCaption}
+\item[{int}]{width, }
+\item[{int}]{height}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_base_view_a41a081c844838223e991bfe2d1220090}
+Set size 
+\begin{DoxyParams}{Parameters}
+{\em width} & width of view \\
+\hline
+{\em height} & height of view \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 76 of file Base\-View.\-cpp.
+
+\hypertarget{class_base_view_a3fb4396cd7133b73f113251c3828538a}{\index{Base\-View@{Base\-View}!set\-Visibility@{set\-Visibility}}
+\index{set\-Visibility@{set\-Visibility}!BaseView@{Base\-View}}
+\subsubsection[{set\-Visibility}]{\setlength{\rightskip}{0pt plus 5cm}void Base\-View\-::set\-Visibility (
+\begin{DoxyParamCaption}
+\item[{bool}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_base_view_a3fb4396cd7133b73f113251c3828538a}
+Set visibility 
+\begin{DoxyParams}{Parameters}
+{\em val} & true -\/ show, false -\/ hide \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 43 of file Base\-View.\-cpp.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_base_view_a27bf1606488064c17a4fad81b0feb61f}{\index{Base\-View@{Base\-View}!m\-\_\-p\-Main\-Layout@{m\-\_\-p\-Main\-Layout}}
+\index{m\-\_\-p\-Main\-Layout@{m\-\_\-p\-Main\-Layout}!BaseView@{Base\-View}}
+\subsubsection[{m\-\_\-p\-Main\-Layout}]{\setlength{\rightskip}{0pt plus 5cm}Evas\-\_\-\-Object$\ast$ Base\-View\-::m\-\_\-p\-Main\-Layout\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_base_view_a27bf1606488064c17a4fad81b0feb61f}
+
+
+Definition at line 88 of file Base\-View.\-h.
+
+\hypertarget{class_base_view_af2e9d5f37dc60430d28cebcb55ffe2b4}{\index{Base\-View@{Base\-View}!m\-\_\-p\-Parent@{m\-\_\-p\-Parent}}
+\index{m\-\_\-p\-Parent@{m\-\_\-p\-Parent}!BaseView@{Base\-View}}
+\subsubsection[{m\-\_\-p\-Parent}]{\setlength{\rightskip}{0pt plus 5cm}Evas\-\_\-\-Object$\ast$ Base\-View\-::m\-\_\-p\-Parent\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_base_view_af2e9d5f37dc60430d28cebcb55ffe2b4}
+
+
+Definition at line 87 of file Base\-View.\-h.
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{_base_view_8h}{Base\-View.\-h}\item 
+\hyperlink{_base_view_8cpp}{Base\-View.\-cpp}\end{DoxyCompactItemize}

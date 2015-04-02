@@ -191,8 +191,6 @@ void DrawingContent::changeGraphicObject( IGraphicObject * graphicObject )
 
 void DrawingContent::drawObjects()
 {
-	Evas * canvas = evas_object_evas_get( m_DrawingLayout );
-
 	vector<IGraphicObject *>::iterator begin = m_GraphicObjects.begin();
 	vector<IGraphicObject *>::iterator end = m_GraphicObjects.end();
 	vector<IGraphicObject *>::iterator iter = begin;
