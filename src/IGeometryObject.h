@@ -8,12 +8,11 @@
 #ifndef IGEOMETRYOBJECT_H_
 #define IGEOMETRYOBJECT_H_
 
-#include "IObject.h"
 #include "GeometryObjectsTypes.h"
 #include <string>
 using namespace std;
 
-class IGeometryObject : public IObject
+class IGeometryObject
 {
 public:
 	virtual ~IGeometryObject(){}

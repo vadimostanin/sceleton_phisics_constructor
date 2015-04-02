@@ -39,6 +39,20 @@ void DynamicObjectFactory::initGround()
 	cpSpaceAddShape( m_Space, ground);
 }
 
+IDynamicObject * DynamicObjectFactory::createDynamicObject( IGeometryObject * geometryObject )
+{
+	IDynamicObject * object = 0;
+	switch( geometryObject->getType() )
+	{
+		case GEOMETRYOBJECT_POINT:
+				object = new GeometryPointDynamic( m_Space, (GeometryPoint *)geometryObject );
+			break;
+		default:
+			break;
+	}
+	return object;
+}
+
 IDynamicObject * DynamicObjectFactory::createObject( GeometryObjectsTypes type )
 {
 	IDynamicObject * object = NULL;
@@ -60,7 +74,7 @@ IDynamicObject * DynamicObjectFactory::createObject( GeometryObjectsTypes type )
 }
 
 
-IGraphicObject * DynamicObjectFactory::createGraphicObject( IGeometryObject * geometryObject, Evas_Object * canvas )
+IGraphicObject * DynamicObjectFactory::createGraphicObject( GeometryPointDynamic * geometryObject, Evas_Object * canvas )
 {
 	IGraphicObject * object = 0;
 	switch( geometryObject->getType() )

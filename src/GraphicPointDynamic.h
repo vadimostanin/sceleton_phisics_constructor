@@ -14,14 +14,14 @@
 class GraphicPointDynamic: public GraphicPoint
 {
 public:
-	GraphicPointDynamic( IDynamicObject * dynamicObject, IGeometryObject * geometryObject, Evas_Object * glview );
+	GraphicPointDynamic( GeometryPointDynamic * dynamicObject, Evas_Object * glview );
 	virtual ~GraphicPointDynamic();
 
 	void draw( Evas * canvas );
 
 private:
 
-	GeometryPointDynamic m_DynamicPoint;
+	GeometryPointDynamic * m_DynamicPoint;
 
 };
 

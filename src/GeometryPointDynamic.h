@@ -16,6 +16,7 @@ class GeometryPointDynamic: virtual public GeometryPoint, public IDynamicObject 
 public:
 //	GeometryPointDynamic();
 	GeometryPointDynamic( cpSpace * space );
+	GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint );
 	virtual ~GeometryPointDynamic();
 
 	IGeometryObject * clone();

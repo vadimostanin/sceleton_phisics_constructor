@@ -8,10 +8,9 @@
 #ifndef IDynamicObject_H_
 #define IDynamicObject_H_
 
-#include "IObject.h"
 #include "IGeometryObject.h"
 
-class IDynamicObject : public IObject
+class IDynamicObject
 {
 public:
 	virtual ~IDynamicObject(){}

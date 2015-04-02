@@ -16,13 +16,25 @@ GeometryPointDynamic::GeometryPointDynamic( cpSpace * space ) : m_Space( space )
 	initPoint();
 }
 
+GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint ) : m_Space( space ), m_Radius( 5 ), m_Mass( 1 )
+{
+	initPoint();
+	setX( geometryPoint->getX() );
+	setY( geometryPoint->getY() );
+	setId( geometryPoint->getId() );
+}
+
 GeometryPointDynamic::~GeometryPointDynamic()
 {
 }
 
 IGeometryObject * GeometryPointDynamic::clone()
 {
-	IGeometryObject * new_object = new GeometryPointDynamic( m_Space );
+	GeometryPointDynamic * new_object = new GeometryPointDynamic( m_Space );
+
+	new_object->setX( getX() );
+	new_object->setY( getY() );
+	new_object->setId( getId() );
 
 	return new_object;
 }

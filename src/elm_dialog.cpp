@@ -1,6 +1,6 @@
 //============================================================================
 // Name        : elm_dialog.cpp
-// Author      : 
+// Author      :
 // Version     :
 // Copyright   : Your copyright notice
 // Description : Hello World in C++, Ansi-style
@@ -19,6 +19,7 @@ using namespace std;
 #include "MouseListener.h"
 #include "GeometrySceletonOperationTracking.h"
 #include "GeometryEditingOperationTracking.h"
+#include "DynamicObjectFactory.h"
 #include <ctime>
 #include <stdlib.h>
 
@@ -36,6 +37,26 @@ void on_save_objects( void * userData )
 
 void on_run_simulation( void * userData )
 {
+	DrawingContent * viewUpdater = (DrawingContent *)userData;
+
+	vector<IGraphicObject *> graphicObjects;
+
+	vector<IGeometryObject *> objects;
+	GeometryObjectsManager::getInstance().getObjects( objects );
+
+	vector<IGeometryObject *>::iterator begin = objects.begin();
+	vector<IGeometryObject *>::iterator end = objects.end();
+	vector<IGeometryObject *>::iterator iter = begin;
+
+	for(  ; iter != end ; iter ++ )
+	{
+		GeometryPointDynamic * dynamicObject = (GeometryPointDynamic *)DynamicObjectFactory::getInstance().createDynamicObject( (*iter) );
+		IGraphicObject * graphicObject = DynamicObjectFactory::getInstance().createGraphicObject( dynamicObject, viewUpdater->getDrawingCanvas() );
+
+		graphicObjects.push_back( graphicObject );
+	}
+
+	viewUpdater->setGraphicObjects( graphicObjects );
 }
 
 void on_sceleton_mode( void * userData )
@@ -83,15 +104,17 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 		toolbar.addToolbarContentItem( *item3 );
 	}
+
+
+	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
+
 	{
 		string title( "Run simulating" );
-		ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_run_simulation, NULL );
+		ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_run_simulation, &drawingContent );
 		ToolbarContentItem * item = new ToolbarContentButton( *params );
 
 		toolbar.addToolbarContentItem( *item );
 	}
-
-	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
 //	GeometryObjectsManager::getInstance().initTestingState();
 
