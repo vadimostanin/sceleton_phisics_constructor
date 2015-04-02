@@ -18,7 +18,7 @@ public:
 
 	virtual IGeometryObject & getGeometryObject() = 0;
 
-	virtual void draw( Evas * canvas ) = 0;
+	virtual void draw() = 0;
 };
 
 

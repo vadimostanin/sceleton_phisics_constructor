@@ -36,7 +36,7 @@ GraphicLink::~GraphicLink()
 {
 }
 
-void GraphicLink::draw( Evas * canvas )
+void GraphicLink::draw()
 {
 //	cout << "draw link from:" << getPointFrom().getX() << "x" << getPointFrom().getY() << "; to:" <<
 //						getPointTo().getX() << "x" << getPointTo().getY() << endl << flush;
@@ -146,13 +146,3 @@ void GraphicLink::draw_line_2d()
 
 	__evas_gl_glapi->glUseProgram( 0 );
 }
-
-
-
-
-
-
-
-
-
-

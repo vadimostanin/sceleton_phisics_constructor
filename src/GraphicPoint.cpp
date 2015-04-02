@@ -266,7 +266,7 @@ void GraphicPoint::draw_circle_2d()
 	__evas_gl_glapi->glUseProgram( 0 );
 }
 
-void GraphicPoint::draw( Evas * canvas )
+void GraphicPoint::draw()
 {
 	draw_circle_2d();
 }

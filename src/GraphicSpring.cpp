@@ -24,7 +24,7 @@ GraphicSpring::~GraphicSpring()
 {
 }
 
-void GraphicSpring::draw( Evas * canvas )
+void GraphicSpring::draw()
 {
 //	cout << "draw spring id=" << m_geometrySpring.getId() << endl << flush;
 

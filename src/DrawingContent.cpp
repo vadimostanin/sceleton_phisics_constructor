@@ -198,7 +198,7 @@ void DrawingContent::drawObjects()
 	vector<IGraphicObject *>::iterator iter = begin;
 	for( ; iter != end ; iter++ )
 	{
-		(*iter)->draw( canvas );
+		(*iter)->draw();
 	}
 }
 
