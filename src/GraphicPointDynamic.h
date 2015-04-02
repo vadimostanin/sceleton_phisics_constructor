@@ -17,7 +17,7 @@ public:
 	GraphicPointDynamic( GeometryPointDynamic * dynamicObject, Evas_Object * glview );
 	virtual ~GraphicPointDynamic();
 
-	void draw( Evas * canvas );
+	void draw();
 
 private:
 

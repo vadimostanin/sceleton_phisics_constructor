@@ -16,7 +16,7 @@ GraphicPointDynamic::~GraphicPointDynamic()
 {
 }
 
-void GraphicPointDynamic::draw( Evas * canvas )
+void GraphicPointDynamic::draw()
 {
 	m_DynamicPoint->update();
 

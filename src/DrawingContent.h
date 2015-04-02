@@ -29,19 +29,21 @@ public:
 	void deleteGraphicObject( IGraphicObject * graphicObject );
 	void changeGraphicObject( IGraphicObject * graphicObject );
 
-//	bool getPoint( int x, int y, GraphicPoint & graphicPoint );
+   void setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects );
 
 private:
 
 	void createDrawingLayout();
 	void createDrawingCanvas();
-
+   void preDraw();
+   void postDraw();
 	void drawObjects();
 	void clearObjects();
 
 	static void on_init_gles( Evas_Object * glview );
 	static void on_resize_gl( Evas_Object * glview );
 	static void on_draw_gl( Evas_Object * glview );
+    static void on_draw_dynamic_gl( Evas_Object * glview );
 
 	Evas_Object * m_MainLayout;
 	Evas_Object * m_DrawingLayout;

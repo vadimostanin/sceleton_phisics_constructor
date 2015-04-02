@@ -84,25 +84,41 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 {
 	DrawingContent * lpThis = ( DrawingContent * )evas_object_data_get( glview, "DrawingContent");
 
-	Evas_GL_API * __evas_gl_glapi = lpThis->m_glApi;
+	lpThis->preDraw();
 
+	lpThis->drawObjects();
+
+	lpThis->postDraw();
+}
+static void DrawingContent:: on_draw_dynamic_gl( Evas_Object * glview )
+{
+    DrawingContent * lpThis = ( DrawingContent * )evas_object_data_get( glview, "DrawingContent");
+
+	lpThis->preDraw();
+
+	lpThis->drawObjects();
+
+	lpThis->postDraw();
+
+   elm_glview_changed_set( (Elm_Glview *)m_DrawingCanvas );
+}
+
+void DrawingContent:: preDraw()
+{
 	int w, h;
 
 	elm_glview_size_get( glview, &w, &h);
 
-	__evas_gl_glapi->glViewport(0, 0, w, h);
-	__evas_gl_glapi->glClearColor( 1.0, 0.8, 0.3, 1 );
-	__evas_gl_glapi->glClear(GL_COLOR_BUFFER_BIT);
-
-	// Draw a Triangle
-	__evas_gl_glapi->glEnable(GL_BLEND);
-
-	lpThis->drawObjects();
-
-	// Optional - Flush the GL pipeline
-	__evas_gl_glapi->glFinish();
+	 m_glApi ->glViewport(0, 0, w, h);
+	 m_glApi ->glClearColor( 1.0, 0.8, 0.3, 1 );
+	 m_glApi ->glClear(GL_COLOR_BUFFER_BIT);
 }
 
+void DrawingContent:: postDraw()
+{
+   // Optional - Flush the GL pipeline
+	 m_glApi->glFinish();
+}
 void DrawingContent::createDrawingCanvas()
 {
 	Evas_Object * glview = elm_glview_version_add( m_DrawingLayout, EVAS_GL_GLES_2_X );
@@ -146,6 +162,17 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 	clearObjects();
 
 	m_GraphicObjects = graphicObjects;
+
+	update();
+}
+
+void DrawingContent:: setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects )
+{
+   clearObjects();
+
+	m_GraphicObjects = graphicObjects;
+
+   elm_glview_render_func_set( glview, on_draw_dynamic_gl );
 
 	update();
 }

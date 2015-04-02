@@ -56,7 +56,7 @@ void on_run_simulation( void * userData )
 		graphicObjects.push_back( graphicObject );
 	}
 
-	viewUpdater->setGraphicObjects( graphicObjects );
+	viewUpdater->setGraphicDynamicObjects( graphicObjects );
 }
 
 void on_sceleton_mode( void * userData )
