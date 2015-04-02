@@ -12,7 +12,6 @@ using namespace std;
 
 GeometryLink::GeometryLink() : m_Id( rand() )
 {
-
 }
 
 GeometryLink::GeometryLink( GeometryPoint * point_1, GeometryPoint * point_2 ) : m_Id( rand() )

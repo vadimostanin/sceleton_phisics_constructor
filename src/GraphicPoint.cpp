@@ -108,7 +108,7 @@ void GraphicPoint::initQuadVertex()
 
 void GraphicPoint::initCircleVertex()
 {
-	int vertexNumber = 300;
+	int vertexNumber = 50;
 
 	float ang = 0;
 	float da = (float) (M_PI / 180 * (360.0f / vertexNumber));

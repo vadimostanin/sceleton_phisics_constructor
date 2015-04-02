@@ -29,7 +29,7 @@ public:
 	void setX( int x );
 	void setY( int y );
 
-	void draw( Evas * canvas );
+	virtual void draw( Evas * canvas );
 	IGeometryObject & getGeometryObject();
 
 	virtual string getVertexShader();

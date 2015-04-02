@@ -47,9 +47,10 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
    __evas_gl_glapi->glEnable( GL_CULL_FACE );
    __evas_gl_glapi->glEnable( GL_POINT_SMOOTH );
    __evas_gl_glapi->glLineWidth( 4.0f );
-   __evas_gl_glapi->glHint( GL_LINE_SMOOTH_HINT, GL_FASTEST );
+   __evas_gl_glapi->glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
    __evas_gl_glapi->glEnable( GL_BLEND );
    __evas_gl_glapi->glEnable( GL_LINE_SMOOTH );
+   __evas_gl_glapi->glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
    __evas_gl_glapi->glCullFace( GL_BACK );
 //
    __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
