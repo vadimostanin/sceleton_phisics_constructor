@@ -27,7 +27,7 @@ private:
 
 	static Eina_Bool timer_func( void * userData );
 
-	Ecore_Timer * m_Timer;
+	Ecore_Animator * m_Animator;
 	TimerFuncType m_TimerFunc;
 	void 		* m_UserData;
 	const double m_Interval;
