@@ -1,12 +1,12 @@
 /*
- * GeometryEditingOperationTracking.h
+ * SimulationOperationTracking.h
  *
  *  Created on: Mar 27, 2015
  *      Author: vostanin
  */
 
-#ifndef GEOMETRYEDITINGOPERATIONTRACKING_H_
-#define GEOMETRYEDITINGOPERATIONTRACKING_H_
+#ifndef SIMULATIONOPERATIONTRACKING_H_
+#define SIMULATIONOPERATIONTRACKING_H_
 
 #include "IGeometryObjectTracker.h"
 #include "DrawingContent.h"
@@ -14,11 +14,11 @@
 #include <vector>
 using namespace std;
 
-class GeometryEditingOperationTracking : public IGeometryObjectTracker
+class SimulationOperationTracking : public IGeometryObjectTracker
 {
 public:
-	GeometryEditingOperationTracking( DrawingContent & viewUpdater );
-	virtual ~GeometryEditingOperationTracking();
+	SimulationOperationTracking( DrawingContent & viewUpdater );
+	virtual ~SimulationOperationTracking();
 
 	GeometryMouseTrackingModes getType() const;
 
@@ -38,4 +38,4 @@ private:
 
 };
 
-#endif /* GEOMETRYEDITINGOPERATIONTRACKING_H_ */
+#endif /* SIMULATIONOPERATIONTRACKING_H_ */

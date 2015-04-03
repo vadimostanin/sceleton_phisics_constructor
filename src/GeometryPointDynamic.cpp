@@ -44,9 +44,9 @@ void GeometryPointDynamic::update()
 	  pos.x, pos.y, vel.x, vel.y
 	); fflush( stdout );
 
-	cpFloat timeStep = 1.0/60.0;
+//	cpFloat timeStep = 1.0/60.0;//0.01666
 
-	cpSpaceStep( m_Space, timeStep);
+	cpSpaceStep( m_Space, 0.001);
 
 	setX( pos.x );
 	setY( pos.y );

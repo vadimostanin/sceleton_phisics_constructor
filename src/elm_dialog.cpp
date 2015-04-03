@@ -18,7 +18,7 @@ using namespace std;
 #include "WindowListener.h"
 #include "MouseListener.h"
 #include "GeometrySceletonOperationTracking.h"
-#include "GeometryEditingOperationTracking.h"
+#include "SimulationOperationTracking.h"
 #include "DynamicObjectFactory.h"
 #include <ctime>
 #include <stdlib.h>
@@ -69,11 +69,6 @@ void on_sceleton_mode( void * userData )
 	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SCELETON_MODE_E );
 }
 
-void on_spring_mode( void * userData )
-{
-	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( EDITING_MODE_E );
-}
-
 EAPI_MAIN int elm_main(int argc, char **argv)
 {
 	Window window;
@@ -86,6 +81,8 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	MainContent mainContent( window.getEvasObject() );
 
 	window.setContentLayout( mainContent.getLayout() );
+
+	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
 	ToolbarContent toolbar( mainContent.getLayout() );
 	{
@@ -103,28 +100,17 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 		toolbar.addToolbarContentItem( *item2 );
 
-		title = "Editing Mode";
-		ToolbarContentRadioParams * params3 = new ToolbarContentRadioParams( title, on_spring_mode, NULL, item2->getEvas(), false );
+		title = "RUn simulation";
+		ToolbarContentRadioParams * params3 = new ToolbarContentRadioParams( title, on_run_simulation, &drawingContent, item2->getEvas(), false );
 		ToolbarContentItem * item3 = new ToolbarContentRadio( *params3 );
 
 		toolbar.addToolbarContentItem( *item3 );
 	}
 
-
-	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
-
-	{
-		string title( "Run simulating" );
-		ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_run_simulation, &drawingContent );
-		ToolbarContentItem * item = new ToolbarContentButton( *params );
-
-		toolbar.addToolbarContentItem( *item );
-	}
-
 //	GeometryObjectsManager::getInstance().initTestingState();
 
 	GeometrySceletonOperationTracking geoSceletonObjectTracking( drawingContent );
-	GeometryEditingOperationTracking   geoEditingObjectTracking( drawingContent );
+	SimulationOperationTracking   geoEditingObjectTracking( drawingContent );
 
 	MouseListener mouseListener( NULL, drawingContent.getDrawingCanvas() );
 
