@@ -12,26 +12,23 @@
 #include "IDynamicObject.h"
 #include <chipmunk/chipmunk.h>
 
-class GeometryPointDynamic: virtual public GeometryPoint, public IDynamicObject {
+class GeometryPointDynamic: virtual public GeometryPoint, public IDynamicObject
+{
 public:
-//	GeometryPointDynamic();
 	GeometryPointDynamic( cpSpace * space );
 	GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint );
 	virtual ~GeometryPointDynamic();
 
-	IGeometryObject * clone();
-	bool isValid();
-	string toString();
-	int getId() const;
-	GeometryObjectsTypes getType() const;
-	IGeometryObject & operator = ( IGeometryObject & src );
+	IGeometryObject & getGeometryObject();
+
 	void update();
 private:
 
 	void initPoint();
 
 	cpSpace * m_Space;
-	cpBody * m_BallBody;
+	cpBody  * m_BallBody;
+	cpShape * m_BallShape;
 
 	cpFloat m_Radius;
 	cpFloat m_Mass;

@@ -14,6 +14,9 @@ class IDynamicObject
 {
 public:
 	virtual ~IDynamicObject(){}
+
+	virtual IGeometryObject & getGeometryObject() = 0;
+
 	virtual void update() = 0;
 };
 

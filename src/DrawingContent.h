@@ -9,6 +9,7 @@
 #define DRAWINGCONTENT_H_
 
 #include "GraphicPoint.h"
+#include "Timer.h"
 #include <Evas.h>
 #include <vector>
 using namespace std;
@@ -31,12 +32,15 @@ public:
 
    void setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects );
 
+   unsigned int getCanvasWidth() const;
+   unsigned int getCanvasHeight() const;
+
 private:
 
 	void createDrawingLayout();
 	void createDrawingCanvas();
-   void preDraw();
-   void postDraw();
+	void preDraw();
+	void postDraw();
 	void drawObjects();
 	void clearObjects();
 
@@ -44,6 +48,8 @@ private:
 	static void on_resize_gl( Evas_Object * glview );
 	static void on_draw_gl( Evas_Object * glview );
     static void on_draw_dynamic_gl( Evas_Object * glview );
+
+    static bool DynamicDrawThread( void * userData );
 
 	Evas_Object * m_MainLayout;
 	Evas_Object * m_DrawingLayout;
@@ -56,6 +62,10 @@ private:
 
 	vector<IGraphicObject *> m_GraphicObjects;
 
+	Timer m_DynamicTimer;
+
+	int m_CanvasWidth;
+	int m_CanvasHeight;
 };
 
 #endif /* DRAWINGCONTENT_H_ */

@@ -23,17 +23,28 @@ public:
 
 	IDynamicObject * createObject( GeometryObjectsTypes type );
 	IDynamicObject * createDynamicObject( IGeometryObject * geometryObject );
-	IGraphicObject * createGraphicObject( GeometryPointDynamic * geometryObject, Evas_Object * canvas );
+	IGraphicObject * createGraphicObject( IDynamicObject * geometryObject, Evas_Object * canvas );
+
+	void setCanvasWidth( unsigned int width );
+	void setCanvasHeight( unsigned int height );
+	unsigned int getCanvasWidth() const;
+	unsigned int getCanvasHeight() const;
+
+	void init();
 
 	static DynamicObjectFactory & getInstance();
 
 private:
 
 	void initSpace();
-	void initGround();
 
 	cpSpace * m_Space;
 	cpVect m_Gravity;
+
+	unsigned int m_CanvasWidth;
+	unsigned int m_CanvasHeight;
+
+	bool m_Inited;
 };
 
 #endif /* DYNAMICOBJECTFACTORY_H_ */

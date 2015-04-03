@@ -6,6 +6,7 @@
  */
 
 #include "GeometryPointDynamic.h"
+#include <cstdio>
 
 //GeometryPointDynamic::GeometryPointDynamic() : m_Space( NULL ), m_BallBody( NULL ), m_Radius( 5 ), m_Mass( 1 )
 //{
@@ -16,62 +17,37 @@ GeometryPointDynamic::GeometryPointDynamic( cpSpace * space ) : m_Space( space )
 	initPoint();
 }
 
-GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint ) : m_Space( space ), m_Radius( 5 ), m_Mass( 1 )
+GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint ) : m_Space( space ), m_Radius( 5 ), m_Mass( 10 )
 {
-	initPoint();
 	setX( geometryPoint->getX() );
 	setY( geometryPoint->getY() );
 	setId( geometryPoint->getId() );
+
+	initPoint();
 }
 
 GeometryPointDynamic::~GeometryPointDynamic()
 {
+	// Clean up our objects and exit!
+	cpShapeFree( m_BallShape );
+	cpBodyFree( m_BallBody );
 }
 
-IGeometryObject * GeometryPointDynamic::clone()
+IGeometryObject & GeometryPointDynamic::getGeometryObject()
 {
-	GeometryPointDynamic * new_object = new GeometryPointDynamic( m_Space );
-
-	new_object->setX( getX() );
-	new_object->setY( getY() );
-	new_object->setId( getId() );
-
-	return new_object;
-}
-
-IGeometryObject & GeometryPointDynamic::operator = ( IGeometryObject & src )
-{
-	return GeometryPoint::operator =( src );
-}
-
-GeometryObjectsTypes GeometryPointDynamic::getType() const
-{
-	return GeometryPoint::getType();
-}
-
-int GeometryPointDynamic::getId() const
-{
-	return GeometryPoint::getId();
-}
-
-string GeometryPointDynamic::toString()
-{
-	return GeometryPoint::toString();
-}
-
-bool GeometryPointDynamic::isValid()
-{
-	return GeometryPoint::isValid();
+	return *this;
 }
 
 void GeometryPointDynamic::update()
 {
 	cpVect pos = cpBodyGetPosition( m_BallBody );
-//	cpVect vel = cpBodyGetVelocity( m_BallBody );
-//	printf(
-//	  "Time is %5.2f. ballBody is at (%5.2f, %5.2f). It's velocity is (%5.2f, %5.2f)\n",
-//	  time, pos.x, pos.y, vel.x, vel.y
-//	); fflush( stdout );
+	cpVect vel = cpBodyGetVelocity( m_BallBody );
+
+
+	printf(
+	  "Time is  ballBody is at (%5.2f, %5.2f). It's velocity is (%5.2f, %5.2f)\n",
+	  pos.x, pos.y, vel.x, vel.y
+	); fflush( stdout );
 
 	cpFloat timeStep = 1.0/60.0;
 
@@ -95,8 +71,8 @@ void GeometryPointDynamic::initPoint()
 	// Now we create the collision shape for the ball.
 	// You can create multiple collision shapes that point to the same body.
 	// They will all be attached to the body and move around to follow it.
-	cpShape *ballShape = cpSpaceAddShape( m_Space, cpCircleShapeNew( m_BallBody, m_Radius, cpvzero ) );
-	cpShapeSetFriction( ballShape, 0.7 );
+	m_BallShape = cpSpaceAddShape( m_Space, cpCircleShapeNew( m_BallBody, m_Radius, cpvzero ) );
+	cpShapeSetFriction( m_BallShape, 0.7 );
 }
 
 

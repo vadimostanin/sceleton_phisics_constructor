@@ -5,7 +5,8 @@
  *      Author: vostanin
  */
 
-#include "Window.h" 
+#include "Window.h"
+#include "Thread.h"
 #include "DrawingContent.h"
 #include "GeometryObjectsManager.h"
 #include "GraphicObjectFindPredicate.h"
@@ -18,7 +19,8 @@ using namespace std;
 
 #define MAIN_EDJ "./main.edj"
 
-DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject )
+DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject ),
+		m_DynamicTimer( DynamicDrawThread, this, 0.1 )
 {
 	createDrawingLayout();
 	createDrawingCanvas();
@@ -38,8 +40,6 @@ void DrawingContent::createDrawingLayout()
 
 void DrawingContent::on_init_gles( Evas_Object * glview )
 {
-   int w = 0, h = 0;
-
    Evas_GL_API * __evas_gl_glapi = elm_glview_gl_api_get( glview );
 
    __evas_gl_glapi->glClearColor( 0.0, 0.0, 0.0, 1.0 );
@@ -55,12 +55,6 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
 //
    __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
    __evas_gl_glapi->glDepthFunc( GL_EQUAL );
-
-   elm_glview_size_get( glview, &w, &h );
-
-   __evas_gl_glapi->glViewport( 0, 0, w, h );
-
-//   __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
 }
 
 // resize callback gets called every time object is resized
@@ -70,13 +64,11 @@ void DrawingContent::on_resize_gl( Evas_Object * glview )
 
 	Evas_GL_API * __evas_gl_glapi = lpThis->m_glApi;
 
-	int w, h;
-
-	elm_glview_size_get( glview, &w, &h );
+	elm_glview_size_get( glview, &lpThis->m_CanvasWidth, &lpThis->m_CanvasHeight );
 
 	// GL Viewport stuff. you can avoid doing this if viewport is all the
 	// same as last frame if you want
-	__evas_gl_glapi->glViewport( 0, 0, w, h );
+	__evas_gl_glapi->glViewport( 0, 0, lpThis->m_CanvasWidth, lpThis->m_CanvasHeight );
 }
 
 // draw callback is where all the main GL rendering happens
@@ -90,26 +82,28 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 
 	lpThis->postDraw();
 }
-static void DrawingContent:: on_draw_dynamic_gl( Evas_Object * glview )
+
+bool DrawingContent::DynamicDrawThread( void * userData )
 {
-    DrawingContent * lpThis = ( DrawingContent * )evas_object_data_get( glview, "DrawingContent");
+	DrawingContent * lpThis = ( DrawingContent * )userData;
+	elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
+
+	return true;
+}
+
+void DrawingContent::on_draw_dynamic_gl( Evas_Object * glview )
+{
+	DrawingContent * lpThis = ( DrawingContent * )evas_object_data_get( glview, "DrawingContent");
 
 	lpThis->preDraw();
 
 	lpThis->drawObjects();
 
 	lpThis->postDraw();
-
-   elm_glview_changed_set( (Elm_Glview *)m_DrawingCanvas );
 }
 
-void DrawingContent:: preDraw()
+void DrawingContent::preDraw()
 {
-	int w, h;
-
-	elm_glview_size_get( glview, &w, &h);
-
-	 m_glApi ->glViewport(0, 0, w, h);
 	 m_glApi ->glClearColor( 1.0, 0.8, 0.3, 1 );
 	 m_glApi ->glClear(GL_COLOR_BUFFER_BIT);
 }
@@ -145,6 +139,8 @@ void DrawingContent::createDrawingCanvas()
 	m_DrawingCanvas = glview;
 	m_glApi = elm_glview_gl_api_get( m_DrawingCanvas );
 	evas_object_data_set( glview, "DrawingContent", this );
+
+	elm_glview_size_get( glview, &m_CanvasWidth, &m_CanvasHeight );
 }
 
 Evas_Object * DrawingContent::getDrawingCanvas()
@@ -163,16 +159,22 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 
 	m_GraphicObjects = graphicObjects;
 
+	m_DynamicTimer.stop();
+
+	elm_glview_render_func_set( getDrawingCanvas(), on_draw_gl );
+
 	update();
 }
 
-void DrawingContent:: setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects )
+void DrawingContent::setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects )
 {
-   clearObjects();
+	clearObjects();
 
 	m_GraphicObjects = graphicObjects;
 
-   elm_glview_render_func_set( glview, on_draw_dynamic_gl );
+	m_DynamicTimer.start();
+
+	elm_glview_render_func_set( getDrawingCanvas(), on_draw_dynamic_gl );
 
 	update();
 }
@@ -237,6 +239,16 @@ void DrawingContent::clearObjects()
 		delete (*iter);
 	}
 	m_GraphicObjects.clear();
+}
+
+unsigned int DrawingContent::getCanvasWidth() const
+{
+	return m_CanvasWidth;
+}
+
+unsigned int DrawingContent::getCanvasHeight() const
+{
+	return m_CanvasHeight;
 }
 
 

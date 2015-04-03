@@ -7,9 +7,9 @@
 
 #include "GraphicPointDynamic.h"
 
-GraphicPointDynamic::GraphicPointDynamic( GeometryPointDynamic * geometryObject, Evas_Object * glview ) : GraphicPoint( geometryObject, glview )
+GraphicPointDynamic::GraphicPointDynamic( GeometryPointDynamic * dynamicObject, Evas_Object * glview ) : GraphicPoint( dynamicObject, glview )
 {
-	m_DynamicPoint = geometryObject;
+	m_DynamicPoint = dynamicObject;
 }
 
 GraphicPointDynamic::~GraphicPointDynamic()

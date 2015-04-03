@@ -44,13 +44,18 @@ void on_run_simulation( void * userData )
 	vector<IGeometryObject *> objects;
 	GeometryObjectsManager::getInstance().getObjects( objects );
 
+	DynamicObjectFactory::getInstance().setCanvasWidth( viewUpdater->getCanvasWidth() );
+	DynamicObjectFactory::getInstance().setCanvasHeight( viewUpdater->getCanvasHeight() );
+
+	DynamicObjectFactory::getInstance().init();
+
 	vector<IGeometryObject *>::iterator begin = objects.begin();
 	vector<IGeometryObject *>::iterator end = objects.end();
 	vector<IGeometryObject *>::iterator iter = begin;
 
 	for(  ; iter != end ; iter ++ )
 	{
-		GeometryPointDynamic * dynamicObject = (GeometryPointDynamic *)DynamicObjectFactory::getInstance().createDynamicObject( (*iter) );
+		IDynamicObject * dynamicObject = (GeometryPointDynamic *)DynamicObjectFactory::getInstance().createDynamicObject( (*iter) );
 		IGraphicObject * graphicObject = DynamicObjectFactory::getInstance().createGraphicObject( dynamicObject, viewUpdater->getDrawingCanvas() );
 
 		graphicObjects.push_back( graphicObject );
