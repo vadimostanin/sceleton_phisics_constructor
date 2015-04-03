@@ -8,10 +8,6 @@
 #include "GeometryPointDynamic.h"
 #include <cstdio>
 
-//GeometryPointDynamic::GeometryPointDynamic() : m_Space( NULL ), m_BallBody( NULL ), m_Radius( 5 ), m_Mass( 1 )
-//{
-//}
-
 GeometryPointDynamic::GeometryPointDynamic( cpSpace * space ) : m_Space( space ), m_Radius( 5 ), m_Mass( 1 )
 {
 	initPoint();
@@ -28,7 +24,6 @@ GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geo
 
 GeometryPointDynamic::~GeometryPointDynamic()
 {
-	// Clean up our objects and exit!
 	cpShapeFree( m_BallShape );
 	cpBodyFree( m_BallBody );
 }

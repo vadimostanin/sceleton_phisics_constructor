@@ -6,7 +6,6 @@
  */
 
 #include "Window.h"
-#include "Thread.h"
 #include "DrawingContent.h"
 #include "GeometryObjectsManager.h"
 #include "GraphicObjectFindPredicate.h"
