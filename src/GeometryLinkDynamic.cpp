@@ -16,6 +16,7 @@ GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space, GeometryLink * geomet
 {
 	setPointFrom( geometryLink->getPointFrom() );
 	setPointTo( geometryLink->getPointTo() );
+    setId( geometryLink->getId );
 
 	initGround();
 }
@@ -39,11 +40,13 @@ void GeometryLinkDynamic::initGround()
 void GeometryLinkDynamic::setDynamicPointFrom( GeometryPointDynamic * dynamicPoint )
 {
 	m_DynamicPoints[0] = dynamicPoint;
+    setPointFrom( dynamicPoint->getGeometryObject() );
 }
 
 void GeometryLinkDynamic::setDynamicPointTo( GeometryPointDynamic * dynamicPoint )
 {
 	m_DynamicPoints[1] = dynamicPoint;
+    setPointTo( dynamicPoint->getGeometryObject() );
 }
 
 const IGeometryObject & GeometryLinkDynamic::getGeometryObject() const
@@ -53,7 +56,15 @@ const IGeometryObject & GeometryLinkDynamic::getGeometryObject() const
 
 void GeometryLinkDynamic::update()
 {
-	;
+//	 cpVect pos = cpBodyGetPosition( m_BallBody );
+//	 cpVect vel = cpBodyGetVelocity( m_BallBody );
+
+// 	cpFloat timeStep = 1.0/60.0;//0.01666
+
+ 	cpSpaceStep( m_Space, (1.0/30.0) / 4.0 );
+
+// 	setX( pos.x );
+// 	setY( pos.y );
 }
 
 
