@@ -30,6 +30,7 @@ public:
 private:
 
 	void initGround();
+	void initLink();
 
 	cpSpace * m_Space;
 	cpShape * m_Ground;

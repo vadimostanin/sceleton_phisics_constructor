@@ -16,7 +16,7 @@ GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space, GeometryLink * geomet
 {
 	setPointFrom( geometryLink->getPointFrom() );
 	setPointTo( geometryLink->getPointTo() );
-    setId( geometryLink->getId );
+//    setId( geometryLink->getId );
 
 	initGround();
 }
@@ -31,22 +31,32 @@ void GeometryLinkDynamic::initGround()
 	// Add a static line segment shape for the ground.
 	// We'll make it slightly tilted so the ball will roll off.
 	// We attach it to space->staticBody to tell Chipmunk it shouldn't be movable.
+
+	cpBodyNew( 1, 1.0)
+
 	m_Ground = cpSegmentShapeNew( cpSpaceGetStaticBody( m_Space ), cpv( getPointFrom()->getX(), getPointFrom()->getY() ), cpv( getPointTo()->getX(), getPointTo()->getY() ), 0 );
+
+
 
 	cpShapeSetFriction( m_Ground, 1 );
 	cpSpaceAddShape( m_Space, m_Ground );
 }
 
+void GeometryLinkDynamic::initLink()
+{
+	cpsp
+}
+
 void GeometryLinkDynamic::setDynamicPointFrom( GeometryPointDynamic * dynamicPoint )
 {
 	m_DynamicPoints[0] = dynamicPoint;
-    setPointFrom( dynamicPoint->getGeometryObject() );
+    setPointFrom( (const GeometryPoint *)&dynamicPoint->getGeometryObject() );
 }
 
 void GeometryLinkDynamic::setDynamicPointTo( GeometryPointDynamic * dynamicPoint )
 {
 	m_DynamicPoints[1] = dynamicPoint;
-    setPointTo( dynamicPoint->getGeometryObject() );
+    setPointTo( (const GeometryPoint *)&dynamicPoint->getGeometryObject() );
 }
 
 const IGeometryObject & GeometryLinkDynamic::getGeometryObject() const
