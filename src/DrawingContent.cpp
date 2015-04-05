@@ -11,7 +11,7 @@
 #include "GraphicObjectFindPredicate.h"
 #include <Elementary.h>
 #include <iostream>
-#include <vector> 
+#include <vector>
 #include <algorithm>
 #include <GL/gl.h>
 using namespace std;
@@ -54,6 +54,7 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
 //
    __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
    __evas_gl_glapi->glDepthFunc( GL_EQUAL );
+   __evas_gl_glapi->glEnable( GL_MULTISAMPLE );
 }
 
 // resize callback gets called every time object is resized

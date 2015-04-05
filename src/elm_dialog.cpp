@@ -29,6 +29,8 @@ using namespace std;
 #include "ToolbarContentRadio.h"
 #include "ToolbarContentRadioParams.h"
 #include "MouseTrackerManager.h"
+#include "DynamicObjectsContructor.h"
+#include "GraphicObjectsContrucor.h"
 
 void on_save_objects( void * userData )
 {
@@ -41,25 +43,16 @@ void on_run_simulation( void * userData )
 
 	vector<IGraphicObject *> graphicObjects;
 
-	vector<IGeometryObject *> objects;
-	GeometryObjectsManager::getInstance().getObjects( objects );
+	vector<IGeometryObject *> geometryObjects;
+	vector<IDynamicObject *> dynamicObjects;
+	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
 
-	DynamicObjectFactory::getInstance().setCanvasWidth( viewUpdater->getCanvasWidth() );
-	DynamicObjectFactory::getInstance().setCanvasHeight( viewUpdater->getCanvasHeight() );
+	DynamicObjectsContructor dynamicConstructor( viewUpdater->getCanvasWidth(), viewUpdater->getCanvasHeight() );
+	dynamicConstructor.convertToDynamic( geometryObjects, dynamicObjects );
 
-	DynamicObjectFactory::getInstance().init();
+	GraphicObjectsContrucor graphicConstructor;
+	graphicConstructor.convert( dynamicObjects, graphicObjects );
 
-	vector<IGeometryObject *>::iterator begin = objects.begin();
-	vector<IGeometryObject *>::iterator end = objects.end();
-	vector<IGeometryObject *>::iterator iter = begin;
-
-	for(  ; iter != end ; iter ++ )
-	{
-		IDynamicObject * dynamicObject = (GeometryPointDynamic *)DynamicObjectFactory::getInstance().createDynamicObject( (*iter) );
-		IGraphicObject * graphicObject = DynamicObjectFactory::getInstance().createGraphicObject( dynamicObject, viewUpdater->getDrawingCanvas() );
-
-		graphicObjects.push_back( graphicObject );
-	}
 
 	viewUpdater->setGraphicDynamicObjects( graphicObjects );
 }
@@ -83,6 +76,8 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	window.setContentLayout( mainContent.getLayout() );
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
+
+	GraphicObjectsContrucor::getInstance().setCanvas( drawingContent.getDrawingCanvas() );
 
 	ToolbarContent toolbar( mainContent.getLayout() );
 	{

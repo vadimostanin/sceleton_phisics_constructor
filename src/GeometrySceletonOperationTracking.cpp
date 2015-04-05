@@ -9,6 +9,7 @@
 #include "GeometryObjectsManager.h"
 #include "GeometryObjectFactory.h"
 #include "GraphicLink.h"
+#include "GraphicObjectsContrucor.h"
 #include <iostream>
 using namespace std;
 
@@ -24,19 +25,10 @@ GeometrySceletonOperationTracking::~GeometrySceletonOperationTracking()
 
 void GeometrySceletonOperationTracking::constructGraphicObjects( vector<IGraphicObject *> & graphicObjects )
 {
-	vector<IGeometryObject *> objects;
-	GeometryObjectsManager::getInstance().getObjects( objects );
+	vector<IGeometryObject *> geometryObjects;
+	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
 
-	vector<IGeometryObject *>::iterator begin = objects.begin();
-	vector<IGeometryObject *>::iterator end = objects.end();
-	vector<IGeometryObject *>::iterator iter = begin;
-
-	for(  ; iter != end ; iter ++ )
-	{
-		IGraphicObject * graphicObject = GeometryObjectFactory::getInstance().createGraphicObject( (*iter), m_ViewUpdater.getDrawingCanvas() );
-
-		graphicObjects.push_back( graphicObject );
-	}
+	GraphicObjectsContrucor::getInstance().convert( geometryObjects, graphicObjects );
 }
 
 void GeometrySceletonOperationTracking::constructGraphicObject( IGeometryObject * geometryObject, IGraphicObject ** graphicObject )

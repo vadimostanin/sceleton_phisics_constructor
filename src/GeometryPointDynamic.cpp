@@ -38,12 +38,6 @@ void GeometryPointDynamic::update()
 	cpVect pos = cpBodyGetPosition( m_BallBody );
 	cpVect vel = cpBodyGetVelocity( m_BallBody );
 
-
-	printf(
-	  "Time is  ballBody is at (%5.2f, %5.2f). It's velocity is (%5.2f, %5.2f)\n",
-	  pos.x, pos.y, vel.x, vel.y
-	); fflush( stdout );
-
 //	cpFloat timeStep = 1.0/60.0;//0.01666
 
 	cpSpaceStep( m_Space, 0.001);
