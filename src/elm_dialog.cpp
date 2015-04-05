@@ -48,11 +48,9 @@ void on_run_simulation( void * userData )
 	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
 
 	DynamicObjectsContructor dynamicConstructor( viewUpdater->getCanvasWidth(), viewUpdater->getCanvasHeight() );
-	dynamicConstructor.convertToDynamic( geometryObjects, dynamicObjects );
+	dynamicConstructor.convertSmart( geometryObjects, dynamicObjects );
 
-	GraphicObjectsContrucor graphicConstructor;
-	graphicConstructor.convert( dynamicObjects, graphicObjects );
-
+	GraphicObjectsContrucor::getInstance().convert( dynamicObjects, graphicObjects );
 
 	viewUpdater->setGraphicDynamicObjects( graphicObjects );
 }
@@ -95,7 +93,7 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 		toolbar.addToolbarContentItem( *item2 );
 
-		title = "RUn simulation";
+		title = "Run simulation";
 		ToolbarContentRadioParams * params3 = new ToolbarContentRadioParams( title, on_run_simulation, &drawingContent, item2->getEvas(), false );
 		ToolbarContentItem * item3 = new ToolbarContentRadio( *params3 );
 

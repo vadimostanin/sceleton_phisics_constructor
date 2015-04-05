@@ -23,7 +23,7 @@ public:
 	void setDynamicPointFrom( GeometryPointDynamic * dynamicPoint );
 	void setDynamicPointTo( GeometryPointDynamic * dynamicPoint );
 
-	IGeometryObject & getGeometryObject();
+	const IGeometryObject & getGeometryObject() const;
 
 	void update();
 

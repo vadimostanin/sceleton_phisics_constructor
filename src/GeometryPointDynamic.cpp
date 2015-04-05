@@ -28,7 +28,7 @@ GeometryPointDynamic::~GeometryPointDynamic()
 	cpBodyFree( m_BallBody );
 }
 
-IGeometryObject & GeometryPointDynamic::getGeometryObject()
+const IGeometryObject & GeometryPointDynamic::getGeometryObject() const
 {
 	return *this;
 }
@@ -40,7 +40,7 @@ void GeometryPointDynamic::update()
 
 //	cpFloat timeStep = 1.0/60.0;//0.01666
 
-	cpSpaceStep( m_Space, 0.001);
+	cpSpaceStep( m_Space, (1.0/30.0) / 4.0 );
 
 	setX( pos.x );
 	setY( pos.y );

@@ -18,7 +18,8 @@ public:
 	DynamicObjectsContructor( int CanvasWidth, int CanvasHeight );
 	virtual ~DynamicObjectsContructor();
 
-	void convertToDynamic( vector<IGeometryObject *> & geometryObjects, vector<IDynamicObject *> & dynamicObjects );
+	void convert( vector<IGeometryObject *> & geometryObjects, vector<IDynamicObject *> & dynamicObjects );
+	void convertSmart( vector<IGeometryObject *> & geometryObjects, vector<IDynamicObject *> & dynamicObjects );
 
 	void setCanvasWidth( int width );
 	void setCanvasHeight( int height );

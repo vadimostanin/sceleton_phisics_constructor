@@ -46,7 +46,7 @@ void GeometryLinkDynamic::setDynamicPointTo( GeometryPointDynamic * dynamicPoint
 	m_DynamicPoints[1] = dynamicPoint;
 }
 
-IGeometryObject & GeometryLinkDynamic::getGeometryObject()
+const IGeometryObject & GeometryLinkDynamic::getGeometryObject() const
 {
 	return *this;
 }

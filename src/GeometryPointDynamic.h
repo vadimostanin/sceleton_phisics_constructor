@@ -19,7 +19,7 @@ public:
 	GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint );
 	virtual ~GeometryPointDynamic();
 
-	IGeometryObject & getGeometryObject();
+	const IGeometryObject & getGeometryObject() const;
 
 	void update();
 private:
