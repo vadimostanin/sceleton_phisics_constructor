@@ -42,13 +42,13 @@ private:
 	cpSpace * m_Space;
 	cpVect m_Gravity;
 
-	unsigned int m_CanvasWidth;
-	unsigned int m_CanvasHeight;
-
 	cpShape * m_LeftBorder;
 	cpShape * m_RightBorder;
 	cpShape * m_TopBorder;
 	cpShape * m_BottomBorder;
+
+	unsigned int m_CanvasWidth;
+	unsigned int m_CanvasHeight;
 
 	bool m_Inited;
 };

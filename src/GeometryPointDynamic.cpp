@@ -64,6 +64,31 @@ void GeometryPointDynamic::initPoint()
 	cpShapeSetFriction( m_BallShape, 0.7 );
 }
 
+cpFloat GeometryPointDynamic::getRadius() const
+{
+	return m_Radius;
+}
+
+cpFloat GeometryPointDynamic::getMass() const
+{
+	return m_Mass;
+}
+
+cpBody * GeometryPointDynamic::getBody() const
+{
+	return m_BallBody;
+}
+
+cpShape * GeometryPointDynamic::getShape() const
+{
+	return m_BallShape;
+}
+
+cpSpace * GeometryPointDynamic::getSpace() const
+{
+	return m_Space;
+}
+
 
 
 

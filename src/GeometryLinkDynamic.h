@@ -23,6 +23,9 @@ public:
 	void setDynamicPointFrom( GeometryPointDynamic * dynamicPoint );
 	void setDynamicPointTo( GeometryPointDynamic * dynamicPoint );
 
+	GeometryPointDynamic * getDynamicPointFrom() const;
+	GeometryPointDynamic * getDynamicPointTo() const;
+
 	const IGeometryObject & getGeometryObject() const;
 
 	void update();
@@ -30,10 +33,16 @@ public:
 private:
 
 	void initGround();
-	void initLink();
+	void initJoints();
+	void clearJoints();
 
 	cpSpace * m_Space;
-	cpShape * m_Ground;
+	cpBody  * m_Body;
+	cpShape * m_Shape;
+
+	cpConstraint * m_ConstraintFrom;
+	cpConstraint * m_ConstraintTo;
+
 
 	GeometryPointDynamic * m_DynamicPoints[2];
 };

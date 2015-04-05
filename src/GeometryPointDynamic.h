@@ -19,6 +19,13 @@ public:
 	GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint );
 	virtual ~GeometryPointDynamic();
 
+	cpFloat getRadius() const;
+	cpFloat getMass()   const;
+
+	cpBody * getBody() const;
+	cpShape * getShape() const;
+	cpSpace * getSpace() const;
+
 	const IGeometryObject & getGeometryObject() const;
 
 	void update();

@@ -15,12 +15,17 @@
 cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
-DynamicObjectFactory::DynamicObjectFactory() : m_Space( 0 ), m_CanvasWidth( 0 ), m_CanvasHeight( 0 ), m_Inited( false )
+DynamicObjectFactory::DynamicObjectFactory() : m_Space( 0 ), m_LeftBorder( 0 ), m_RightBorder( 0 ),
+		m_TopBorder( 0 ), m_BottomBorder( 0 ), m_CanvasWidth( 0 ), m_CanvasHeight( 0 ), m_Inited( false )
 {
 }
 
 DynamicObjectFactory::~DynamicObjectFactory()
 {
+	cpShapeFree( m_LeftBorder );
+	cpShapeFree( m_RightBorder );
+	cpShapeFree( m_TopBorder );
+	cpShapeFree( m_BottomBorder );
 	cpSpaceFree( m_Space );
 }
 
@@ -39,17 +44,17 @@ void DynamicObjectFactory::init()
 void DynamicObjectFactory::initCanvasBorders()
 {
 	cpBody * staticBody = cpSpaceGetStaticBody( m_Space );
-	m_LeftBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 0 ), cpv( 0, m_CanvasHeight ), 0.0f ) );
+	m_LeftBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 60 ), cpv( 0, m_CanvasHeight + 60 ), 0.0f ) );
 	cpShapeSetElasticity( m_LeftBorder, 1.0f );
 	cpShapeSetFriction( m_LeftBorder, 1.0f );
 	cpShapeSetFilter( m_LeftBorder, NOT_GRABBABLE_FILTER );
 
-	m_RightBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( m_CanvasWidth, 0 ), cpv( m_CanvasWidth, m_CanvasHeight ), 0.0f ) );
+	m_RightBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( m_CanvasWidth, 60 ), cpv( m_CanvasWidth, m_CanvasHeight + 60 ), 0.0f ) );
 	cpShapeSetElasticity( m_RightBorder, 1.0f );
 	cpShapeSetFriction( m_RightBorder, 1.0f );
 	cpShapeSetFilter( m_RightBorder, NOT_GRABBABLE_FILTER );
 
-	m_TopBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 0 ), cpv( m_CanvasWidth, 0 ), 0.0f ) );
+	m_TopBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 60 ), cpv( m_CanvasWidth, 60 ), 0.0f ) );
 	cpShapeSetElasticity( m_TopBorder, 1.0f );
 	cpShapeSetFriction( m_TopBorder, 1.0f );
 	cpShapeSetFilter( m_TopBorder, NOT_GRABBABLE_FILTER );

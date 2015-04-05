@@ -29,7 +29,7 @@ public:
 
 	virtual GeometryObjectsTypes getType() const;
 	virtual int getId() const;
-	virtual void setId( int id);
+	virtual void setId( int id );
 	virtual IGeometryObject * clone();
 	virtual string toString();
 	virtual bool isValid();
