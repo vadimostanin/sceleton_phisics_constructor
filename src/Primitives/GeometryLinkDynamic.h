@@ -11,10 +11,9 @@
 #include "GeometryLink.h"
 #include "GeometryPointDynamic.h"
 #include "IDynamicObject.h"
-#include "GeometryObjectDynamicBase.h"
 #include <chipmunk/chipmunk.h>
 
-class GeometryLinkDynamic: public GeometryLink, public GeometryObjectDynamicBase
+class GeometryLinkDynamic: public GeometryLink, public IDynamicObject
 {
 public:
 	GeometryLinkDynamic( cpSpace * space );

@@ -32,6 +32,8 @@ public:
 
 	void init();
 
+	cpSpace * getSpace() const;
+
 	static DynamicObjectFactory & getInstance();
 
 private:

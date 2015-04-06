@@ -30,6 +30,11 @@ DynamicObjectFactory::~DynamicObjectFactory()
 	cpSpaceFree( m_Space );
 }
 
+cpSpace * DynamicObjectFactory::getSpace() const
+{
+	return m_Space;
+}
+
 void DynamicObjectFactory::init()
 {
 	if( true == m_Inited )

@@ -149,7 +149,7 @@ const IGeometryObject & GeometryLinkDynamic::getGeometryObject() const
 
 void GeometryLinkDynamic::update()
 {
-	GeometryObjectDynamicBase::update();
+
 }
 
 

@@ -11,6 +11,7 @@
 #include "IGeometryObjectTracker.h"
 #include "DrawingContent.h"
 #include "GeometryLink.h"
+#include <chipmunk/chipmunk.h>
 #include <vector>
 using namespace std;
 
@@ -35,6 +36,11 @@ private:
 
 	DrawingContent & m_ViewUpdater;
 	IGeometryObject * m_GeometryObjectTracking;
+
+	cpBody 		 * m_MouseBody;
+	cpBody 		 * m_TrackingBody;
+	cpConstraint * m_MouseJoint;
+	cpSpace 	 * m_Space;
 
 };
 

@@ -10,10 +10,9 @@
 
 #include "GeometryPoint.h"
 #include "IDynamicObject.h"
-#include "GeometryObjectDynamicBase.h"
 #include <chipmunk/chipmunk.h>
 
-class GeometryPointDynamic: virtual public GeometryPoint, public GeometryObjectDynamicBase
+class GeometryPointDynamic: virtual public GeometryPoint, public IDynamicObject
 {
 public:
 	GeometryPointDynamic( cpSpace * space );
@@ -31,6 +30,8 @@ public:
 
 	void update();
 private:
+
+	static void onBodyPositionChangeFunc(cpBody *body, cpFloat dt);
 
 	void initPoint();
 

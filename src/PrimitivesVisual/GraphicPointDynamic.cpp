@@ -6,6 +6,8 @@
  */
 
 #include "GraphicPointDynamic.h"
+#include <iostream>
+using namespace std;
 
 GraphicPointDynamic::GraphicPointDynamic( GeometryPointDynamic * dynamicObject, Evas_Object * glview ) : GraphicPoint( dynamicObject, glview )
 {
