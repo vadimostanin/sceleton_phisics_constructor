@@ -243,9 +243,6 @@ void GraphicSpring::initLineVertexes()
 {
 	m_vertexBuffer.clear();
 
-	int canvas_width =  m_DrawCanvasWidth;
-	int canvas_height = m_DrawCanvasHeight;
-
 	int from_x = ( m_geometrySpring.getLinkFrom()->getPointFrom()->getX() + m_geometrySpring.getLinkFrom()->getPointTo()->getX() ) / 2;
 	int from_y = ( m_geometrySpring.getLinkFrom()->getPointFrom()->getY() + m_geometrySpring.getLinkFrom()->getPointTo()->getY() ) / 2;
 

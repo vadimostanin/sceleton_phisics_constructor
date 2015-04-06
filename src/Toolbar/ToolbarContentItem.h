@@ -22,9 +22,9 @@ public:
 	virtual void create( Evas_Object * parent ) = 0;
 	virtual Evas_Object * getEvas() const = 0;
 
-	Evas_Object * m_Evas;
 	ToolbarContentTypes m_Type;
 	ToolbarContentItemParams & m_Params;
+	Evas_Object * m_Evas;
 };
 
 #endif /* TOOLBARCONTENTITEM_H_ */

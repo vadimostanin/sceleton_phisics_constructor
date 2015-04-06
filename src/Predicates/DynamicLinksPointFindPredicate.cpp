@@ -1,7 +1,7 @@
 /*
  * DynamicLinksPointFindPredicate.cpp
  *
- *  Created on: 5 апр. 2015
+ *  Created on: 5 ������. 2015
  *      Author: vadim
  */
 

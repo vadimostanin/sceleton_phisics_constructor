@@ -1,7 +1,7 @@
 /*
  * DynamicObjectsContructor.h
  *
- *  Created on: 5 апр. 2015
+ *  Created on: 5 ������. 2015
  *      Author: vadim
  */
 
@@ -14,15 +14,17 @@
 
 class DynamicObjectsContructor
 {
-public:
-	DynamicObjectsContructor( int CanvasWidth, int CanvasHeight );
+	DynamicObjectsContructor();
 	virtual ~DynamicObjectsContructor();
+public:
 
 	void convert( vector<IGeometryObject *> & geometryObjects, vector<IDynamicObject *> & dynamicObjects );
 	void convertSmart( vector<IGeometryObject *> & geometryObjects, vector<IDynamicObject *> & dynamicObjects );
 
 	void setCanvasWidth( int width );
 	void setCanvasHeight( int height );
+
+	static DynamicObjectsContructor & getInstance();
 
 private:
 

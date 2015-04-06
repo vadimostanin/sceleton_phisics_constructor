@@ -18,12 +18,13 @@ using namespace std;
 
 class GeometryObjectsManager
 {
-public:
 	GeometryObjectsManager();
 	virtual ~GeometryObjectsManager();
 
+public:
+
 	void addObject( IGeometryObject * object );
-	void removeObject( IGeometryObject * object );
+	void removeObjectSmart( IGeometryObject * object );
 	void getObjects( vector<IGeometryObject *> & objects );
 	bool getPoint( int x, int y, GeometryPoint *& point );
 	bool getNearestPoint( const GeometryPoint & startPoint, int x, int y, const GeometryPoint * & point );

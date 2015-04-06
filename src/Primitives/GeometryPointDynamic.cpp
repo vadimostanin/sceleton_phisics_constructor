@@ -8,12 +8,12 @@
 #include "GeometryPointDynamic.h"
 #include <cstdio>
 
-GeometryPointDynamic::GeometryPointDynamic( cpSpace * space ) : m_Space( space ), m_Radius( 5 ), m_Mass( 1 )
+GeometryPointDynamic::GeometryPointDynamic( cpSpace * space ) : m_Space( space ), m_Radius( 8 ), m_Mass( 1 )
 {
 	initPoint();
 }
 
-GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint ) : m_Space( space ), m_Radius( 5 ), m_Mass( 10 )
+GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint ) : m_Space( space ), m_Radius( 8 ), m_Mass( 1 )
 {
 	setX( geometryPoint->getX() );
 	setY( geometryPoint->getY() );
@@ -24,7 +24,9 @@ GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geo
 
 GeometryPointDynamic::~GeometryPointDynamic()
 {
+	cpSpaceRemoveShape( m_Space, m_BallShape );
 	cpShapeFree( m_BallShape );
+	cpSpaceRemoveBody( m_Space, m_BallBody );
 	cpBodyFree( m_BallBody );
 }
 
@@ -35,12 +37,10 @@ const IGeometryObject & GeometryPointDynamic::getGeometryObject() const
 
 void GeometryPointDynamic::update()
 {
+	GeometryObjectDynamicBase::update();
+
 	cpVect pos = cpBodyGetPosition( m_BallBody );
-	cpVect vel = cpBodyGetVelocity( m_BallBody );
-
-//	cpFloat timeStep = 1.0/60.0;//0.01666
-
-	cpSpaceStep( m_Space, (1.0/30.0) / 4.0 );
+//	cpVect vel = cpBodyGetVelocity( m_BallBody );
 
 	setX( pos.x );
 	setY( pos.y );
@@ -61,7 +61,9 @@ void GeometryPointDynamic::initPoint()
 	// You can create multiple collision shapes that point to the same body.
 	// They will all be attached to the body and move around to follow it.
 	m_BallShape = cpSpaceAddShape( m_Space, cpCircleShapeNew( m_BallBody, m_Radius, cpvzero ) );
-	cpShapeSetFriction( m_BallShape, 0.7 );
+	cpShapeSetFriction( m_BallShape, 0.0 );
+
+	cpShapeSetElasticity( m_BallShape, 0.3 );
 }
 
 cpFloat GeometryPointDynamic::getRadius() const

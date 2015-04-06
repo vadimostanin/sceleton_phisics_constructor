@@ -10,9 +10,10 @@
 
 #include "GeometryPoint.h"
 #include "IDynamicObject.h"
+#include "GeometryObjectDynamicBase.h"
 #include <chipmunk/chipmunk.h>
 
-class GeometryPointDynamic: virtual public GeometryPoint, public IDynamicObject
+class GeometryPointDynamic: virtual public GeometryPoint, public GeometryObjectDynamicBase
 {
 public:
 	GeometryPointDynamic( cpSpace * space );

@@ -8,6 +8,7 @@
 #include "Window.h"
 #include "DrawingContent.h"
 #include "GeometryObjectsManager.h"
+#include "DynamicTimeLineManager.h"
 #include "GraphicObjectFindPredicate.h"
 #include <Elementary.h>
 #include <iostream>
@@ -19,7 +20,7 @@ using namespace std;
 #define MAIN_EDJ "./main.edj"
 
 DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject ),
-		m_DynamicTimer( DynamicDrawThread, this, 0.1 )
+		m_DynamicTimer( DynamicDrawTimer, this, 0.1 ), m_DrawDynamic( false )
 {
 	createDrawingLayout();
 	createDrawingCanvas();
@@ -83,23 +84,12 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 	lpThis->postDraw();
 }
 
-bool DrawingContent::DynamicDrawThread( void * userData )
+bool DrawingContent::DynamicDrawTimer( void * userData )
 {
 	DrawingContent * lpThis = ( DrawingContent * )userData;
 	elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
 
 	return true;
-}
-
-void DrawingContent::on_draw_dynamic_gl( Evas_Object * glview )
-{
-	DrawingContent * lpThis = ( DrawingContent * )evas_object_data_get( glview, "DrawingContent");
-
-	lpThis->preDraw();
-
-	lpThis->drawObjects();
-
-	lpThis->postDraw();
 }
 
 void DrawingContent::preDraw()
@@ -163,6 +153,8 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 
 	elm_glview_render_func_set( getDrawingCanvas(), on_draw_gl );
 
+	m_DrawDynamic = false;
+
 	update();
 }
 
@@ -174,7 +166,9 @@ void DrawingContent::setGraphicDynamicObjects( vector<IGraphicObject *> & graphi
 
 	m_DynamicTimer.start();
 
-	elm_glview_render_func_set( getDrawingCanvas(), on_draw_dynamic_gl );
+	elm_glview_render_func_set( getDrawingCanvas(), on_draw_gl );
+
+	m_DrawDynamic = true;
 
 	update();
 }
@@ -220,6 +214,10 @@ void DrawingContent::changeGraphicObject( IGraphicObject * graphicObject )
 
 void DrawingContent::drawObjects()
 {
+	if( true == m_DrawDynamic )
+	{
+		DynamicTimeLineManager::getInstance().stepSpace();
+	}
 	vector<IGraphicObject *>::iterator begin = m_GraphicObjects.begin();
 	vector<IGraphicObject *>::iterator end = m_GraphicObjects.end();
 	vector<IGraphicObject *>::iterator iter = begin;

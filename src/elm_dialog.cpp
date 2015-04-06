@@ -19,18 +19,31 @@ using namespace std;
 #include "MouseListener.h"
 #include "GeometrySceletonOperationTracking.h"
 #include "SimulationOperationTracking.h"
-#include "DynamicObjectFactory.h"
 #include <ctime>
 #include <stdlib.h>
 
 #include "GeometryObjectsManager.h"
+#include "DynamicObjectsManager.h"
+#include "MouseTrackerManager.h"
 #include "ToolbarContentButton.h"
 #include "ToolbarContentButtonParams.h"
 #include "ToolbarContentRadio.h"
 #include "ToolbarContentRadioParams.h"
-#include "MouseTrackerManager.h"
 #include "DynamicObjectsContructor.h"
 #include "GraphicObjectsContrucor.h"
+
+void on_construct_test_objects( void * userData )
+{
+	DrawingContent * viewUpdater = (DrawingContent *)userData;
+
+	GeometryObjectsManager::getInstance().initTestingState();
+	vector<IGeometryObject *> geometryObjects;
+	vector<IGraphicObject *> graphicObjects;
+	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
+	GraphicObjectsContrucor::getInstance().convert( geometryObjects, graphicObjects );
+
+	viewUpdater->setGraphicObjects( graphicObjects );
+}
 
 void on_save_objects( void * userData )
 {
@@ -41,22 +54,42 @@ void on_run_simulation( void * userData )
 {
 	DrawingContent * viewUpdater = (DrawingContent *)userData;
 
-	vector<IGraphicObject *> graphicObjects;
-
 	vector<IGeometryObject *> geometryObjects;
 	vector<IDynamicObject *> dynamicObjects;
+	vector<IGraphicObject *> graphicObjects;
+
 	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
 
-	DynamicObjectsContructor dynamicConstructor( viewUpdater->getCanvasWidth(), viewUpdater->getCanvasHeight() );
-	dynamicConstructor.convertSmart( geometryObjects, dynamicObjects );
+	DynamicObjectsContructor::getInstance().setCanvasWidth( viewUpdater->getCanvasWidth() );
+	DynamicObjectsContructor::getInstance().setCanvasHeight( viewUpdater->getCanvasHeight() );
+
+	DynamicObjectsContructor::getInstance().convertSmart( geometryObjects, dynamicObjects );
+
+	DynamicObjectsManager::getInstance().setObjects( dynamicObjects );
 
 	GraphicObjectsContrucor::getInstance().convert( dynamicObjects, graphicObjects );
 
 	viewUpdater->setGraphicDynamicObjects( graphicObjects );
+
+	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SIMULATION_MODE_E );
 }
 
 void on_sceleton_mode( void * userData )
 {
+	DrawingContent * viewUpdater = (DrawingContent *)userData;
+
+	DynamicObjectsManager::getInstance().clearObjects();
+
+	vector<IGeometryObject *> geometryObjects;
+	vector<IGraphicObject *> emptyGraphicObjects;
+	vector<IGraphicObject *> graphicObjects;
+
+	viewUpdater->setGraphicDynamicObjects( emptyGraphicObjects );
+
+	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
+	GraphicObjectsContrucor::getInstance().convert( geometryObjects, graphicObjects );
+	viewUpdater->setGraphicObjects( graphicObjects );
+
 	MouseTrackerManager::getInstance().setMouseListenerTrackerMode( SCELETON_MODE_E );
 }
 
@@ -88,7 +121,7 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	{
 		string title( "Sceleton Mode" );
-		ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( title, on_sceleton_mode, NULL, NULL, true );
+		ToolbarContentRadioParams * params2 = new ToolbarContentRadioParams( title, on_sceleton_mode, &drawingContent, NULL, true );
 		ToolbarContentItem * item2 = new ToolbarContentRadio( *params2 );
 
 		toolbar.addToolbarContentItem( *item2 );
@@ -99,8 +132,13 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 		toolbar.addToolbarContentItem( *item3 );
 	}
+	{
+		string title( "Test objects" );
+		ToolbarContentButtonParams * params = new ToolbarContentButtonParams( title, on_construct_test_objects, &drawingContent );
+		ToolbarContentItem * item = new ToolbarContentButton( *params );
 
-//	GeometryObjectsManager::getInstance().initTestingState();
+		toolbar.addToolbarContentItem( *item );
+	}
 
 	GeometrySceletonOperationTracking geoSceletonObjectTracking( drawingContent );
 	SimulationOperationTracking   geoEditingObjectTracking( drawingContent );

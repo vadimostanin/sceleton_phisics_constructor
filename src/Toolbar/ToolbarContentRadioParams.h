@@ -30,11 +30,11 @@ public:
 
 private:
 
-	bool m_Checked;
 	Evas_Object * m_RadioGroup;
-    string m_sTitle;
+	string m_sTitle;
 	ToolbarItemCallback m_Callback;
 	void * m_UserData;
+	bool m_Checked;
 
 };
 

@@ -152,7 +152,7 @@ void GeometrySceletonOperationTracking::deleteObject( int x, int y )
 		return;
 	}
 
-	GeometryObjectsManager::getInstance().removeObject( point );
+	GeometryObjectsManager::getInstance().removeObjectSmart( point );
 
 	vector<IGraphicObject *> graphicObjects;
 	constructGraphicObjects( graphicObjects );

@@ -49,7 +49,7 @@ private:
 	static void on_draw_gl( Evas_Object * glview );
     static void on_draw_dynamic_gl( Evas_Object * glview );
 
-    static bool DynamicDrawThread( void * userData );
+    static bool DynamicDrawTimer( void * userData );
 
 	Evas_Object * m_MainLayout;
 	Evas_Object * m_DrawingLayout;
@@ -66,6 +66,8 @@ private:
 
 	int m_CanvasWidth;
 	int m_CanvasHeight;
+
+	bool m_DrawDynamic;
 };
 
 #endif /* DRAWINGCONTENT_H_ */

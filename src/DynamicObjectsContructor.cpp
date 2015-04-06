@@ -1,7 +1,7 @@
 /*
  * DynamicObjectsContructor.cpp
  *
- *  Created on: 5 апр. 2015
+ *  Created on: 5 ������. 2015
  *      Author: vadim
  */
 
@@ -11,7 +11,7 @@
 #include <algorithm>
 using namespace std;
 
-DynamicObjectsContructor::DynamicObjectsContructor( int CanvasWidth, int CanvasHeight ) : m_CanvasWidth( CanvasWidth ), m_CanvasHeight( CanvasHeight )
+DynamicObjectsContructor::DynamicObjectsContructor()
 {
 }
 
@@ -52,6 +52,10 @@ void DynamicObjectsContructor::convertSmart( vector<IGeometryObject *> & geometr
 	for(  ; geometryIter != geometryEnd ; geometryIter ++ )
 	{
 		IDynamicObject * dynamicObject = (GeometryPointDynamic *)DynamicObjectFactory::getInstance().createDynamicObject( (* geometryIter) );
+		if( 0 == dynamicObject )
+		{
+			continue;
+		}
 		dynamicObjects.push_back( dynamicObject );
 	}
 
@@ -64,25 +68,26 @@ void DynamicObjectsContructor::convertSmart( vector<IGeometryObject *> & geometr
 
 	for(  ; dynamicIter != dynamicEnd ; dynamicIter ++ )
 	{
-		if( (* dynamicIter)->getGeometryObject().getType() != GEOMETRYOBJECT_LINK )
+		IDynamicObject * dynamic_ptr = (* dynamicIter);
+		if( dynamic_ptr->getGeometryObject().getType() != GEOMETRYOBJECT_LINK )
 		{
 			continue;
 		}
 
 		{
-			DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)(* dynamicIter), true );
+			DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)dynamic_ptr, true );
 			foundPointFromIter = find_if( dynamicBegin, dynamicEnd, predicate );
 		}
 		{
-			DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)(* dynamicIter), false );
+			DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)dynamic_ptr, false );
 			foundPointToIter = find_if( dynamicBegin, dynamicEnd, predicate );
 		}
 		if( foundPointFromIter == dynamicEnd || foundPointToIter == dynamicEnd )
 		{
 			continue;
 		}
-		((GeometryLinkDynamic *)(* dynamicIter))->setDynamicPointFrom( (GeometryPointDynamic *)(* foundPointFromIter) );
-		((GeometryLinkDynamic *)(* dynamicIter))->setDynamicPointTo( (GeometryPointDynamic *)(* foundPointToIter) );
+		((GeometryLinkDynamic *)dynamic_ptr)->setDynamicPointFrom( (GeometryPointDynamic *)(* foundPointFromIter) );
+		((GeometryLinkDynamic *)dynamic_ptr)->setDynamicPointTo( (GeometryPointDynamic *)(* foundPointToIter) );
 	}
 }
 
@@ -94,6 +99,12 @@ void DynamicObjectsContructor::setCanvasWidth( int width )
 void DynamicObjectsContructor::setCanvasHeight( int height )
 {
 	m_CanvasHeight = height;
+}
+
+DynamicObjectsContructor & DynamicObjectsContructor::getInstance()
+{
+	static DynamicObjectsContructor instance;
+	return instance;
 }
 
 

@@ -10,6 +10,7 @@
 #include "GeometryLinkDynamic.h"
 #include "GraphicPointDynamic.h"
 #include "GraphicLinkDynamic.h"
+#include "DynamicTimeLineManager.h"
 
 #define GRABBABLE_MASK_BIT (1<<31)
 cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
@@ -72,6 +73,8 @@ void DynamicObjectFactory::initSpace()
 	// Create an empty space.
 	m_Space = cpSpaceNew();
 	cpSpaceSetGravity( m_Space, m_Gravity );
+
+	DynamicTimeLineManager::getInstance().setSpace( m_Space );
 }
 
 IDynamicObject * DynamicObjectFactory::createDynamicObject( IGeometryObject * geometryObject )

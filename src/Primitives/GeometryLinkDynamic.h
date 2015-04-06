@@ -11,9 +11,10 @@
 #include "GeometryLink.h"
 #include "GeometryPointDynamic.h"
 #include "IDynamicObject.h"
+#include "GeometryObjectDynamicBase.h"
 #include <chipmunk/chipmunk.h>
 
-class GeometryLinkDynamic: public GeometryLink, public IDynamicObject
+class GeometryLinkDynamic: public GeometryLink, public GeometryObjectDynamicBase
 {
 public:
 	GeometryLinkDynamic( cpSpace * space );
@@ -42,6 +43,7 @@ private:
 
 	cpConstraint * m_ConstraintFrom;
 	cpConstraint * m_ConstraintTo;
+	cpConstraint * m_ConstraintFromTo;
 
 
 	GeometryPointDynamic * m_DynamicPoints[2];

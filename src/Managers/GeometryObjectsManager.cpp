@@ -29,7 +29,7 @@ void GeometryObjectsManager::addObject( IGeometryObject * object )
 	m_geometryObjects.push_back( object );
 }
 
-void GeometryObjectsManager::removeObject( IGeometryObject * object )
+void GeometryObjectsManager::removeObjectSmart( IGeometryObject * object )
 {
 	GeometryObjectFindPredicate predicate( object );
 	vector<IGeometryObject *>::iterator found_iter = std::find_if( m_geometryObjects.begin(), m_geometryObjects.end(), predicate );
