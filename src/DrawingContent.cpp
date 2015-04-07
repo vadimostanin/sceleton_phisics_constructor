@@ -24,7 +24,7 @@ using namespace std;
 DrawingContent * lpThis = 0;
 
 DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject ),
-		m_DynamicTimer( DynamicDrawTimer, this, 0.1 ), m_DrawDynamic( true )
+		m_DynamicTimer( DynamicDrawTimer, this, 0.1 ), m_DrawDynamic( false )
 {
 	createDrawingLayout();
 	createDrawingCanvas();
@@ -62,7 +62,9 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
    __evas_gl_glapi->glDepthFunc( GL_EQUAL );
    __evas_gl_glapi->glEnable( GL_MULTISAMPLE );
 
-//   lpThis->initCanvasBackground();
+    __evas_gl_glapi->glEnable( GL_TEXTURE_2D );.
+
+   lpThis->initCanvasBackground();
 }
 
 // resize callback gets called every time object is resized
@@ -86,7 +88,7 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 
 	lpThis->preDraw();
 
-//	lpThis->drawCanvasBackground();
+   lpThis->drawCanvasBackground();
 
 	lpThis->drawObjects();
 
@@ -97,10 +99,7 @@ bool DrawingContent::DynamicDrawTimer( void * userData )
 {
 	DrawingContent * lpThis = ( DrawingContent * )userData;
 
-	if( true == lpThis->m_DrawDynamic )
-	{
 		elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
-	}
 
 	return true;
 }
@@ -162,14 +161,10 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 
 	m_GraphicObjects = graphicObjects;
 
-//	m_DynamicTimer.stop();
+   m_DynamicTimer.stop();
+   m_DrawDynamic = false;
 
 	elm_glview_render_func_set( getDrawingCanvas(), on_draw_gl );
-
-	m_DrawDynamic = false;
-
-//	m_DynamicTimer.stop();
-
 	update();
 }
 
@@ -177,7 +172,7 @@ void DrawingContent::setGraphicDynamicObjects( vector<IGraphicObject *> & graphi
 {
 	m_DrawDynamic = true;
 
-//	m_DynamicTimer.start();
+  	m_DynamicTimer.start();
 
 	setGraphicObjects( graphicObjects );
 }
@@ -517,9 +512,6 @@ void DrawingContent::loadPng( string & filename, vector<unsigned char> & rgbRawD
 		reader.read_row( &rgbRawData[0] + sizeof(png::byte) * ( row_i * width * colors_in_rgb ) );
 	}
 }
-
-
-
 
 
 
