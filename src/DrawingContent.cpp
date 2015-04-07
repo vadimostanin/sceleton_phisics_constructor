@@ -476,7 +476,7 @@ void DrawingContent::drawCanvasBackground()
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-
+   m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_MIN_FILTER, GL_LINEAR );
 	m_glApi->glUniform1i( m_fragmentUniformTextureIdx, m_textureIdx );
 
 	// Draw a rectangle from the 2 triangles using 6 indices
