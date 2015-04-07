@@ -62,7 +62,7 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
    __evas_gl_glapi->glDepthFunc( GL_EQUAL );
    __evas_gl_glapi->glEnable( GL_MULTISAMPLE );
 
-   lpThis->initCanvasBackground();
+//   lpThis->initCanvasBackground();
 }
 
 // resize callback gets called every time object is resized
@@ -86,7 +86,7 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 
 	lpThis->preDraw();
 
-	lpThis->drawCanvasBackground();
+//	lpThis->drawCanvasBackground();
 
 	lpThis->drawObjects();
 
@@ -96,7 +96,11 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 bool DrawingContent::DynamicDrawTimer( void * userData )
 {
 	DrawingContent * lpThis = ( DrawingContent * )userData;
-	elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
+
+	if( true == lpThis->m_DrawDynamic )
+	{
+		elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
+	}
 
 	return true;
 }
@@ -164,12 +168,16 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 
 	m_DrawDynamic = false;
 
+	m_DynamicTimer.stop();
+
 	update();
 }
 
 void DrawingContent::setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects )
 {
 	m_DrawDynamic = true;
+
+	m_DynamicTimer.start();
 
 	setGraphicObjects( graphicObjects );
 }

@@ -37,7 +37,7 @@ Eina_Bool Timer::timer_func( void * userData )
 void Timer::init()
 {
 	m_Animator = ecore_animator_add( timer_func, this );
-	ecore_animator_freeze( m_Animator );
+//	ecore_animator_freeze( m_Animator );
 }
 
 void Timer::start()
