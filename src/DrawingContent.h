@@ -30,10 +30,10 @@ public:
 	void deleteGraphicObject( IGraphicObject * graphicObject );
 	void changeGraphicObject( IGraphicObject * graphicObject );
 
-   void setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects );
+	void setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects );
 
-   unsigned int getCanvasWidth() const;
-   unsigned int getCanvasHeight() const;
+	unsigned int getCanvasWidth() const;
+	unsigned int getCanvasHeight() const;
 
 private:
 
@@ -43,6 +43,14 @@ private:
 	void postDraw();
 	void drawObjects();
 	void clearObjects();
+
+	string getVertexShader();
+	string getFragmentShader();
+	GLuint loadShader( GLenum type, const char *shader_src );
+	int initShaders();
+	void loadPng( string & filename, vector<unsigned char> & rgbContent, int & width, int & height );
+	void initCanvasBackground();
+	void drawCanvasBackground();
 
 	static void on_init_gles( Evas_Object * glview );
 	static void on_resize_gl( Evas_Object * glview );
@@ -68,6 +76,19 @@ private:
 	int m_CanvasHeight;
 
 	bool m_DrawDynamic;
+
+	GLuint       	m_Program;
+	GLuint       	m_vertexShader;
+	GLuint       	m_fragmentShader;
+
+	GLint       	m_positionIdx;
+	GLint       	m_textureCoordsIdx;
+
+	vector<unsigned char> m_rgbRawData;
+	GLuint 			m_textureIdx;
+	GLuint 			m_fragmentUniformTextureIdx;
+	int 			m_BackgroundWidth;
+	int 			m_BackgroundHeight;
 };
 
 #endif /* DRAWINGCONTENT_H_ */

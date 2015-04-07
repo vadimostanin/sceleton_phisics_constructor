@@ -46,20 +46,6 @@ void GeometryPointDynamic::update()
 
 	setX( pos.x );
 	setY( pos.y );
-
-//	cout << "GeometryPointDynamic::update x=" << lpThis->getX() << "; y=" << lpThis->getY() << endl << flush;
-}
-
-void GeometryPointDynamic::onBodyPositionChangeFunc(cpBody *body, cpFloat dt)
-{
-	cpBodyUpdatePosition( body, dt );
-
-	cpVect pos = cpBodyGetPosition( body );
-
-	lpThis->setX( pos.x );
-	lpThis->setY( pos.y );
-
-//	cout << "GeometryPointDynamic::onBodyPositionChangeFunc x=" << lpThis->getX() << "; y=" << lpThis->getY() << endl << flush;
 }
 
 void GeometryPointDynamic::initPoint()
@@ -81,9 +67,6 @@ void GeometryPointDynamic::initPoint()
 	cpShapeSetFriction( m_BallShape, 0.0 );
 
 	cpShapeSetElasticity( m_BallShape, 0.3 );
-
-
-//	cpBodySetPositionUpdateFunc( m_BallBody, onBodyPositionChangeFunc );
 }
 
 cpFloat GeometryPointDynamic::getRadius() const

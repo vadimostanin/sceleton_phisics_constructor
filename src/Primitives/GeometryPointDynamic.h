@@ -31,8 +31,6 @@ public:
 	void update();
 private:
 
-	static void onBodyPositionChangeFunc(cpBody *body, cpFloat dt);
-
 	void initPoint();
 
 	cpSpace * m_Space;
