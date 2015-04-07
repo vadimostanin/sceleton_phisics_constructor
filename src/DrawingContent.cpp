@@ -49,7 +49,7 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
 
    __evas_gl_glapi->glClearColor( 0.0, 0.0, 0.0, 1.0 );
 
-   __evas_gl_glapi->glEnable( GL_CULL_FACE );
+//   __evas_gl_glapi->glEnable( GL_CULL_FACE );
    __evas_gl_glapi->glEnable( GL_POINT_SMOOTH );
    __evas_gl_glapi->glLineWidth( 4.0f );
    __evas_gl_glapi->glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
@@ -62,7 +62,7 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
    __evas_gl_glapi->glDepthFunc( GL_EQUAL );
    __evas_gl_glapi->glEnable( GL_MULTISAMPLE );
 
-    __evas_gl_glapi->glEnable( GL_TEXTURE_2D );.
+    __evas_gl_glapi->glEnable( GL_TEXTURE_2D );
 
    lpThis->initCanvasBackground();
 }
@@ -295,14 +295,14 @@ string DrawingContent::getVertexShader()
 	string shader = SHADER(
 \n
 							attribute vec2 vPosition;\n
-							attribute vec2 textureCoords;\n
+							attribute vec3 textureCoords;\n
 \n
 							varying vec2 textureCoordinates;\n
 \n
 							void main()\n
 							{\n
 							   gl_Position = vec4( vPosition, 0.0, 1.0 );\n
-							   textureCoordinates = textureCoords;\n
+							   textureCoordinates = textureCoords.xy;\n
 							}\n
 \n
 						);
@@ -318,7 +318,8 @@ string DrawingContent::getFragmentShader()
 \n
 							void main()\n
 							{\n
-								gl_FragColor = vec4( 1.0, 0.5, 0.5, 1.0 );//texture2D( textureIndex, textureCoordinates );\n
+								gl_FragColor = texture2D( textureIndex, textureCoordinates );//vec4( 1.0, 0.5, 0.5, 1.0 );\n
+							    //gl_FragColor = vec4( textureCoordinates.xy, 0.0, 1.0 );//texture2D( textureIndex, textureCoordinates );//vec4( 1.0, 0.5, 0.5, 1.0 );\n
 							}\n
 \n
 						);
@@ -375,10 +376,10 @@ int DrawingContent::initShaders()
 
 float textures[] = {
 //   Texcoords
-    0.0f, 0.0f, // Top-left
-    1.0f, 0.0f, // Top-right
-    1.0f, 1.0f, // Bottom-right
-    0.0f, 1.0f  // Bottom-left
+    0.0f, 0.0f, 0.0f, // Top-left
+    1.0f, 0.0f, 0.0f, // Top-right
+    1.0f, 1.0f, 0.0f,// Bottom-right
+    0.0f, 1.0f, 0.0f// Bottom-left
 };
 
 float vertices[] = {
@@ -426,6 +427,7 @@ void DrawingContent::initCanvasBackground()
 	string filename( "images/background_1.png" );
 	loadPng( filename, m_rgbRawData, m_BackgroundWidth, m_BackgroundHeight );
 
+	size_t count = m_rgbRawData.size();
 
 	m_glApi->glGenTextures( 1, &m_textureIdx );
 }
@@ -461,7 +463,7 @@ void DrawingContent::drawCanvasBackground()
 	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &vertices[0] );
 
 	m_glApi->glEnableVertexAttribArray( m_textureCoordsIdx );
-	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof( GLfloat ), &textures[0] );
+	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( GLfloat ), &textures[0] );
 
 	m_glApi->glActiveTexture( GL_TEXTURE0 );
 	m_glApi->glBindTexture( GL_TEXTURE_2D, m_textureIdx );
@@ -510,6 +512,7 @@ void DrawingContent::loadPng( string & filename, vector<unsigned char> & rgbRawD
 	for( int row_i = 0 ; row_i < height ; row_i++ )
 	{
 		reader.read_row( &rgbRawData[0] + sizeof(png::byte) * ( row_i * width * colors_in_rgb ) );
+		//memset( &rgbRawData[0] + sizeof(png::byte) * ( row_i * width * colors_in_rgb ), 255, sizeof( unsigned char ) * width );
 	}
 }
 
