@@ -57,13 +57,13 @@ void SimulationOperationTracking::trackerBegin( int x, int y )
 	m_TrackingBody = cpShapeGetBody( shape );
 
 
-	m_MouseJoint = cpPinJointNew( m_MouseBody, m_TrackingBody, cpBodyWorldToLocal( m_TrackingBody, new_mouse_position ), cpBodyWorldToLocal( m_TrackingBody, new_mouse_position ) );
-	cpPinJointSetDist( m_MouseJoint, 0.0 );
-	cpFloat distance = cpPinJointGetDist( m_MouseJoint );
-	cout << "distance=" << distance << endl << flush;
+	m_MouseJoint = cpPivotJointNew2( m_MouseBody, m_TrackingBody, cpvzero, cpvzero );
+//	cpPinJointSetDist( m_MouseJoint, 0.0 );
+//	cpFloat distance = cpPinJointGetDist( m_MouseJoint );
+//	cout << "distance=" << distance << endl << flush;
 
-	cpConstraintSetMaxForce( m_MouseJoint, 50000.0f );
-	cpConstraintSetMaxBias( m_MouseJoint, 0 );
+	cpConstraintSetMaxForce( m_MouseJoint, INFINITY );
+	cpConstraintSetMaxBias( m_MouseJoint, INFINITY );
 	cpSpaceAddConstraint( m_Space, m_MouseJoint );
 }
 
@@ -73,22 +73,9 @@ void SimulationOperationTracking::trackerContinue( int x, int y )
 
 	cpVect old_body_position = cpBodyGetPosition( m_MouseBody );
 
-//	cpVect new_point = cpvlerp( old_body_position, new_mouse_position, 1.0f );
-//	cpBodySetVelocity( m_MouseBody, cpvmult( cpvsub( new_mouse_position, old_body_position ), 0.0f ) );
-	cpBodySetPosition( m_MouseBody, new_mouse_position );
-
-	if( 0 != m_MouseJoint )
-	{
-		cpPinJointSetDist( m_MouseJoint, 0.0 );
-	}
-
-	cpVect mouse_pos = cpBodyGetPosition( m_MouseBody );
-//	if( 0 != m_TrackingBody )
-//	{
-//		cpBodySetPosition( m_TrackingBody, new_mouse_position );
-//	}
-
-//	cout << "x=" << mouse_pos.x << "; y=" << mouse_pos.y << endl << flush;
+	cpVect new_point = cpvlerp( old_body_position, new_mouse_position, 1.0f );
+	cpBodySetVelocity( m_MouseBody, cpvmult( cpvsub( new_mouse_position, old_body_position ), 0.0f ) );
+	cpBodySetPosition( m_MouseBody, new_point );
 }
 
 void SimulationOperationTracking::trackerEnd( int x, int y )
@@ -98,7 +85,7 @@ void SimulationOperationTracking::trackerEnd( int x, int y )
 		return;
 	}
 	cpSpaceRemoveConstraint( m_Space, m_MouseJoint );
-	cpPinJointSetDist( m_MouseJoint, 0.0 );
+//	cpPinJointSetDist( m_MouseJoint, 0.0 );
 	cpConstraintFree( m_MouseJoint );
 	m_MouseJoint = 0;
 }

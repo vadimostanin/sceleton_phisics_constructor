@@ -50,7 +50,7 @@ void DynamicObjectFactory::init()
 void DynamicObjectFactory::initCanvasBorders()
 {
 	cpBody * staticBody = cpSpaceGetStaticBody( m_Space );
-	m_LeftBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 60 ), cpv( 0, m_CanvasHeight + 60 ), 0.0f ) );
+	m_LeftBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 60 ), 			cpv( 0, m_CanvasHeight + 60 ), 0.0f ) );
 	cpShapeSetElasticity( m_LeftBorder, 1.0f );
 	cpShapeSetFriction( m_LeftBorder, 1.0f );
 	cpShapeSetFilter( m_LeftBorder, NOT_GRABBABLE_FILTER );
@@ -60,7 +60,7 @@ void DynamicObjectFactory::initCanvasBorders()
 	cpShapeSetFriction( m_RightBorder, 1.0f );
 	cpShapeSetFilter( m_RightBorder, NOT_GRABBABLE_FILTER );
 
-	m_TopBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 60 ), cpv( m_CanvasWidth, 60 ), 0.0f ) );
+	m_TopBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, 60 ), 			cpv( m_CanvasWidth, 60 ), 0.0f ) );
 	cpShapeSetElasticity( m_TopBorder, 1.0f );
 	cpShapeSetFriction( m_TopBorder, 1.0f );
 	cpShapeSetFilter( m_TopBorder, NOT_GRABBABLE_FILTER );
