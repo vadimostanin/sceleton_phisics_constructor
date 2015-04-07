@@ -24,7 +24,7 @@ using namespace std;
 DrawingContent * lpThis = 0;
 
 DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject ),
-		m_DynamicTimer( DynamicDrawTimer, this, 0.1 ), m_DrawDynamic( false )
+		m_DynamicTimer( DynamicDrawTimer, this, 0.1 ), m_DrawDynamic( true )
 {
 	createDrawingLayout();
 	createDrawingCanvas();
@@ -162,13 +162,13 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
 
 	m_GraphicObjects = graphicObjects;
 
-	m_DynamicTimer.stop();
+//	m_DynamicTimer.stop();
 
 	elm_glview_render_func_set( getDrawingCanvas(), on_draw_gl );
 
 	m_DrawDynamic = false;
 
-	m_DynamicTimer.stop();
+//	m_DynamicTimer.stop();
 
 	update();
 }
@@ -177,7 +177,7 @@ void DrawingContent::setGraphicDynamicObjects( vector<IGraphicObject *> & graphi
 {
 	m_DrawDynamic = true;
 
-	m_DynamicTimer.start();
+//	m_DynamicTimer.start();
 
 	setGraphicObjects( graphicObjects );
 }

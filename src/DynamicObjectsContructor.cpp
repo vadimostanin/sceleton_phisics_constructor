@@ -24,8 +24,6 @@ void DynamicObjectsContructor::convert( vector<IGeometryObject *> & geometryObje
 	DynamicObjectFactory::getInstance().setCanvasWidth( m_CanvasWidth );
 	DynamicObjectFactory::getInstance().setCanvasHeight( m_CanvasHeight );
 
-	DynamicObjectFactory::getInstance().init();
-
 	vector<IGeometryObject *>::iterator begin = geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = geometryObjects.end();
 	vector<IGeometryObject *>::iterator iter = begin;
@@ -42,8 +40,6 @@ void DynamicObjectsContructor::convertSmart( vector<IGeometryObject *> & geometr
 {
 	DynamicObjectFactory::getInstance().setCanvasWidth( m_CanvasWidth );
 	DynamicObjectFactory::getInstance().setCanvasHeight( m_CanvasHeight );
-
-	DynamicObjectFactory::getInstance().init();
 
 	vector<IGeometryObject *>::iterator geometryBegin = geometryObjects.begin();
 	vector<IGeometryObject *>::iterator geometryEnd = geometryObjects.end();

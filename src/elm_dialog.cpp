@@ -24,6 +24,7 @@ using namespace std;
 
 #include "GeometryObjectsManager.h"
 #include "DynamicObjectsManager.h"
+#include "DynamicObjectFactory.h"
 #include "MouseTrackerManager.h"
 #include "ToolbarContentButton.h"
 #include "ToolbarContentButtonParams.h"
@@ -109,6 +110,7 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
 	GraphicObjectsContrucor::getInstance().setCanvas( drawingContent.getDrawingCanvas() );
+	DynamicObjectFactory::getInstance().init();
 
 	ToolbarContent toolbar( mainContent.getLayout() );
 	{
