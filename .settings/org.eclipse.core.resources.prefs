@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/DynamicObjectsContructor.cpp=UTF-8
 encoding//src/DynamicObjectsContructor.h=UTF-8
+encoding//src/GraphicObjectsContrucor.cpp=UTF-8
 encoding//src/Predicates/DynamicLinksPointFindPredicate.cpp=UTF-8
+encoding//src/Predicates/DynamicSpringsLinkFindPredicate.cpp=UTF-8

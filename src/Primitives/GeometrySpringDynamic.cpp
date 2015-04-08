@@ -7,6 +7,7 @@
 
 #include "GeometrySpringDynamic.h"
 #include <string.h>
+#include <iostream>
 
 GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space ) : m_Space( space ), m_ConstraintFromTo( 0 )
 {
@@ -33,41 +34,41 @@ GeometrySpringDynamic::~GeometrySpringDynamic()
 		m_ConstraintFromTo = 0;
 	}
 
-	if( true == cpSpaceContainsShape( m_Space, m_Shape ) )
-	{
-		cpSpaceRemoveShape( m_Space, m_Shape );
-		cpShapeFree( m_Shape );
-		m_Shape = 0;
-	}
-	if( true == cpSpaceContainsBody( m_Space, m_Body ) )
-	{
-		cpSpaceRemoveBody( m_Space, m_Body );
-		cpBodyFree( m_Body );
-		m_Body = 0;
-	}
+//	if( true == cpSpaceContainsShape( m_Space, m_Shape ) )
+//	{
+//		cpSpaceRemoveShape( m_Space, m_Shape );
+//		cpShapeFree( m_Shape );
+//		m_Shape = 0;
+//	}
+//	if( true == cpSpaceContainsBody( m_Space, m_Body ) )
+//	{
+//		cpSpaceRemoveBody( m_Space, m_Body );
+//		cpBodyFree( m_Body );
+//		m_Body = 0;
+//	}
 }
 
 void GeometrySpringDynamic::initSpring()
 {
-	cpFloat radius = 1.0;
-	cpFloat mass = 0.0;
-	int from_x = ( getLinkFrom()->getPointFrom()->getX() + getLinkFrom()->getPointTo()->getX() ) / 2;
-	int from_y = ( getLinkFrom()->getPointFrom()->getY() + getLinkFrom()->getPointTo()->getY() ) / 2;
-
-	int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
-	int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
-
-	cpVect startPoint = cpv( from_x, from_y );
-	cpVect endPoint = cpv( to_x, to_y );
-	cpFloat moment = cpMomentForSegment( mass, startPoint, endPoint, radius );
-	m_Body = cpBodyNew( mass, moment );
-
-	cpSpaceAddBody( m_Space, m_Body );
-
+//	cpFloat radius = 0.0;
+//	cpFloat mass = 1.0;
+//	int from_x = ( getLinkFrom()->getPointFrom()->getX() + getLinkFrom()->getPointTo()->getX() ) / 2;
+//	int from_y = ( getLinkFrom()->getPointFrom()->getY() + getLinkFrom()->getPointTo()->getY() ) / 2;
+//
+//	int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
+//	int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
+//
+//	cpVect startPoint = cpv( from_x, from_y );
+//	cpVect endPoint = cpv( to_x, to_y );
+//	cpFloat moment = cpMomentForSegment( mass, startPoint, endPoint, radius );
+//	m_Body = cpBodyNew( mass, moment );
+//
+//	cpSpaceAddBody( m_Space, m_Body );
+//
 //	m_Shape = cpSegmentShapeNew( m_Body, startPoint, endPoint, radius );
-
-
-//	cpShapeSetFriction( m_Shape, 0 );
+//
+//
+////	cpShapeSetFriction( m_Shape, 0 );
 //	cpSpaceAddShape( m_Space, m_Shape );
 }
 
@@ -81,7 +82,7 @@ void GeometrySpringDynamic::initJoints()
 		int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
 		int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
 
-		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpPinJointNew( getDynamicLinkTo()->getBody(), getDynamicLinkFrom()->getBody(), cpvzero, cpvzero ) );//, 50.0f, 50.0f, 1.0f
+		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpDampedSpringNew( getDynamicLinkTo()->getBody(), getDynamicLinkFrom()->getBody(), cpvzero, cpvzero, 10, 10, 1.0 ) );
 	}
 }
 
@@ -130,7 +131,8 @@ const IGeometryObject & GeometrySpringDynamic::getGeometryObject() const
 
 void GeometrySpringDynamic::update()
 {
-
+	cpFloat restLength = cpDampedSpringGetRestLength( m_ConstraintFromTo );
+	cout << "restLength=" << restLength << endl << flush;
 }
 
 

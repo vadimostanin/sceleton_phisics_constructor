@@ -49,8 +49,8 @@ GeometryLinkDynamic::~GeometryLinkDynamic()
 
 void GeometryLinkDynamic::initLink()
 {
-	cpFloat radius = 5.0;
-	cpFloat mass = 1000;
+	cpFloat radius = 0.1;
+	cpFloat mass = 1;
 	cpVect startPoint = cpv( getPointFrom()->getX(), getPointFrom()->getY() );
 	cpVect endPoint = cpv( getPointTo()->getX(), getPointTo()->getY() );
 	cpFloat moment = cpMomentForSegment( mass, startPoint, endPoint, radius );
@@ -62,7 +62,7 @@ void GeometryLinkDynamic::initLink()
 
 
 //	cpShapeSetFriction( m_Shape, 100 );
-//	cpSpaceAddShape( m_Space, m_Shape );
+	cpSpaceAddShape( m_Space, m_Shape );
 }
 
 void GeometryLinkDynamic::initJoints()
@@ -70,6 +70,7 @@ void GeometryLinkDynamic::initJoints()
 	if( 0 != getDynamicPointFrom() && 0 != getDynamicPointTo() )
 	{
 		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpPinJointNew( getDynamicPointTo()->getBody(), getDynamicPointFrom()->getBody(), cpvzero, cpvzero ) );
+//		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpDampedSpringNew( getDynamicPointTo()->getBody(), getDynamicPointFrom()->getBody(), cpvzero, cpvzero, 50, 50, 1.0 ) );
 	}
 }
 
