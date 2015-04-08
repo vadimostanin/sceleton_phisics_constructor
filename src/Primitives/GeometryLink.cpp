@@ -34,6 +34,11 @@ int GeometryLink::getId() const
 	return m_Id;
 }
 
+void GeometryLink::setId( int id )
+{
+	m_Id = id;
+}
+
 IGeometryObject * GeometryLink::clone()
 {
 	GeometryLink * newLink = new GeometryLink;

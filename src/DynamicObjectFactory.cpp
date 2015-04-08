@@ -8,8 +8,10 @@
 #include "DynamicObjectFactory.h"
 #include "GeometryPointDynamic.h"
 #include "GeometryLinkDynamic.h"
+#include "GeometrySpringDynamic.h"
 #include "GraphicPointDynamic.h"
 #include "GraphicLinkDynamic.h"
+#include "GraphicSpringDynamic.h"
 #include "DynamicTimeLineManager.h"
 
 #define GRABBABLE_MASK_BIT (1<<31)
@@ -93,6 +95,9 @@ IDynamicObject * DynamicObjectFactory::createDynamicObject( IGeometryObject * ge
 		case GEOMETRYOBJECT_LINK:
 				object = new GeometryLinkDynamic( m_Space, (GeometryLink *)geometryObject );
 			break;
+		case GEOMETRYOBJECT_SPRING:
+				object = new GeometrySpringDynamic( m_Space, (GeometrySpring *)geometryObject );
+			break;
 		default:
 			break;
 	}
@@ -112,6 +117,7 @@ IDynamicObject * DynamicObjectFactory::createObject( GeometryObjectsTypes type )
 				object = new GeometryLinkDynamic( m_Space );
 			break;
 		case GEOMETRYOBJECT_SPRING:
+				object = new GeometrySpringDynamic( m_Space );
 			break;
 		default:
 			break;
@@ -131,6 +137,9 @@ IGraphicObject * DynamicObjectFactory::createGraphicObject( IDynamicObject * dyn
 			break;
 		case GEOMETRYOBJECT_LINK:
 				object = new GraphicLinkDynamic( (GeometryLinkDynamic *)dynamicObject, canvas );
+			break;
+		case GEOMETRYOBJECT_SPRING:
+				object = new GraphicSpringDynamic( (GeometrySpringDynamic *)dynamicObject, canvas );
 			break;
 		default:
 			break;

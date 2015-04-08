@@ -26,7 +26,12 @@ GeometryObjectsManager::~GeometryObjectsManager()
 
 void GeometryObjectsManager::addObject( IGeometryObject * object )
 {
+	size_t count = m_geometryObjects.size();
 	m_geometryObjects.push_back( object );
+	count = m_geometryObjects.size();
+	int a = 0;
+	a++;
+
 }
 
 void GeometryObjectsManager::removeObjectSmart( IGeometryObject * object )
@@ -80,6 +85,8 @@ void GeometryObjectsManager::removeDummyObjects()
 
 void GeometryObjectsManager::getObjects( vector<IGeometryObject *> & objects )
 {
+	size_t count = m_geometryObjects.size();
+
 	objects = m_geometryObjects;
 }
 

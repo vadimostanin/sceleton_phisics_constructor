@@ -55,6 +55,8 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		spring_object->setLinkTo( found_link_from );
 
 		cout << "add spring from:" << found_link_from->getId() << "; to:" << found_link_from->getId() << endl << flush;
+
+		GeometryObjectsManager::getInstance().addObject( spring_object );
 	}
 	else if( true == GeometryObjectsManager::getInstance().getPoint( x, y, point ) )
 	{

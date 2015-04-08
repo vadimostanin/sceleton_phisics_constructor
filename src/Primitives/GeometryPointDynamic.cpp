@@ -64,7 +64,7 @@ void GeometryPointDynamic::initPoint()
 	// You can create multiple collision shapes that point to the same body.
 	// They will all be attached to the body and move around to follow it.
 	m_BallShape = cpSpaceAddShape( m_Space, cpCircleShapeNew( m_BallBody, m_Radius, cpvzero ) );
-	cpShapeSetFriction( m_BallShape, 0.0 );
+	cpShapeSetFriction( m_BallShape, 1.0 );
 
 	cpShapeSetElasticity( m_BallShape, 0.3 );
 }

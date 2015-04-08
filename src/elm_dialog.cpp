@@ -68,6 +68,8 @@ void on_run_simulation( void * userData )
 	DynamicObjectsContructor::getInstance().setCanvasWidth( viewUpdater->getCanvasWidth() );
 	DynamicObjectsContructor::getInstance().setCanvasHeight( viewUpdater->getCanvasHeight() );
 
+	size_t count = geometryObjects.size();
+
 	DynamicObjectsContructor::getInstance().convertSmart( geometryObjects, dynamicObjects );
 
 	DynamicObjectsManager::getInstance().setObjects( dynamicObjects );

@@ -63,7 +63,7 @@ int GeometryPoint::getId() const
 	return m_Id;
 }
 
-void GeometryPoint::setId( int id)
+void GeometryPoint::setId( int id )
 {
 	m_Id = id;
 }

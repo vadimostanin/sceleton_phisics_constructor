@@ -8,6 +8,7 @@
 #include "DynamicObjectsContructor.h"
 #include "DynamicObjectFactory.h"
 #include "DynamicLinksPointFindPredicate.h"
+#include "DynamicSpringsLinkFindPredicate.h"
 #include <algorithm>
 using namespace std;
 
@@ -62,25 +63,40 @@ void DynamicObjectsContructor::convertSmart( vector<IGeometryObject *> & geometr
 	for(  ; dynamicIter != dynamicEnd ; dynamicIter ++ )
 	{
 		IDynamicObject * dynamic_ptr = (* dynamicIter);
-		if( dynamic_ptr->getGeometryObject().getType() != GEOMETRYOBJECT_LINK )
+		if( dynamic_ptr->getGeometryObject().getType() == GEOMETRYOBJECT_LINK )
 		{
-			continue;
+			{
+				DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)dynamic_ptr, true );
+				foundPointFromIter = find_if( dynamicBegin, dynamicEnd, predicate );
+			}
+			{
+				DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)dynamic_ptr, false );
+				foundPointToIter = find_if( dynamicBegin, dynamicEnd, predicate );
+			}
+			if( foundPointFromIter == dynamicEnd || foundPointToIter == dynamicEnd )
+			{
+				continue;
+			}
+			((GeometryLinkDynamic *)dynamic_ptr)->setDynamicPointFrom( (GeometryPointDynamic *)(* foundPointFromIter) );
+			((GeometryLinkDynamic *)dynamic_ptr)->setDynamicPointTo( (GeometryPointDynamic *)(* foundPointToIter) );
 		}
-
+		else if( dynamic_ptr->getGeometryObject().getType() == GEOMETRYOBJECT_SPRING )
 		{
-			DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)dynamic_ptr, true );
-			foundPointFromIter = find_if( dynamicBegin, dynamicEnd, predicate );
+			{
+				DynamicSpringsLinkFindPredicate predicate( *(GeometrySpringDynamic *)dynamic_ptr, true );
+				foundPointFromIter = find_if( dynamicBegin, dynamicEnd, predicate );
+			}
+			{
+				DynamicSpringsLinkFindPredicate predicate( *(GeometrySpringDynamic *)dynamic_ptr, false );
+				foundPointToIter = find_if( dynamicBegin, dynamicEnd, predicate );
+			}
+			if( foundPointFromIter == dynamicEnd || foundPointToIter == dynamicEnd )
+			{
+				continue;
+			}
+			((GeometrySpringDynamic *)dynamic_ptr)->setDynamicLinkFrom( (GeometryLinkDynamic *)(* foundPointFromIter) );
+			((GeometrySpringDynamic *)dynamic_ptr)->setDynamicLinkTo( (GeometryLinkDynamic *)(* foundPointToIter) );
 		}
-		{
-			DynamicLinksPointFindPredicate predicate( *(GeometryLinkDynamic *)dynamic_ptr, false );
-			foundPointToIter = find_if( dynamicBegin, dynamicEnd, predicate );
-		}
-		if( foundPointFromIter == dynamicEnd || foundPointToIter == dynamicEnd )
-		{
-			continue;
-		}
-		((GeometryLinkDynamic *)dynamic_ptr)->setDynamicPointFrom( (GeometryPointDynamic *)(* foundPointFromIter) );
-		((GeometryLinkDynamic *)dynamic_ptr)->setDynamicPointTo( (GeometryPointDynamic *)(* foundPointToIter) );
 	}
 }
 

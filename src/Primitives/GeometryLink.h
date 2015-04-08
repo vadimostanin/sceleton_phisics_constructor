@@ -29,6 +29,7 @@ public:
 	const GeometryPoint * getPointTo() const;
 
 	int getId() const;
+	void setId( int id );
 	GeometryObjectsTypes getType() const;
 	IGeometryObject * clone();
 	string toString();

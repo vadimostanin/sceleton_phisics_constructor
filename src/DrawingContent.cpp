@@ -67,7 +67,7 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
 
 //    __evas_gl_glapi->glEnable( GL_TEXTURE_2D );
 
-   lpThis->initCanvasBackground();
+//   lpThis->initCanvasBackground();
 }
 
 // resize callback gets called every time object is resized
@@ -91,7 +91,7 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 
 	lpThis->preDraw();
 
-   lpThis->drawCanvasBackground();
+//   lpThis->drawCanvasBackground();
 
 	lpThis->drawObjects();
 
@@ -436,42 +436,10 @@ void DrawingContent::initCanvasBackground()
 	string filename( "images/background_1.png" );
 	loadPng( filename, m_rgbRawData, m_BackgroundWidth, m_BackgroundHeight );
 
-	size_t count = m_rgbRawData.size();
-
 	m_glApi->glGenTextures( 1, &m_textureIdx );
-}
-
-void DrawingContent::drawCanvasBackground()
-{
-
-	// Create a Vertex Buffer Object and copy the vertex data to it
-//	GLuint vbo;
-//	m_glApi->glGenBuffers( 1, &vbo );
-//
-//	m_glApi->glBindBuffer( GL_ARRAY_BUFFER, vbo );
-//	m_glApi->glBufferData( GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW );
-//
-////	 Create an element array
-	GLuint ebo;
-	m_glApi->glGenBuffers( 1, &ebo );
-
-	m_glApi->glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
-	m_glApi->glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW );
-
-	const int coordinates_in_point = 2;
-
-	m_glApi->glUseProgram( m_Program );
-
-	m_glApi->glEnableVertexAttribArray( m_positionIdx );
-	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &vertices[0] );
-//
-	m_glApi->glEnableVertexAttribArray( m_textureCoordsIdx );
-	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof( GLfloat ), &textures[0] );
 
 	m_glApi->glActiveTexture( GL_TEXTURE0 );
 	m_glApi->glBindTexture( GL_TEXTURE_2D, m_textureIdx );
-	int width_power_2 = pow( 2, (int)log2( m_BackgroundWidth ) );
-	int height_power_2 = pow( 2, (int)log2( m_BackgroundHeight ) );
 	m_glApi->glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_BackgroundWidth, m_BackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &m_rgbRawData[0] );
 
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
@@ -479,15 +447,23 @@ void DrawingContent::drawCanvasBackground()
 
 //	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
 //	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
-	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-//	m_glApi->glUniform1i( m_fragmentUniformTextureIdx, m_textureIdx );
+	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+}
 
-	// Draw a rectangle from the 2 triangles using 6 indices
-	m_glApi->glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
+void DrawingContent::drawCanvasBackground()
+{
+	const int coordinates_in_point = 2;
 
-//	m_glApi->glDrawArrays( GL_TRIANGLE_STRIP, 0, 5 );
-//	m_glApi->glDrawArrays( GL_TRIANGLES, 1, 3 );
+	m_glApi->glUseProgram( m_Program );
+
+	m_glApi->glEnableVertexAttribArray( m_positionIdx );
+	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &vertices[0] );
+
+	m_glApi->glEnableVertexAttribArray( m_textureCoordsIdx );
+	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof( GLfloat ), &textures[0] );
+
+	m_glApi->glDrawArrays( GL_TRIANGLE_FAN, 0, 5 );
 
 	m_glApi->glDisableVertexAttribArray( m_positionIdx );
 

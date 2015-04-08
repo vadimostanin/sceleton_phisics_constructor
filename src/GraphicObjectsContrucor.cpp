@@ -1,7 +1,7 @@
 /*
  * GraphicObjectsContrucor.cpp
  *
- *  Created on: 5 апр. 2015
+ *  Created on: 5 ������. 2015
  *      Author: vadim
  */
 
@@ -42,6 +42,10 @@ void GraphicObjectsContrucor::convert( vector<IDynamicObject *> & geometryObject
 	for(  ; iter != end ; iter ++ )
 	{
 		IGraphicObject * graphicObject = DynamicObjectFactory::getInstance().createGraphicObject( (* iter), m_Canvas );
+		if( 0 == graphicObject )
+		{
+			continue;
+		}
 
 		graphicObjects.push_back( graphicObject );
 	}
