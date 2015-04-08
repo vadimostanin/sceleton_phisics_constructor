@@ -61,6 +61,10 @@ void on_run_simulation( void * userData )
 
 	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
 
+	DynamicObjectFactory::getInstance().setCanvasWidth( viewUpdater->getCanvasWidth() );
+	DynamicObjectFactory::getInstance().setCanvasHeight( viewUpdater->getCanvasHeight() );
+	DynamicObjectFactory::getInstance().init();
+
 	DynamicObjectsContructor::getInstance().setCanvasWidth( viewUpdater->getCanvasWidth() );
 	DynamicObjectsContructor::getInstance().setCanvasHeight( viewUpdater->getCanvasHeight() );
 
@@ -110,7 +114,6 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
 	GraphicObjectsContrucor::getInstance().setCanvas( drawingContent.getDrawingCanvas() );
-	DynamicObjectFactory::getInstance().init();
 
 	ToolbarContent toolbar( mainContent.getLayout() );
 	{

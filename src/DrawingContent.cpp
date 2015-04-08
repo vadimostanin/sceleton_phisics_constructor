@@ -33,6 +33,7 @@ DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *main
 
 DrawingContent::~DrawingContent()
 {
+	m_glApi->glDeleteProgram( m_Program );
 }
 
 void DrawingContent::createDrawingLayout()
@@ -53,16 +54,18 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
    __evas_gl_glapi->glEnable( GL_POINT_SMOOTH );
    __evas_gl_glapi->glLineWidth( 4.0f );
    __evas_gl_glapi->glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
-////   __evas_gl_glapi->glEnable( GL_BLEND );// impact to textures
+//   __evas_gl_glapi->glEnable( GL_BLEND );// impact to textures
    __evas_gl_glapi->glEnable( GL_LINE_SMOOTH );
+   __evas_gl_glapi->glEnable( GL_SMOOTH );
    __evas_gl_glapi->glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-   __evas_gl_glapi->glCullFace( GL_BACK );
+//   __evas_gl_glapi->glCullFace( GL_BACK );
+   __evas_gl_glapi->glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST );
 
-   __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
+//   __evas_gl_glapi->glEnable( GL_DEPTH_TEST );
    __evas_gl_glapi->glDepthFunc( GL_EQUAL );
    __evas_gl_glapi->glEnable( GL_MULTISAMPLE );
 
-    __evas_gl_glapi->glEnable( GL_TEXTURE_2D );
+//    __evas_gl_glapi->glEnable( GL_TEXTURE_2D );
 
    lpThis->initCanvasBackground();
 }
@@ -99,7 +102,7 @@ bool DrawingContent::DynamicDrawTimer( void * userData )
 {
 	DrawingContent * lpThis = ( DrawingContent * )userData;
 
-		elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
+	elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
 
 	return true;
 }
@@ -142,6 +145,13 @@ void DrawingContent::createDrawingCanvas()
 	m_glApi = elm_glview_gl_api_get( m_DrawingCanvas );
 	evas_object_data_set( glview, "DrawingContent", this );
 
+//	edje_object_calc_force( elm_layout_edje_get( m_DrawingLayout ) );
+//
+//	Evas_Coord x, y;
+//	evas_object_geometry_get( m_DrawingLayout, &x, &y, &m_CanvasWidth, &m_CanvasHeight );
+//
+//	evas_object_geometry_get( glview, &x, &y, &m_CanvasWidth, &m_CanvasHeight );
+
 	elm_glview_size_get( glview, &m_CanvasWidth, &m_CanvasHeight );
 }
 
@@ -164,17 +174,16 @@ void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObject
    m_DynamicTimer.stop();
    m_DrawDynamic = false;
 
-	elm_glview_render_func_set( getDrawingCanvas(), on_draw_gl );
 	update();
 }
 
 void DrawingContent::setGraphicDynamicObjects( vector<IGraphicObject *> & graphicObjects )
 {
+	setGraphicObjects( graphicObjects );
+
 	m_DrawDynamic = true;
 
   	m_DynamicTimer.start();
-
-	setGraphicObjects( graphicObjects );
 }
 
 void DrawingContent::addGraphicObject( IGraphicObject * graphicObject )
@@ -295,14 +304,14 @@ string DrawingContent::getVertexShader()
 	string shader = SHADER(
 \n
 							attribute vec2 vPosition;\n
-							attribute vec3 textureCoords;\n
+							attribute vec2 textureCoords;\n
 \n
 							varying vec2 textureCoordinates;\n
 \n
 							void main()\n
 							{\n
 							   gl_Position = vec4( vPosition, 0.0, 1.0 );\n
-							   textureCoordinates = textureCoords.xy;\n
+							   textureCoordinates = textureCoords;\n
 							}\n
 \n
 						);
@@ -318,8 +327,8 @@ string DrawingContent::getFragmentShader()
 \n
 							void main()\n
 							{\n
-								gl_FragColor = texture2D( textureIndex, textureCoordinates );//vec4( 1.0, 0.5, 0.5, 1.0 );\n
-							    //gl_FragColor = vec4( textureCoordinates.xy, 0.0, 1.0 );//texture2D( textureIndex, textureCoordinates );//vec4( 1.0, 0.5, 0.5, 1.0 );\n
+								gl_FragColor = texture2D( textureIndex, textureCoordinates );\n
+//							    gl_FragColor = vec4( textureCoordinates.xy, 0.0, 1.0 );//texture2D( textureIndex, textureCoordinates );\n
 							}\n
 \n
 						);
@@ -376,10 +385,10 @@ int DrawingContent::initShaders()
 
 float textures[] = {
 //   Texcoords
-    0.0f, 0.0f, 0.0f, // Top-left
-    1.0f, 0.0f, 0.0f, // Top-right
-    1.0f, 1.0f, 0.0f,// Bottom-right
-    0.0f, 1.0f, 0.0f// Bottom-left
+    0.0f, 0.0f, // Top-left
+    1.0f, 0.0f, // Top-right
+    1.0f, 1.0f, // Bottom-right
+    0.0f, 1.0f // Bottom-left
 };
 
 float vertices[] = {
@@ -443,46 +452,41 @@ void DrawingContent::drawCanvasBackground()
 //	m_glApi->glBufferData( GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW );
 //
 ////	 Create an element array
-//	GLuint ebo;
-//	m_glApi->glGenBuffers( 1, &ebo );
-//
-//	m_glApi->glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
-//	m_glApi->glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW );
+	GLuint ebo;
+	m_glApi->glGenBuffers( 1, &ebo );
+
+	m_glApi->glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, ebo );
+	m_glApi->glBufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW );
 
 	const int coordinates_in_point = 2;
-
-//	m_glApi->glEnableVertexAttribArray( m_positionIdx );
-//	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, 4 * sizeof( GLfloat ), 0 );
-//
-//	m_glApi->glEnableVertexAttribArray( m_textureCoordsIdx );
-//	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof( GLfloat ), ( void * )( 2 * sizeof( GLfloat ) ) );
 
 	m_glApi->glUseProgram( m_Program );
 
 	m_glApi->glEnableVertexAttribArray( m_positionIdx );
 	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &vertices[0] );
-
+//
 	m_glApi->glEnableVertexAttribArray( m_textureCoordsIdx );
-	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, 3, GL_FLOAT, GL_FALSE, 3 * sizeof( GLfloat ), &textures[0] );
+	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof( GLfloat ), &textures[0] );
 
 	m_glApi->glActiveTexture( GL_TEXTURE0 );
 	m_glApi->glBindTexture( GL_TEXTURE_2D, m_textureIdx );
+	int width_power_2 = pow( 2, (int)log2( m_BackgroundWidth ) );
+	int height_power_2 = pow( 2, (int)log2( m_BackgroundHeight ) );
+	m_glApi->glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_BackgroundWidth, m_BackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &m_rgbRawData[0] );
 
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-	m_glApi->glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_BackgroundWidth, m_BackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &m_rgbRawData[0] );
 
-	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-   m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_MIN_FILTER, GL_LINEAR );
-	m_glApi->glUniform1i( m_fragmentUniformTextureIdx, m_textureIdx );
+//	m_glApi->glUniform1i( m_fragmentUniformTextureIdx, m_textureIdx );
 
 	// Draw a rectangle from the 2 triangles using 6 indices
-//	m_glApi->glDrawElements( GL_TRIANGLES, 4, GL_UNSIGNED_INT, 0 );
+	m_glApi->glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0 );
 
-	m_glApi->glDrawArrays( GL_TRIANGLE_STRIP, 0, 5 );
+//	m_glApi->glDrawArrays( GL_TRIANGLE_STRIP, 0, 5 );
 //	m_glApi->glDrawArrays( GL_TRIANGLES, 1, 3 );
 
 	m_glApi->glDisableVertexAttribArray( m_positionIdx );
@@ -507,12 +511,13 @@ void DrawingContent::loadPng( string & filename, vector<unsigned char> & rgbRawD
 
 	const int colors_in_rgb = 3;
 
-	rgbRawData.resize( height * width * colors_in_rgb, 0.0 );
+	rgbRawData.resize( height * width * colors_in_rgb, 255.0 );
 
 	for( int row_i = 0 ; row_i < height ; row_i++ )
 	{
-		reader.read_row( &rgbRawData[0] + sizeof(png::byte) * ( row_i * width * colors_in_rgb ) );
-		//memset( &rgbRawData[0] + sizeof(png::byte) * ( row_i * width * colors_in_rgb ), 255, sizeof( unsigned char ) * width );
+		unsigned char * row_ptr = &rgbRawData[0] + sizeof(png::byte) * ( row_i * width * colors_in_rgb );
+		reader.read_row( row_ptr );
+//		memset( &rgbRawData[0] + sizeof(png::byte) * ( row_i * width * colors_in_rgb ), 255, sizeof( unsigned char ) * width );
 	}
 }
 

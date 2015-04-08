@@ -11,7 +11,7 @@
 #include <algorithm>
 using namespace std;
 
-DynamicObjectsContructor::DynamicObjectsContructor()
+DynamicObjectsContructor::DynamicObjectsContructor() : m_CanvasWidth( 0 ), m_CanvasHeight( 0 )
 {
 }
 
@@ -21,9 +21,6 @@ DynamicObjectsContructor::~DynamicObjectsContructor()
 
 void DynamicObjectsContructor::convert( vector<IGeometryObject *> & geometryObjects, vector<IDynamicObject *> & dynamicObjects )
 {
-	DynamicObjectFactory::getInstance().setCanvasWidth( m_CanvasWidth );
-	DynamicObjectFactory::getInstance().setCanvasHeight( m_CanvasHeight );
-
 	vector<IGeometryObject *>::iterator begin = geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = geometryObjects.end();
 	vector<IGeometryObject *>::iterator iter = begin;
