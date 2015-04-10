@@ -9,38 +9,30 @@
 #include <string.h>
 #include <iostream>
 
-GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space ) : m_Space( space ), m_ConstraintFromTo( 0 )
+GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space ) : m_Space( space ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicPoints, 0, sizeof( m_DynamicPoints ) );
-	initLink();
 }
 
-GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space, GeometryLink * geometryLink ) : m_Space( space ), m_ConstraintFromTo( 0 )
+GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space, GeometryLink * geometryLink ) : m_Space( space ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicPoints, 0, sizeof( m_DynamicPoints ) );
 	setPointFrom( geometryLink->getPointFrom() );
 	setPointTo( geometryLink->getPointTo() );
     setId( geometryLink->getId() );
-
-	initLink();
 }
 
 GeometryLinkDynamic::~GeometryLinkDynamic()
 {
-	if( 0 != m_ConstraintFromTo && true == cpSpaceContainsConstraint( m_Space, m_ConstraintFromTo ) )
-	{
-		cpSpaceRemoveConstraint( m_Space, m_ConstraintFromTo );
-		cpConstraintFree( m_ConstraintFromTo );
-		m_ConstraintFromTo = 0;
-	}
+	clearJoints();
 
-	if( true == cpSpaceContainsShape( m_Space, m_Shape ) )
+	if( 0 != m_Shape && true == cpSpaceContainsShape( m_Space, m_Shape ) )
 	{
 		cpSpaceRemoveShape( m_Space, m_Shape );
 		cpShapeFree( m_Shape );
 		m_Shape = 0;
 	}
-	if( true == cpSpaceContainsBody( m_Space, m_Body ) )
+	if( 0 != m_Body && true == cpSpaceContainsBody( m_Space, m_Body ) )
 	{
 		cpSpaceRemoveBody( m_Space, m_Body );
 		cpBodyFree( m_Body );
@@ -50,24 +42,26 @@ GeometryLinkDynamic::~GeometryLinkDynamic()
 
 void GeometryLinkDynamic::initLink()
 {
-	cpFloat radius = 0.1;
+	cpFloat ballRadius = getDynamicPointFrom()->getRadius();
+
 	cpFloat mass = 1;
 
-	int boxWidth = abs( getPointFrom()->getX() - getPointTo()->getX() );
-	int boxHeight = abs( getPointFrom()->getY() - getPointTo()->getY() );
+	int katet_width = abs( getPointFrom()->getX() - getPointTo()->getX() );
+	int katet_height = abs( getPointFrom()->getY() - getPointTo()->getY() );
 
-	cpVect startPoint = cpv( getPointFrom()->getX(), getPointFrom()->getY() );
-	cpVect endPoint = cpv( getPointTo()->getX(), getPointTo()->getY() );
-//	cpFloat moment = cpMomentForSegment( mass, startPoint, endPoint, radius );
-	cpFloat moment = cpMomentForBox( mass, boxWidth, boxHeight );
+	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+	int box_height = 2;
+
+	cpFloat moment = cpMomentForBox( mass, box_width, box_height );
 	m_Body = cpBodyNew( mass, moment );
 
+
 	cpSpaceAddBody( m_Space, m_Body );
+
+//	m_Shape = cpBoxShapeNew( m_Body, box_width, box_height, 0.0 );
 //
-//	m_Shape = cpSegmentShapeNew( m_Body, startPoint, endPoint, radius );
 //
-//
-////	cpShapeSetFriction( m_Shape, 100 );
+//	cpShapeSetFriction( m_Shape, 1 );
 //	cpSpaceAddShape( m_Space, m_Shape );
 }
 
@@ -75,37 +69,42 @@ void GeometryLinkDynamic::initJoints()
 {
 	if( 0 != getDynamicPointFrom() && 0 != getDynamicPointTo() )
 	{
-		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpPinJointNew( getDynamicPointTo()->getBody(), getDynamicPointFrom()->getBody(), cpvzero, cpvzero ) );
-//		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpDampedSpringNew( getDynamicPointTo()->getBody(), getDynamicPointFrom()->getBody(), cpvzero, cpvzero, 50, 50, 1.0 ) );
+		initLink();
 
-//		cpVect boxOffset = cpvzero;
-//		int width = abs( getPointFrom()->getX() - getPointTo()->getX() );
-//
-//		cpVect globalTo = cpvzero;
-//		cpVect globalFrom = cpvzero;
-//		cpVect localFrom = cpBodyWorldToLocal( m_Body, globalFrom );
-//		cpVect globalFrom_2 = cpBodyLocalToWorld( m_Body, localFrom );
-//
-//		globalFrom = cpv( getDynamicPointFrom()->getX(), getDynamicPointFrom()->getY() );
-//		globalTo   = cpv( getDynamicPointTo()->getX(),   getDynamicPointTo()->getY() );
-//
-//		m_ConstraintFrom = cpPivotJointNew( m_Body, getDynamicPointFrom()->getBody(), globalFrom );
-//		m_ConstraintTo   = cpPivotJointNew( m_Body, getDynamicPointTo()->getBody(), globalTo );
-//		cpConstraintSetMaxBias( m_ConstraintFrom, INFINITY );
-//		cpConstraintSetMaxBias( m_ConstraintTo, INFINITY );
-//		cpConstraintSetMaxForce( m_ConstraintFrom, INFINITY );
-//		cpConstraintSetMaxForce( m_ConstraintTo, INFINITY );
-//		cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
-//		cpSpaceAddConstraint( m_Space, m_ConstraintTo );
+		cpFloat ballRadius = getDynamicPointFrom()->getRadius();
+
+		int katet_width = abs( getPointFrom()->getX() - getPointTo()->getX() );
+		int katet_height = abs( getPointFrom()->getY() - getPointTo()->getY() );
+
+		int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+
+		cpVect startPoint = cpv( ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, 0 );
+		cpVect endPoint = cpv( box_width - ( box_width / 2 ) - ballRadius, 0 );
+
+		m_ConstraintFrom = cpPivotJointNew2( m_Body, getDynamicPointFrom()->getBody(), startPoint, cpvzero );
+		m_ConstraintTo   = cpPivotJointNew2( m_Body, getDynamicPointTo()->getBody(), endPoint, cpvzero );
+		cpConstraintSetMaxBias( m_ConstraintFrom, INFINITY );
+		cpConstraintSetMaxBias( m_ConstraintTo, INFINITY );
+		cpConstraintSetMaxForce( m_ConstraintFrom, INFINITY );
+		cpConstraintSetMaxForce( m_ConstraintTo, INFINITY );
+		cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
+		cpSpaceAddConstraint( m_Space, m_ConstraintTo );
 	}
 }
 
 void GeometryLinkDynamic::clearJoints()
 {
-	if( m_ConstraintFromTo != 0 )
+	if( 0 != m_ConstraintFrom && true == cpSpaceContainsConstraint( m_Space, m_ConstraintFrom ) )
 	{
-		cpConstraintFree( m_ConstraintFromTo );
-		m_ConstraintFromTo = 0;
+		cpSpaceRemoveConstraint( m_Space, m_ConstraintFrom );
+		cpConstraintFree( m_ConstraintFrom );
+		m_ConstraintFrom = 0;
+	}
+	if( 0 != m_ConstraintTo && true == cpSpaceContainsConstraint( m_Space, m_ConstraintTo ) )
+	{
+		cpSpaceRemoveConstraint( m_Space, m_ConstraintTo );
+		cpConstraintFree( m_ConstraintTo );
+		m_ConstraintTo = 0;
 	}
 }
 
