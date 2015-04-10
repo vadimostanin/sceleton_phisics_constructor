@@ -52,7 +52,7 @@ void GeometryLinkDynamic::initLink()
 	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
 	int box_height = 2;
 
-	cpFloat moment = cpMomentForBox( mass, box_width, box_height );
+	cpFloat moment = cpMomentForBox( mass, box_width - ballRadius * 2, box_height );
 	m_Body = cpBodyNew( mass, moment );
 
 
