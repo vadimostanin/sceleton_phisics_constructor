@@ -46,6 +46,9 @@ private:
 
 	cpConstraint * m_ConstraintFromTo;
 
+	cpConstraint * m_ConstraintFrom;
+	cpConstraint * m_ConstraintTo;
+
 
 	GeometryPointDynamic * m_DynamicPoints[2];
 };

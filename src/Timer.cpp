@@ -14,7 +14,7 @@ Timer::Timer( TimerFuncType timerFunc, void * userData, const double interval ) 
 
 Timer::~Timer()
 {
-	ecore_animator_del( m_Animator );
+	ecore_animator_del( m_Timer );
 }
 
 Eina_Bool Timer::timer_func( void * userData )
@@ -36,18 +36,18 @@ Eina_Bool Timer::timer_func( void * userData )
 
 void Timer::init()
 {
-	m_Animator = ecore_animator_add( timer_func, this );
-	ecore_animator_freeze( m_Animator );
+	m_Timer = ecore_animator_add( timer_func, this );
+	ecore_animator_freeze( m_Timer );
 }
 
 void Timer::start()
 {
-	ecore_animator_thaw( m_Animator );
+	ecore_animator_thaw( m_Timer );
 }
 
 void Timer::stop()
 {
-	ecore_animator_freeze( m_Animator );
+	ecore_animator_freeze( m_Timer );
 }
 
 

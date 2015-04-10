@@ -5,18 +5,18 @@
  *      Author: vostanin
  */
 
-#ifndef TIMER_H_
-#define TIMER_H_
+#ifndef ANIMATOR_H_
+#define ANIMATOR_H_
 
 #include <Ecore.h>
 
 typedef bool (* TimerFuncType )( void * userData );
 
-class Timer
+class Animator
 {
 public:
-	Timer( TimerFuncType timerFunc, void * userData, const double interval );
-	virtual ~Timer();
+	Animator( TimerFuncType timerFunc, void * userData );
+	virtual ~Animator();
 
 	void start();
 	void stop();
@@ -27,10 +27,9 @@ private:
 
 	static Eina_Bool timer_func( void * userData );
 
-	Ecore_Timer * m_Timer;
-	TimerFuncType m_TimerFunc;
-	void 		* m_UserData;
-	const double m_Interval;
+	Ecore_Animator * 	m_Animator;
+	TimerFuncType 		m_TimerFunc;
+	void 		* 		m_UserData;
 };
 
-#endif /* TIMER_H_ */
+#endif /* ANIMATOR_H_ */

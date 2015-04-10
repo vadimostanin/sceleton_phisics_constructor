@@ -33,9 +33,11 @@ private:
 
 	void initPoint();
 
-	cpSpace * m_Space;
-	cpBody  * m_BallBody;
-	cpShape * m_BallShape;
+	cpSpace 	 * m_Space;
+	cpBody  	 * m_BallBody;
+	cpShape 	 * m_BallShape;
+	cpConstraint * m_IntermidiateConstraint;
+	cpBody  	 * m_OuterBody;
 
 	cpFloat m_Radius;
 	cpFloat m_Mass;

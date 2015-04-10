@@ -7,6 +7,7 @@
 
 #include "GeometryLinkDynamic.h"
 #include <string.h>
+#include <iostream>
 
 GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space ) : m_Space( space ), m_ConstraintFromTo( 0 )
 {
@@ -69,8 +70,22 @@ void GeometryLinkDynamic::initJoints()
 {
 	if( 0 != getDynamicPointFrom() && 0 != getDynamicPointTo() )
 	{
-		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpPinJointNew( getDynamicPointTo()->getBody(), getDynamicPointFrom()->getBody(), cpvzero, cpvzero ) );
+//		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpPinJointNew( getDynamicPointTo()->getBody(), getDynamicPointFrom()->getBody(), cpvzero, cpvzero ) );
 //		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpDampedSpringNew( getDynamicPointTo()->getBody(), getDynamicPointFrom()->getBody(), cpvzero, cpvzero, 50, 50, 1.0 ) );
+
+		cpVect boxOffset = cpvzero;
+		int width = abs( getPointFrom()->getX() - getPointTo()->getX() );
+
+		cpVect globalTo = cpvzero;
+		cpVect globalFrom = cpvzero;
+		cpVect localFrom = cpBodyWorldToLocal( m_Body, globalFrom );
+		cpVect globalFrom_2 = cpBodyLocalToWorld( m_Body, localFrom );
+
+		globalFrom = cpvzero;cpvadd( boxOffset, cpv( 0, 0 ) );
+		globalTo   = cpvzero;cpvadd( boxOffset, cpv( 0, 0 ) );
+
+		m_ConstraintFrom = cpSpaceAddConstraint( m_Space, cpPinJointNew( getDynamicPointFrom()->getBody(), m_Body, cpvzero, cpvzero ) );
+		m_ConstraintTo   = cpSpaceAddConstraint( m_Space, cpPinJointNew( getDynamicPointTo()->getBody(), m_Body, cpvzero, cpvzero ) );
 	}
 }
 
@@ -133,7 +148,8 @@ const IGeometryObject & GeometryLinkDynamic::getGeometryObject() const
 
 void GeometryLinkDynamic::update()
 {
-
+	cpFloat moment = cpShapeGetMoment( m_Shape );
+	cout << "link moment=" << moment << endl << flush;
 }
 
 

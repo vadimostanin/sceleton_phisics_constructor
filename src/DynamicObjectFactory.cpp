@@ -69,7 +69,7 @@ void DynamicObjectFactory::initCanvasBorders()
 
 	m_BottomBorder = cpSpaceAddShape( m_Space, cpSegmentShapeNew( staticBody, cpv( 0, m_CanvasHeight + 60 ), cpv( m_CanvasWidth, m_CanvasHeight + 60 ), 0.0f ) );
 	cpShapeSetElasticity( m_BottomBorder, 1.0f );
-	cpShapeSetFriction( m_BottomBorder, 1.0f );
+	cpShapeSetFriction( m_BottomBorder, 100.0f );
 	cpShapeSetFilter( m_BottomBorder, NOT_GRABBABLE_FILTER );
 }
 

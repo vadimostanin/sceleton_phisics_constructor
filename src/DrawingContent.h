@@ -10,6 +10,7 @@
 
 #include "GraphicPoint.h"
 #include "Timer.h"
+#include "Animator.h"
 #include <Evas.h>
 #include <vector>
 using namespace std;
@@ -59,6 +60,8 @@ private:
 
     static bool DynamicDrawTimer( void * userData );
 
+    void checkError();
+
 	Evas_Object * m_MainLayout;
 	Evas_Object * m_DrawingLayout;
 
@@ -70,7 +73,7 @@ private:
 
 	vector<IGraphicObject *> m_GraphicObjects;
 
-	Timer m_DynamicTimer;
+	Animator m_DynamicTimer;
 
 	int m_CanvasWidth;
 	int m_CanvasHeight;

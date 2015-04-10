@@ -24,7 +24,7 @@ using namespace std;
 DrawingContent * lpThis = 0;
 
 DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject ),
-		m_DynamicTimer( DynamicDrawTimer, this, 0.1 ), m_DrawDynamic( false )
+		m_DynamicTimer( DynamicDrawTimer, this ), m_DrawDynamic( false )
 {
 	createDrawingLayout();
 	createDrawingCanvas();
@@ -67,7 +67,7 @@ void DrawingContent::on_init_gles( Evas_Object * glview )
 
 //    __evas_gl_glapi->glEnable( GL_TEXTURE_2D );
 
-//   lpThis->initCanvasBackground();
+   lpThis->initCanvasBackground();
 }
 
 // resize callback gets called every time object is resized
@@ -91,7 +91,7 @@ void DrawingContent::on_draw_gl( Evas_Object * glview )
 
 	lpThis->preDraw();
 
-//   lpThis->drawCanvasBackground();
+	lpThis->drawCanvasBackground();
 
 	lpThis->drawObjects();
 
@@ -323,12 +323,12 @@ string DrawingContent::getFragmentShader()
 {
 	string shader =	SHADER(
 							varying vec2 textureCoordinates;\n
-							uniform sampler2D textureIndex;\n
+							uniform sampler2D textureSampler;\n
 \n
 							void main()\n
 							{\n
-								gl_FragColor = texture2D( textureIndex, textureCoordinates );\n
-//							    gl_FragColor = vec4( textureCoordinates.xy, 0.0, 1.0 );//texture2D( textureIndex, textureCoordinates );\n
+								gl_FragColor = texture2D( textureSampler, textureCoordinates );\n
+//							    gl_FragColor = vec4( textureCoordinates.xy, 0.0, 1.0 );//texture2D( textureSampler, textureCoordinates );\n
 							}\n
 \n
 						);
@@ -341,29 +341,29 @@ int DrawingContent::initShaders()
 {
 	string v_shader = getVertexShader();
 	GLbyte * vShaderStr = (GLbyte *)v_shader.c_str();
-
+	checkError();
 	string f_shader = getFragmentShader();
 	GLbyte * fShaderStr = (GLbyte *)f_shader.c_str();
-
+	checkError();
 	GLint linked;
-
+	checkError();
 	// Load the vertex/fragment shaders
 	m_vertexShader  = loadShader( GL_VERTEX_SHADER, (const char*)vShaderStr);
 	m_fragmentShader = loadShader( GL_FRAGMENT_SHADER, (const char*)fShaderStr);
-
+	checkError();
 	// Create the program object
 	m_Program = m_glApi->glCreateProgram( );
 	if( m_Program == 0 )
 	{
 		return 0;
 	}
-
+	checkError();
 	m_glApi->glAttachShader( m_Program,  m_vertexShader);
 	m_glApi->glAttachShader( m_Program,  m_fragmentShader);
-
+	checkError();
 	m_glApi->glLinkProgram( m_Program );
 	m_glApi->glGetProgramiv( m_Program, GL_LINK_STATUS, &linked );
-
+	checkError();
 	if( 0 == linked )
 	{
 		GLint info_len = 0;
@@ -379,7 +379,7 @@ int DrawingContent::initShaders()
 		m_glApi->glDeleteProgram( m_Program );
 		return 0;
 	}
-
+	checkError();
 	return 1;
 }
 
@@ -413,6 +413,51 @@ GLuint elements[] = {
         2, 3, 0
     };
 
+void DrawingContent::checkError()
+{
+    /* Check for error conditions. */
+    GLenum gl_error = m_glApi->glGetError( );
+    if( gl_error != GL_NO_ERROR ) {
+        printf(" OpenGL error: %d", gl_error ); fflush( stdout );
+    }
+}
+
+//void DrawingContent::initCanvasBackground()
+//{
+//	initShaders();
+//
+//	m_glApi->glUseProgram( m_Program );
+//
+//	m_positionIdx 		= 	m_glApi->glGetAttribLocation( m_Program, "vPosition" );
+//	m_textureCoordsIdx 	=   m_glApi->glGetAttribLocation( m_Program, "textureCoords" );
+//	GLint info_len = 0;
+//			m_glApi->glGetProgramiv( m_Program, GL_INFO_LOG_LENGTH, &info_len);
+//			if (info_len > 1)
+//			{
+//				char* info_log = (char *)malloc(sizeof(char) * info_len);
+//
+//				m_glApi->glGetProgramInfoLog( m_Program, info_len, NULL, info_log );
+//				printf( "Error linking program:\n%s\n", info_log );
+//				free( info_log );
+//			}
+//	m_fragmentUniformTextureIdx = m_glApi->glGetUniformLocation( m_Program, "textureSampler" );
+//
+//	string filename( "images/background_1.png" );
+//	loadPng( filename, m_rgbRawData, m_BackgroundWidth, m_BackgroundHeight );
+//
+//	m_glApi->glGenTextures( 1, &m_textureIdx );
+//
+//	m_glApi->glActiveTexture( GL_TEXTURE0 );
+//	m_glApi->glBindTexture( GL_TEXTURE_2D, m_textureIdx );
+//	m_glApi->glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_BackgroundWidth, m_BackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &m_rgbRawData[0] );
+//
+//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+//
+//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+//}
+
 void DrawingContent::initCanvasBackground()
 {
 	initShaders();
@@ -421,17 +466,7 @@ void DrawingContent::initCanvasBackground()
 
 	m_positionIdx 		= 	m_glApi->glGetAttribLocation( m_Program, "vPosition" );
 	m_textureCoordsIdx 	=   m_glApi->glGetAttribLocation( m_Program, "textureCoords" );
-	GLint info_len = 0;
-			m_glApi->glGetProgramiv( m_Program, GL_INFO_LOG_LENGTH, &info_len);
-			if (info_len > 1)
-			{
-				char* info_log = (char *)malloc(sizeof(char) * info_len);
-
-				m_glApi->glGetProgramInfoLog( m_Program, info_len, NULL, info_log );
-				printf( "Error linking program:\n%s\n", info_log );
-				free( info_log );
-			}
-	m_fragmentUniformTextureIdx = m_glApi->glGetUniformLocation( m_Program, "textureIndex" );
+	m_fragmentUniformTextureIdx = m_glApi->glGetUniformLocation( m_Program, "textureSampler" );
 
 	string filename( "images/background_1.png" );
 	loadPng( filename, m_rgbRawData, m_BackgroundWidth, m_BackgroundHeight );
@@ -440,15 +475,16 @@ void DrawingContent::initCanvasBackground()
 
 	m_glApi->glActiveTexture( GL_TEXTURE0 );
 	m_glApi->glBindTexture( GL_TEXTURE_2D, m_textureIdx );
-	m_glApi->glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_BackgroundWidth, m_BackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &m_rgbRawData[0] );
 
-	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-
-//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
-//	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
+	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE );
+	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE );
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 	m_glApi->glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
+
+//	m_glApi->glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_BackgroundWidth, m_BackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &m_rgbRawData[0] );
+
+	m_glApi->glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, m_BackgroundWidth, m_BackgroundHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL );
+	checkError();
 }
 
 void DrawingContent::drawCanvasBackground()
@@ -458,12 +494,19 @@ void DrawingContent::drawCanvasBackground()
 	m_glApi->glUseProgram( m_Program );
 
 	m_glApi->glEnableVertexAttribArray( m_positionIdx );
-	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &vertices[0] );
-
 	m_glApi->glEnableVertexAttribArray( m_textureCoordsIdx );
+
+	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &vertices[0] );
 	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof( GLfloat ), &textures[0] );
 
-	m_glApi->glDrawArrays( GL_TRIANGLE_FAN, 0, 5 );
+	m_glApi->glBindTexture(GL_TEXTURE_2D, m_textureIdx );
+
+	m_glApi->glTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, m_BackgroundWidth, m_BackgroundHeight, GL_RGB, GL_UNSIGNED_BYTE, &m_rgbRawData[0] );
+
+	//sampler texture unit to 0
+	m_glApi->glUniform1i( m_fragmentUniformTextureIdx, 0 );
+
+	m_glApi->glDrawElements( GL_TRIANGLES, 6, GL_UNSIGNED_INT, elements );
 
 	m_glApi->glDisableVertexAttribArray( m_positionIdx );
 
@@ -471,6 +514,27 @@ void DrawingContent::drawCanvasBackground()
 
 	m_glApi->glUseProgram( 0 );
 }
+
+//void DrawingContent::drawCanvasBackground()
+//{
+//	const int coordinates_in_point = 2;
+//
+//	m_glApi->glUseProgram( m_Program );
+//
+//	m_glApi->glEnableVertexAttribArray( m_positionIdx );
+//	m_glApi->glVertexAttribPointer( m_positionIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof(GLfloat), &vertices[0] );
+//
+//	m_glApi->glEnableVertexAttribArray( m_textureCoordsIdx );
+//	m_glApi->glVertexAttribPointer( m_textureCoordsIdx, coordinates_in_point, GL_FLOAT, GL_FALSE, coordinates_in_point * sizeof( GLfloat ), &textures[0] );
+//
+//	m_glApi->glDrawArrays( GL_TRIANGLE_FAN, 0, 5 );
+//
+//	m_glApi->glDisableVertexAttribArray( m_positionIdx );
+//
+//	m_glApi->glDisableVertexAttribArray( m_textureCoordsIdx );
+//
+//	m_glApi->glUseProgram( 0 );
+//}
 
 void DrawingContent::loadPng( string & filename, vector<unsigned char> & rgbRawData, int & width, int & height )
 {
