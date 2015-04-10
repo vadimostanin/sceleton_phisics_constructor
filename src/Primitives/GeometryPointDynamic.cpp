@@ -59,9 +59,9 @@ void GeometryPointDynamic::initPoint()
 	// The cpSpaceAdd*() functions return the thing that you are adding.
 	// It's convenient to create and add an object in one line.
 	m_BallBody = cpSpaceAddBody( m_Space, cpBodyNew( m_Mass, moment ) );
-	m_OuterBody = cpSpaceAddBody( m_Space, cpBodyNew( m_Mass, emptyBodyMoment ) );
+//	m_OuterBody = cpSpaceAddBody( m_Space, cpBodyNew( m_Mass, emptyBodyMoment ) );
 	cpBodySetPosition( m_BallBody, cpv( getX(), getY() ) );
-	cpBodySetPosition( m_OuterBody, cpv( getX(), getY() ) );
+//	cpBodySetPosition( m_OuterBody, cpv( getX(), getY() ) );
 
 	// Now we create the collision shape for the ball.
 	// You can create multiple collision shapes that point to the same body.
@@ -74,7 +74,7 @@ void GeometryPointDynamic::initPoint()
 //	m_TrackingBody = cpShapeGetBody( shape );
 //
 //
-	m_IntermidiateConstraint = cpSpaceAddConstraint( m_Space, cpPivotJointNew2( m_BallBody, m_OuterBody, cpvzero, cpvzero ) );
+//	m_IntermidiateConstraint = cpSpaceAddConstraint( m_Space, cpPivotJointNew2( m_BallBody, m_OuterBody, cpvzero, cpvzero ) );
 }
 
 cpFloat GeometryPointDynamic::getRadius() const
