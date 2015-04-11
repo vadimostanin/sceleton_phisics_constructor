@@ -9,12 +9,12 @@
 #include <string.h>
 #include <iostream>
 
-GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space ) : m_Space( space ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
+GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space ) : m_Space( space ), m_Body( 0 ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicPoints, 0, sizeof( m_DynamicPoints ) );
 }
 
-GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space, GeometryLink * geometryLink ) : m_Space( space ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
+GeometryLinkDynamic::GeometryLinkDynamic( cpSpace * space, GeometryLink * geometryLink ) : m_Space( space ), m_Body( 0 ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicPoints, 0, sizeof( m_DynamicPoints ) );
 	setPointFrom( geometryLink->getPointFrom() );
@@ -73,8 +73,13 @@ void GeometryLinkDynamic::initJoints()
 
 		cpFloat ballRadius = getDynamicPointFrom()->getRadius();
 
-		int katet_width = abs( getPointFrom()->getX() - getPointTo()->getX() );
-		int katet_height = abs( getPointFrom()->getY() - getPointTo()->getY() );
+		int from_x = getPointFrom()->getX();
+		int to_x = getPointTo()->getX();
+		int from_y = getPointFrom()->getY();
+		int to_y = getPointTo()->getY();
+
+		int katet_width = abs( from_x - to_x );
+		int katet_height = abs( from_y - to_y );
 
 		int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
 
@@ -89,6 +94,11 @@ void GeometryLinkDynamic::initJoints()
 		cpConstraintSetMaxForce( m_ConstraintTo, INFINITY );
 		cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
 		cpSpaceAddConstraint( m_Space, m_ConstraintTo );
+
+		cpVect globalStart = cpBodyWorldToLocal( m_Body, startPoint );
+		cpVect globalEnd = cpBodyWorldToLocal( m_Body, endPoint );
+		int a = 0;
+		a++;
 	}
 }
 

@@ -40,7 +40,8 @@ private:
 	cpBody  * m_Body;
 	cpShape * m_Shape;
 
-	cpConstraint * m_ConstraintFromTo;
+	cpConstraint * m_ConstraintFrom;
+	cpConstraint * m_ConstraintTo;
 
 
 	GeometryLinkDynamic * m_DynamicLinks[2];

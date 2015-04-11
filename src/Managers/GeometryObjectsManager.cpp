@@ -70,8 +70,8 @@ void GeometryObjectsManager::removeDummyObjects()
 		IGeometryObject * object_ptr = m_geometryObjects[object_i];
 		if( object_ptr->getType() == GEOMETRYOBJECT_DUMMY )
 		{
-			GeometryObjectFactory::getInstance().deleteGeometryObject( object_ptr );
 			m_geometryObjects.erase( m_geometryObjects.begin() + object_i );
+			GeometryObjectFactory::getInstance().deleteGeometryObject( object_ptr );
 		}
 	}
 }

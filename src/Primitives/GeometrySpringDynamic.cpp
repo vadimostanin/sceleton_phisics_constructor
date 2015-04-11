@@ -9,61 +9,59 @@
 #include <string.h>
 #include <iostream>
 
-GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space ) : m_Space( space ), m_ConstraintFromTo( 0 )
+GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space ) : m_Space( space ), m_Body( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicLinks, 0, sizeof( m_DynamicLinks ) );
-	initSpring();
 }
 
-GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space, GeometrySpring * geometrySpring ) : m_Space( space ), m_ConstraintFromTo( 0 )
+GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space, GeometrySpring * geometrySpring ) : m_Space( space ), m_Body( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicLinks, 0, sizeof( m_DynamicLinks ) );
 	setLinkFrom( geometrySpring->getLinkFrom() );
 	setLinkTo( geometrySpring->getLinkTo() );
-//    setId( geometryLink->getId() );
-
-	initSpring();
+    setId( geometrySpring->getId() );
 }
 
 GeometrySpringDynamic::~GeometrySpringDynamic()
 {
-	if( 0 != m_ConstraintFromTo && true == cpSpaceContainsConstraint( m_Space, m_ConstraintFromTo ) )
-	{
-		cpSpaceRemoveConstraint( m_Space, m_ConstraintFromTo );
-		cpConstraintFree( m_ConstraintFromTo );
-		m_ConstraintFromTo = 0;
-	}
+	clearJoints();
 
-//	if( true == cpSpaceContainsShape( m_Space, m_Shape ) )
-//	{
-//		cpSpaceRemoveShape( m_Space, m_Shape );
-//		cpShapeFree( m_Shape );
-//		m_Shape = 0;
-//	}
-//	if( true == cpSpaceContainsBody( m_Space, m_Body ) )
-//	{
-//		cpSpaceRemoveBody( m_Space, m_Body );
-//		cpBodyFree( m_Body );
-//		m_Body = 0;
-//	}
+	if( 0 != m_Shape && true == cpSpaceContainsShape( m_Space, m_Shape ) )
+	{
+		cpSpaceRemoveShape( m_Space, m_Shape );
+		cpShapeFree( m_Shape );
+		m_Shape = 0;
+	}
+	if( 0 != m_Body && true == cpSpaceContainsBody( m_Space, m_Body ) )
+	{
+		cpSpaceRemoveBody( m_Space, m_Body );
+		cpBodyFree( m_Body );
+		m_Body = 0;
+	}
 }
 
 void GeometrySpringDynamic::initSpring()
 {
 //	cpFloat radius = 0.0;
-//	cpFloat mass = 1.0;
-//	int from_x = ( getLinkFrom()->getPointFrom()->getX() + getLinkFrom()->getPointTo()->getX() ) / 2;
-//	int from_y = ( getLinkFrom()->getPointFrom()->getY() + getLinkFrom()->getPointTo()->getY() ) / 2;
+	cpFloat mass = 1.0;
+	int from_x = ( getLinkFrom()->getPointFrom()->getX() + getLinkFrom()->getPointTo()->getX() ) / 2;
+	int from_y = ( getLinkFrom()->getPointFrom()->getY() + getLinkFrom()->getPointTo()->getY() ) / 2;
 //
-//	int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
-//	int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
-//
-//	cpVect startPoint = cpv( from_x, from_y );
-//	cpVect endPoint = cpv( to_x, to_y );
-//	cpFloat moment = cpMomentForSegment( mass, startPoint, endPoint, radius );
-//	m_Body = cpBodyNew( mass, moment );
-//
-//	cpSpaceAddBody( m_Space, m_Body );
+	int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
+	int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
+
+	int katet_width = abs( from_x - to_x );
+	int katet_height = abs( from_y - to_y );
+
+	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+	int box_height = 2;
+
+	cpVect startPoint = cpv( from_x, from_y );
+	cpVect endPoint = cpv( to_x, to_y );
+	cpFloat moment = cpMomentForBox( mass, box_width, box_height );
+	m_Body = cpBodyNew( mass, moment );
+
+	cpSpaceAddBody( m_Space, m_Body );
 //
 //	m_Shape = cpSegmentShapeNew( m_Body, startPoint, endPoint, radius );
 //
@@ -76,23 +74,53 @@ void GeometrySpringDynamic::initJoints()
 {
 	if( 0 != getDynamicLinkFrom() && 0 != getDynamicLinkTo() )
 	{
+		initSpring();
+
+		cpFloat ballRadius = 2.0;
+
 		int from_x = ( getLinkFrom()->getPointFrom()->getX() + getLinkFrom()->getPointTo()->getX() ) / 2;
 		int from_y = ( getLinkFrom()->getPointFrom()->getY() + getLinkFrom()->getPointTo()->getY() ) / 2;
 
 		int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
 		int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
 
-		m_ConstraintFromTo = cpSpaceAddConstraint( m_Space, cpDampedSpringNew( getDynamicLinkTo()->getBody(), getDynamicLinkFrom()->getBody(), cpvzero, cpvzero, 10, 10, 1.0 ) );
+		int katet_width = abs( from_x - to_x );
+		int katet_height = abs( from_y - to_y );
+
+		int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+
+		cpVect startPoint = cpv( ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, 0 );
+		cpVect endPoint = cpv( box_width - ( box_width / 2 ) - ballRadius, 0 );
+
+		m_ConstraintFrom = cpPivotJointNew2( m_Body, getDynamicLinkFrom()->getBody(), startPoint, cpvzero );
+		m_ConstraintTo   = cpPivotJointNew2( m_Body, getDynamicLinkTo()->getBody(), endPoint, cpvzero );
+		cpConstraintSetMaxBias( m_ConstraintFrom, INFINITY );
+		cpConstraintSetMaxBias( m_ConstraintTo, INFINITY );
+		cpConstraintSetMaxForce( m_ConstraintFrom, INFINITY );
+		cpConstraintSetMaxForce( m_ConstraintTo, INFINITY );
+		cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
+		cpSpaceAddConstraint( m_Space, m_ConstraintTo );
+
+		cpVect globalStart = cpBodyWorldToLocal( m_Body, startPoint );
+		cpVect globalEnd = cpBodyWorldToLocal( m_Body, endPoint );
+		int a = 0;
+		a++;
 	}
 }
 
 void GeometrySpringDynamic::clearJoints()
 {
-	if( m_ConstraintFromTo != 0 && true == cpSpaceContainsConstraint( m_Space, m_ConstraintFromTo ) )
+	if( 0 != m_ConstraintFrom && true == cpSpaceContainsConstraint( m_Space, m_ConstraintFrom ) )
 	{
-		cpSpaceRemoveConstraint( m_Space, m_ConstraintFromTo );
-		cpConstraintFree( m_ConstraintFromTo );
-		m_ConstraintFromTo = 0;
+		cpSpaceRemoveConstraint( m_Space, m_ConstraintFrom );
+		cpConstraintFree( m_ConstraintFrom );
+		m_ConstraintFrom = 0;
+	}
+	if( 0 != m_ConstraintTo && true == cpSpaceContainsConstraint( m_Space, m_ConstraintTo ) )
+	{
+		cpSpaceRemoveConstraint( m_Space, m_ConstraintTo );
+		cpConstraintFree( m_ConstraintTo );
+		m_ConstraintTo = 0;
 	}
 }
 
@@ -131,8 +159,8 @@ const IGeometryObject & GeometrySpringDynamic::getGeometryObject() const
 
 void GeometrySpringDynamic::update()
 {
-	cpFloat restLength = cpDampedSpringGetRestLength( m_ConstraintFromTo );
-	cout << "restLength=" << restLength << endl << flush;
+//	cpFloat restLength = cpDampedSpringGetRestLength( m_ConstraintFromTo );
+//	cout << "restLength=" << restLength << endl << flush;
 }
 
 
