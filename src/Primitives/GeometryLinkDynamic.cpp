@@ -55,6 +55,16 @@ void GeometryLinkDynamic::initLink()
 	cpFloat moment = cpMomentForBox( mass, box_width - ballRadius * 2, box_height );
 	m_Body = cpBodyNew( mass, moment );
 
+	int from_x = getPointFrom()->getX();
+	int to_x = getPointTo()->getX();
+	int from_y = getPointFrom()->getY();
+	int to_y = getPointTo()->getY();
+
+	int from_to_center_x = ( from_x + to_x ) / 2;
+	int from_to_center_y = ( from_y + to_y ) / 2;
+
+	cpBodySetPosition( m_Body, cpv( from_to_center_x, from_to_center_y ) );
+
 
 	cpSpaceAddBody( m_Space, m_Body );
 
@@ -67,40 +77,78 @@ void GeometryLinkDynamic::initLink()
 
 void GeometryLinkDynamic::initJoints()
 {
-	if( 0 != getDynamicPointFrom() && 0 != getDynamicPointTo() )
+	if( 0 == getDynamicPointFrom() || 0 == getDynamicPointTo() )
 	{
-		initLink();
-
-		cpFloat ballRadius = getDynamicPointFrom()->getRadius();
-
-		int from_x = getPointFrom()->getX();
-		int to_x = getPointTo()->getX();
-		int from_y = getPointFrom()->getY();
-		int to_y = getPointTo()->getY();
-
-		int katet_width = abs( from_x - to_x );
-		int katet_height = abs( from_y - to_y );
-
-		int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
-
-		cpVect startPoint = cpv( ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, 0 );
-		cpVect endPoint = cpv( box_width - ( box_width / 2 ) - ballRadius, 0 );
-
-		m_ConstraintFrom = cpPivotJointNew2( m_Body, getDynamicPointFrom()->getBody(), startPoint, cpvzero );
-		m_ConstraintTo   = cpPivotJointNew2( m_Body, getDynamicPointTo()->getBody(), endPoint, cpvzero );
-		cpConstraintSetMaxBias( m_ConstraintFrom, INFINITY );
-		cpConstraintSetMaxBias( m_ConstraintTo, INFINITY );
-		cpConstraintSetMaxForce( m_ConstraintFrom, INFINITY );
-		cpConstraintSetMaxForce( m_ConstraintTo, INFINITY );
-		cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
-		cpSpaceAddConstraint( m_Space, m_ConstraintTo );
-
-		cpVect globalStart = cpBodyWorldToLocal( m_Body, startPoint );
-		cpVect globalEnd = cpBodyWorldToLocal( m_Body, endPoint );
-		int a = 0;
-		a++;
+		return;
 	}
+	initLink();
+
+	cpFloat ballRadius = getDynamicPointFrom()->getRadius();
+
+	int from_x = getPointFrom()->getX();
+	int to_x = getPointTo()->getX();
+	int from_y = getPointFrom()->getY();
+	int to_y = getPointTo()->getY();
+
+	int from_to_center_x = ( from_x + to_x ) / 2;
+	int from_to_center_y = ( from_y + to_y ) / 2;
+
+	int katet_width = abs( from_x - to_x );
+	int katet_height = abs( from_y - to_y );
+
+	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+
+	cpVect fromLink = cpv( ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, 0 );
+	cpVect toLink = cpv( box_width - ( box_width / 2 ) - ballRadius, 0 );
+
+	cpVect fromPoint = cpv( 0, 0 );
+	cpVect toPoint = cpv( 0, 0 );
+
+	m_ConstraintFrom = cpPivotJointNew2( m_Body, getDynamicPointFrom()->getBody(), fromLink, fromPoint );
+	m_ConstraintTo   = cpPivotJointNew2( m_Body, getDynamicPointTo()->getBody(), toLink, toPoint );
+	cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
+	cpSpaceAddConstraint( m_Space, m_ConstraintTo );
 }
+/*
+void GeometryLinkDynamic::initJoints()
+{
+	if( 0 == getDynamicPointFrom() || 0 == getDynamicPointTo() )
+	{
+		return;
+	}
+	initLink();
+
+	cpFloat ballRadius = getDynamicPointFrom()->getRadius();
+
+	int from_x = getPointFrom()->getX();
+	int to_x = getPointTo()->getX();
+	int from_y = getPointFrom()->getY();
+	int to_y = getPointTo()->getY();
+
+	int from_to_center_x = ( from_x + to_x ) / 2;
+	int from_to_center_y = ( from_y + to_y ) / 2;
+
+	int katet_width = abs( from_x - to_x );
+	int katet_height = abs( from_y - to_y );
+
+	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+
+	cpVect fromLink = cpv( from_to_center_x + ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, from_to_center_y );
+	cpVect toLink = cpv( from_to_center_x + box_width - ( box_width / 2 ) - ballRadius, from_to_center_y );
+
+	cpVect fromPoint = cpv( from_x, from_y );
+	cpVect toPoint = cpv( to_x, to_y );
+
+	m_ConstraintFrom = cpPivotJointNew2( m_Body, getDynamicPointFrom()->getBody(), fromLink, fromPoint );
+	m_ConstraintTo   = cpPivotJointNew2( m_Body, getDynamicPointTo()->getBody(), toLink, toPoint );
+	cpConstraintSetMaxBias( m_ConstraintFrom, INFINITY );
+	cpConstraintSetMaxBias( m_ConstraintTo, INFINITY );
+	cpConstraintSetMaxForce( m_ConstraintFrom, INFINITY );
+	cpConstraintSetMaxForce( m_ConstraintTo, INFINITY );
+	cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
+	cpSpaceAddConstraint( m_Space, m_ConstraintTo );
+}
+*/
 
 void GeometryLinkDynamic::clearJoints()
 {

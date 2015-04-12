@@ -9,12 +9,12 @@
 #include <string.h>
 #include <iostream>
 
-GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space ) : m_Space( space ), m_Body( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
+GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space ) : m_Space( space ), m_Body( 0 ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicLinks, 0, sizeof( m_DynamicLinks ) );
 }
 
-GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space, GeometrySpring * geometrySpring ) : m_Space( space ), m_Body( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
+GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space, GeometrySpring * geometrySpring ) : m_Space( space ), m_Body( 0 ), m_Shape( 0 ), m_ConstraintFrom( 0 ), m_ConstraintTo( 0 )
 {
 	memset( m_DynamicLinks, 0, sizeof( m_DynamicLinks ) );
 	setLinkFrom( geometrySpring->getLinkFrom() );
@@ -61,6 +61,11 @@ void GeometrySpringDynamic::initSpring()
 	cpFloat moment = cpMomentForBox( mass, box_width, box_height );
 	m_Body = cpBodyNew( mass, moment );
 
+	int from_to_center_x = ( from_x + to_x ) / 2;
+	int from_to_center_y = ( from_y + to_y ) / 2;
+
+	cpBodySetPosition( m_Body, cpv( from_to_center_x, from_to_center_y ) );
+
 	cpSpaceAddBody( m_Space, m_Body );
 //
 //	m_Shape = cpSegmentShapeNew( m_Body, startPoint, endPoint, radius );
@@ -89,20 +94,20 @@ void GeometrySpringDynamic::initJoints()
 
 		int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
 
-		cpVect startPoint = cpv( ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, 0 );
-		cpVect endPoint = cpv( box_width - ( box_width / 2 ) - ballRadius, 0 );
+		cpVect fromSpring = cpv( ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, 0 );
+		cpVect toSpring = cpv( box_width - ( box_width / 2 ) - ballRadius, 0 );
 
-		m_ConstraintFrom = cpPivotJointNew2( m_Body, getDynamicLinkFrom()->getBody(), startPoint, cpvzero );
-		m_ConstraintTo   = cpPivotJointNew2( m_Body, getDynamicLinkTo()->getBody(), endPoint, cpvzero );
-		cpConstraintSetMaxBias( m_ConstraintFrom, INFINITY );
-		cpConstraintSetMaxBias( m_ConstraintTo, INFINITY );
-		cpConstraintSetMaxForce( m_ConstraintFrom, INFINITY );
-		cpConstraintSetMaxForce( m_ConstraintTo, INFINITY );
+		cpVect fromPoint = cpv( 0, 0 );
+		cpVect toPoint = cpv( 0, 0 );
+
+		m_ConstraintFrom = cpPivotJointNew2( m_Body, getDynamicLinkFrom()->getBody(), fromSpring, fromPoint );
+		m_ConstraintTo   = cpPivotJointNew2( m_Body, getDynamicLinkTo()->getBody(), toSpring, toPoint );
+
 		cpSpaceAddConstraint( m_Space, m_ConstraintFrom );
 		cpSpaceAddConstraint( m_Space, m_ConstraintTo );
 
-		cpVect globalStart = cpBodyWorldToLocal( m_Body, startPoint );
-		cpVect globalEnd = cpBodyWorldToLocal( m_Body, endPoint );
+		cpVect globalStart = cpBodyWorldToLocal( m_Body, fromSpring );
+		cpVect globalEnd = cpBodyWorldToLocal( m_Body, toSpring );
 		int a = 0;
 		a++;
 	}
