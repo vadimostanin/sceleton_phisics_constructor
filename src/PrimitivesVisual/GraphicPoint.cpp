@@ -104,11 +104,6 @@ void GraphicPoint::initCircleVertex()
 		{
 			float fsin = sin( ang );
 			float fcos = cos( ang );
-			if( v_i == 149 )
-			{
-				int a = 0;
-				a++;
-			}
 			m_vertexBuffer.push_back( fcos );
 			m_vertexBuffer.push_back( fsin );
 	//		m_vertexBuffer.push_back( 0.0 );

@@ -10,6 +10,8 @@
 #include "GeometryObjectFactory.h"
 #include "GraphicLink.h"
 #include "GraphicObjectsContrucor.h"
+#include "GeometryLinkAddCondition.h"
+#include "GeometrySpringAddCondition.h"
 #include <iostream>
 using namespace std;
 
@@ -83,7 +85,6 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		point_object->setX( x );
 		point_object->setY( y );
 		cout << "add point:" << point_object->getX() << "x" << point_object->getY() << endl << flush;
-		printf( "new_object=%p\n", m_GeometryObjectTracking ); fflush( stdout );
 	}
 
 	IGraphicObject * graphicObject;
@@ -95,7 +96,7 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 
 void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 {
-	if( m_GeometryObjectTracking == 0 )
+	if( 0 == m_GeometryObjectTracking )
 	{
 		return;
 	}
@@ -143,6 +144,45 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 
 void GeometrySceletonOperationTracking::trackerEnd( int x, int y )
 {
+	if( 0 == m_GeometryObjectTracking )
+	{
+		return;
+	}
+
+	bool deleted = false;
+
+	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_SPRING )
+	{
+		GeometrySpring * geoSpring = ((GeometrySpring*)m_GeometryObjectTracking);
+		GeometrySpringAddCondition condition( geoSpring );
+		if( false == condition() )
+		{
+			GeometryObjectsManager::getInstance().removeObjectSmart( m_GeometryObjectTracking );
+			clearTrackingStack();
+
+			deleted = true;
+
+			cout << "remove spring:" << endl << flush;
+		}
+	}
+	else if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
+	{
+		GeometryLink * geoLink = ((GeometryLink*)m_GeometryObjectTracking);
+		GeometryLinkAddCondition condition( geoLink );
+		if( false == condition() )
+		{
+			GeometryObjectsManager::getInstance().removeObjectSmart( m_GeometryObjectTracking );
+			clearTrackingStack();
+
+			deleted = true;
+		}
+	}
+	if( true == deleted )
+	{
+		vector<IGraphicObject *> graphicObjects;
+		constructGraphicObjects( graphicObjects );
+		m_ViewUpdater.setGraphicObjects( graphicObjects );
+	}
 	clearTrackingStack();
 }
 
