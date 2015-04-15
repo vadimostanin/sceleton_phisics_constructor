@@ -23,8 +23,8 @@ public:
 	void setDynamicLinkFrom( GeometryLinkDynamic * dynamicLink );
 	void setDynamicLinkTo( GeometryLinkDynamic * dynamicLink );
 
-	GeometryLinkDynamic * getDynamicLinkFrom() const;
-	GeometryLinkDynamic * getDynamicLinkTo() const;
+	const GeometryLinkDynamic * getDynamicLinkFrom() const;
+	const GeometryLinkDynamic * getDynamicLinkTo() const;
 
 	const IGeometryObject & getGeometryObject() const;
 

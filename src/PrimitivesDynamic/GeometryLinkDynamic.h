@@ -27,8 +27,8 @@ public:
 	cpShape * getShape() const;
 	cpSpace * getSpace() const;
 
-	GeometryPointDynamic * getDynamicPointFrom() const;
-	GeometryPointDynamic * getDynamicPointTo() const;
+	const GeometryPointDynamic * getDynamicPointFrom() const;
+	const GeometryPointDynamic * getDynamicPointTo() const;
 
 	const IGeometryObject & getGeometryObject() const;
 

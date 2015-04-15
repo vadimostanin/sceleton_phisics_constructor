@@ -14,7 +14,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe,org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.cross.exe.debug.326595433" name="Debug" parent="cdt.managedbuild.config.gnu.cross.exe.debug">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="rm -rf" description="" id="cdt.managedbuild.config.gnu.cross.exe.debug.326595433" name="Debug" parent="cdt.managedbuild.config.gnu.cross.exe.debug">
 					<folderInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.326595433." name="/" resourcePath="">
 						<toolChain id="cdt.managedbuild.toolchain.gnu.cross.exe.debug.233331295" name="Cross GCC" superClass="cdt.managedbuild.toolchain.gnu.cross.exe.debug">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.1375146527" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
@@ -48,6 +48,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/Primitives&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/PrimitivesVisual&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/Toolbar&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/PrimitivesDynamic&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.369341491" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
@@ -75,6 +76,7 @@
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/Managers&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/Predicates&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/Primitives&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/PrimitivesDynamic&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/src/PrimitivesVisual&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.2019586759" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>

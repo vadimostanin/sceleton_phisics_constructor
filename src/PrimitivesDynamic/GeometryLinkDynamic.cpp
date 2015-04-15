@@ -184,12 +184,12 @@ void GeometryLinkDynamic::setDynamicPointTo( GeometryPointDynamic * dynamicPoint
     initJoints();
 }
 
-GeometryPointDynamic * GeometryLinkDynamic::getDynamicPointFrom() const
+const GeometryPointDynamic * GeometryLinkDynamic::getDynamicPointFrom() const
 {
 	return m_DynamicPoints[0];
 }
 
-GeometryPointDynamic * GeometryLinkDynamic::getDynamicPointTo() const
+const GeometryPointDynamic * GeometryLinkDynamic::getDynamicPointTo() const
 {
 	return m_DynamicPoints[1];
 }

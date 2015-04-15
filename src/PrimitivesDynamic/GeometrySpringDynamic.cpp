@@ -6,6 +6,7 @@
  */
 
 #include "GeometrySpringDynamic.h"
+#include "DynamicSpringGetCrosslinkPredicate.h"
 #include <string.h>
 #include <iostream>
 
@@ -42,37 +43,37 @@ GeometrySpringDynamic::~GeometrySpringDynamic()
 
 void GeometrySpringDynamic::initSpring()
 {
-//	cpFloat radius = 0.0;
-	cpFloat mass = 1.0;
-	int from_x = ( getLinkFrom()->getPointFrom()->getX() + getLinkFrom()->getPointTo()->getX() ) / 2;
-	int from_y = ( getLinkFrom()->getPointFrom()->getY() + getLinkFrom()->getPointTo()->getY() ) / 2;
+//     cpFloat radius = 0.0;
+	   cpFloat mass = 1.0;
+	   int from_x = ( getLinkFrom()->getPointFrom()->getX() + getLinkFrom()->getPointTo()->getX() ) / 2;
+	   int from_y = ( getLinkFrom()->getPointFrom()->getY() + getLinkFrom()->getPointTo()->getY() ) / 2;
 //
-	int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
-	int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
+	   int to_x = ( getLinkTo()->getPointFrom()->getX() + getLinkTo()->getPointTo()->getX() ) / 2;
+	   int to_y = ( getLinkTo()->getPointFrom()->getY() + getLinkTo()->getPointTo()->getY() ) / 2;
 
-	int katet_width = abs( from_x - to_x );
-	int katet_height = abs( from_y - to_y );
+	   int katet_width = abs( from_x - to_x );
+	   int katet_height = abs( from_y - to_y );
 
-	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
-	int box_height = 2;
+	   int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+	  int box_height = 2;
 
-	cpVect startPoint = cpv( from_x, from_y );
-	cpVect endPoint = cpv( to_x, to_y );
-	cpFloat moment = cpMomentForBox( mass, box_width, box_height );
-	m_Body = cpBodyNew( mass, moment );
+	   cpVect startPoint = cpv( from_x, from_y );
+	   cpVect endPoint = cpv( to_x, to_y );
+	   cpFloat moment = cpMomentForBox( mass, box_width, box_height );
+	   m_Body = cpBodyNew( mass, moment );
 
-	int from_to_center_x = ( from_x + to_x ) / 2;
-	int from_to_center_y = ( from_y + to_y ) / 2;
+	   int from_to_center_x = ( from_x + to_x ) / 2;
+	   int from_to_center_y = ( from_y + to_y ) / 2;
 
-	cpBodySetPosition( m_Body, cpv( from_to_center_x, from_to_center_y ) );
+	   cpBodySetPosition( m_Body, cpv( from_to_center_x, from_to_center_y ) );
 
-	cpSpaceAddBody( m_Space, m_Body );
+	   cpSpaceAddBody( m_Space, m_Body );
 //
-//	m_Shape = cpSegmentShapeNew( m_Body, startPoint, endPoint, radius );
+//     m_Shape = cpSegmentShapeNew( m_Body, startPoint, endPoint, radius );
 //
 //
-////	cpShapeSetFriction( m_Shape, 0 );
-//	cpSpaceAddShape( m_Space, m_Shape );
+////   cpShapeSetFriction( m_Shape, 0 );
+//     cpSpaceAddShape( m_Space, m_Shape );
 }
 
 void GeometrySpringDynamic::initJoints()
@@ -147,12 +148,12 @@ void GeometrySpringDynamic::setDynamicLinkTo( GeometryLinkDynamic * dynamicLink 
     initJoints();
 }
 
-GeometryLinkDynamic * GeometrySpringDynamic::getDynamicLinkFrom() const
+const GeometryLinkDynamic * GeometrySpringDynamic::getDynamicLinkFrom() const
 {
 	return m_DynamicLinks[0];
 }
 
-GeometryLinkDynamic * GeometrySpringDynamic::getDynamicLinkTo() const
+const GeometryLinkDynamic * GeometrySpringDynamic::getDynamicLinkTo() const
 {
 	return m_DynamicLinks[1];
 }
