@@ -1,6 +1,8 @@
 Painting tool on EFL
 
-It is sceleton editing tool for futher neuro evolution projects.
+It is sceleton editing tool for futher with physics engine "Chipmunk" and
+
+plan to do neuro evolution projects self learning to movement sceleton creatures.
 
 Now it looks like this
 
