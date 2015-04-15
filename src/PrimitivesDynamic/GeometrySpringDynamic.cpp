@@ -6,7 +6,6 @@
  */
 
 #include "GeometrySpringDynamic.h"
-#include "DynamicSpringGetCrosslinkPredicate.h"
 #include <string.h>
 #include <iostream>
 
