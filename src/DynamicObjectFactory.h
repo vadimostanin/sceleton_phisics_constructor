@@ -14,6 +14,7 @@
 #include "GeometryObjectsTypes.h"
 #include "GeometryPointDynamic.h"
 #include <chipmunk/chipmunk.h>
+#include <EPhysics.h>
 
 class DynamicObjectFactory
 {
@@ -21,7 +22,6 @@ public:
 	DynamicObjectFactory();
 	virtual ~DynamicObjectFactory();
 
-	IDynamicObject * createObject( GeometryObjectsTypes type );
 	IDynamicObject * createDynamicObject( IGeometryObject * geometryObject );
 	IGraphicObject * createGraphicObject( IDynamicObject * geometryObject, Evas_Object * canvas );
 
@@ -33,6 +33,7 @@ public:
 	void init();
 
 	cpSpace * getSpace() const;
+	EPhysics_World * getWorld() const;
 
 	static DynamicObjectFactory & getInstance();
 
@@ -41,8 +42,12 @@ private:
 	void initSpace();
 	void initCanvasBorders();
 
+	void initEPhysicsWorld();
+
 	cpSpace * m_Space;
 	cpVect m_Gravity;
+
+	EPhysics_World * m_EPhysics_World;
 
 	cpShape * m_LeftBorder;
 	cpShape * m_RightBorder;

@@ -11,12 +11,13 @@
 #include "GeometryPoint.h"
 #include "IDynamicObject.h"
 #include <chipmunk/chipmunk.h>
+#include <EPhysics.h>
 
 class GeometryPointDynamic: virtual public GeometryPoint, public IDynamicObject
 {
 public:
-	GeometryPointDynamic( cpSpace * space );
 	GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint );
+	GeometryPointDynamic( EPhysics_World * world, GeometryPoint * geometryPoint );
 	virtual ~GeometryPointDynamic();
 
 	cpFloat getRadius() const;
@@ -32,15 +33,17 @@ public:
 private:
 
 	void initPoint();
+	void initEphysicsPoint();
 
 	cpSpace 	 * m_Space;
 	cpBody  	 * m_BallBody;
 	cpShape 	 * m_BallShape;
-	cpConstraint * m_IntermidiateConstraint;
-	cpBody  	 * m_OuterBody;
 
 	cpFloat m_Radius;
 	cpFloat m_Mass;
+
+	EPhysics_World * m_Ephysics_World;
+	EPhysics_Body  * m_Ephysics_Body;
 
 };
 

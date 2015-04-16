@@ -18,7 +18,7 @@
 cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
-DynamicObjectFactory::DynamicObjectFactory() : m_Space( 0 ), m_LeftBorder( 0 ), m_RightBorder( 0 ),
+DynamicObjectFactory::DynamicObjectFactory() : m_Space( 0 ), m_EPhysics_World( 0 ), m_LeftBorder( 0 ), m_RightBorder( 0 ),
 		m_TopBorder( 0 ), m_BottomBorder( 0 ), m_CanvasWidth( 0 ), m_CanvasHeight( 0 ), m_Inited( false )
 {
 }
@@ -30,11 +30,18 @@ DynamicObjectFactory::~DynamicObjectFactory()
 	cpShapeFree( m_TopBorder );
 	cpShapeFree( m_BottomBorder );
 	cpSpaceFree( m_Space );
+
+	ephysics_shutdown();
 }
 
 cpSpace * DynamicObjectFactory::getSpace() const
 {
 	return m_Space;
+}
+
+EPhysics_World * DynamicObjectFactory::getWorld() const
+{
+	return m_EPhysics_World;
 }
 
 void DynamicObjectFactory::init()
@@ -45,6 +52,7 @@ void DynamicObjectFactory::init()
 	}
 	initSpace();
 	initCanvasBorders();
+	initEPhysicsWorld();
 
 	m_Inited = true;
 }
@@ -84,48 +92,50 @@ void DynamicObjectFactory::initSpace()
 	DynamicTimeLineManager::getInstance().setSpace( m_Space );
 }
 
+void DynamicObjectFactory::initEPhysicsWorld()
+{
+	ephysics_init();
+	m_EPhysics_World = ephysics_world_new();
+
+	ephysics_world_gravity_set( m_EPhysics_World, 0, 9.8 * 2.0 / 1.0, 0 );
+
+	ephysics_world_render_geometry_set( m_EPhysics_World, 0, 0, 1, m_CanvasWidth, m_CanvasHeight + 60, 1 );
+	EPhysics_Body * boundary = ephysics_body_bottom_boundary_add( m_EPhysics_World );
+	ephysics_body_restitution_set( boundary, 0.5 );
+	ephysics_body_friction_set( boundary, 5 );
+
+	boundary = ephysics_body_top_boundary_add( m_EPhysics_World );
+	ephysics_body_restitution_set( boundary, 0.5 );
+	ephysics_body_friction_set( boundary, 5 );
+
+	boundary = ephysics_body_right_boundary_add( m_EPhysics_World );
+	ephysics_body_restitution_set( boundary, 0.5 );
+	ephysics_body_friction_set( boundary, 5 );
+
+	boundary = ephysics_body_left_boundary_add( m_EPhysics_World );
+	ephysics_body_restitution_set( boundary, 0.5 );
+	ephysics_body_friction_set( boundary, 5 );
+}
+
 IDynamicObject * DynamicObjectFactory::createDynamicObject( IGeometryObject * geometryObject )
 {
 	IDynamicObject * object = 0;
 	switch( geometryObject->getType() )
 	{
 		case GEOMETRYOBJECT_POINT:
-				object = new GeometryPointDynamic( m_Space, (GeometryPoint *)geometryObject );
+				object = new GeometryPointDynamic( m_EPhysics_World, (GeometryPoint *)geometryObject );
 			break;
 		case GEOMETRYOBJECT_LINK:
-				object = new GeometryLinkDynamic( m_Space, (GeometryLink *)geometryObject );
+//				object = new GeometryLinkDynamic( m_Space, (GeometryLink *)geometryObject );
 			break;
 		case GEOMETRYOBJECT_SPRING:
-				object = new GeometrySpringDynamic( m_Space, (GeometrySpring *)geometryObject );
+//				object = new GeometrySpringDynamic( m_Space, (GeometrySpring *)geometryObject );
 			break;
 		default:
 			break;
 	}
 	return object;
 }
-
-IDynamicObject * DynamicObjectFactory::createObject( GeometryObjectsTypes type )
-{
-	IDynamicObject * object = NULL;
-
-	switch( type )
-	{
-		case GEOMETRYOBJECT_POINT:
-				object = new GeometryPointDynamic( m_Space );
-			break;
-		case GEOMETRYOBJECT_LINK:
-				object = new GeometryLinkDynamic( m_Space );
-			break;
-		case GEOMETRYOBJECT_SPRING:
-				object = new GeometrySpringDynamic( m_Space );
-			break;
-		default:
-			break;
-	}
-
-	return object;
-}
-
 
 IGraphicObject * DynamicObjectFactory::createGraphicObject( IDynamicObject * dynamicObject, Evas_Object * canvas )
 {

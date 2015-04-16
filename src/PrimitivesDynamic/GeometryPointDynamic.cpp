@@ -10,12 +10,9 @@
 #include <iostream>
 using namespace std;
 
-GeometryPointDynamic::GeometryPointDynamic( cpSpace * space ) : m_Space( space ), m_Radius( 8 ), m_Mass( 1 )
-{
-	initPoint();
-}
-
-GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint ) : m_Space( space ), m_Radius( 8 ), m_Mass( 1 )
+GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geometryPoint ) :
+		m_Space( space ), m_BallBody( 0 ), m_BallShape( 0 ), m_Radius( 10 ), m_Mass( 1 ),
+		m_Ephysics_World( 0 ), m_Ephysics_Body( 0 )
 {
 	setX( geometryPoint->getX() );
 	setY( geometryPoint->getY() );
@@ -24,12 +21,30 @@ GeometryPointDynamic::GeometryPointDynamic( cpSpace * space, GeometryPoint * geo
 	initPoint();
 }
 
+GeometryPointDynamic::GeometryPointDynamic( EPhysics_World * world, GeometryPoint * geometryPoint ) :
+		m_Space( 0 ), m_BallBody( 0 ), m_BallShape( 0 ), m_Radius(8 ), m_Mass( 1 ),
+		m_Ephysics_World( world ), m_Ephysics_Body( 0 )
+{
+	setX( geometryPoint->getX() );
+	setY( geometryPoint->getY() );
+	setId( geometryPoint->getId() );
+
+	initEphysicsPoint();
+}
+
 GeometryPointDynamic::~GeometryPointDynamic()
 {
-	cpSpaceRemoveShape( m_Space, m_BallShape );
-	cpShapeFree( m_BallShape );
-	cpSpaceRemoveBody( m_Space, m_BallBody );
-	cpBodyFree( m_BallBody );
+	if( 0 != m_Space )
+	{
+		cpSpaceRemoveShape( m_Space, m_BallShape );
+		cpShapeFree( m_BallShape );
+		cpSpaceRemoveBody( m_Space, m_BallBody );
+		cpBodyFree( m_BallBody );
+	}
+	if( 0 != m_Ephysics_Body )
+	{
+		ephysics_body_del( m_Ephysics_Body );
+	}
 }
 
 const IGeometryObject & GeometryPointDynamic::getGeometryObject() const
@@ -41,11 +56,17 @@ GeometryPointDynamic * lpThis = 0;
 
 void GeometryPointDynamic::update()
 {
-	cpVect pos = cpBodyGetPosition( m_BallBody );
-//	cpVect vel = cpBodyGetVelocity( m_BallBody );
+//	cpVect pos = cpBodyGetPosition( m_BallBody );
+//
+//	setX( pos.x );
+//	setY( pos.y );
 
-	setX( pos.x );
-	setY( pos.y );
+	Evas_Coord x = 0, y = 0, z = 0, w = 0, h = 0, d = 0;
+	ephysics_body_geometry_get( m_Ephysics_Body, &x, &y, &z, &w, &h, &d );
+
+	setX( x );
+	setY( y );
+	cout << "x=" << x << "; y=" << y << endl << flush;
 }
 
 void GeometryPointDynamic::initPoint()
@@ -54,7 +75,6 @@ void GeometryPointDynamic::initPoint()
 	// The moment of inertia is like mass for rotation
 	// Use the cpMomentFor*() functions to help you approximate it.
 	cpFloat moment = cpMomentForCircle( m_Mass, 0, m_Radius, cpvzero );
-	cpFloat emptyBodyMoment = cpMomentForCircle( m_Mass, 0, 0.1, cpvzero );
 
 	// The cpSpaceAdd*() functions return the thing that you are adding.
 	// It's convenient to create and add an object in one line.
@@ -70,11 +90,19 @@ void GeometryPointDynamic::initPoint()
 	cpShapeSetFriction( m_BallShape, 1.0 );
 
 	cpShapeSetElasticity( m_BallShape, 0.3 );
+}
 
-//	m_TrackingBody = cpShapeGetBody( shape );
-//
-//
-//	m_IntermidiateConstraint = cpSpaceAddConstraint( m_Space, cpPivotJointNew2( m_BallBody, m_OuterBody, cpvzero, cpvzero ) );
+void GeometryPointDynamic::initEphysicsPoint()
+{
+	m_Ephysics_Body = ephysics_body_sphere_add( m_Ephysics_World );
+	ephysics_body_mass_set( m_Ephysics_Body, m_Mass );
+	ephysics_body_restitution_set( m_Ephysics_Body, 0.5 );
+	ephysics_body_friction_set( m_Ephysics_Body, 0.1 );
+
+	int x = getX();
+	int y = getY();
+
+	ephysics_body_geometry_set( m_Ephysics_Body, x, y, 0, getRadius(), getRadius(), 1 );
 }
 
 cpFloat GeometryPointDynamic::getRadius() const

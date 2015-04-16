@@ -30,6 +30,10 @@ void DynamicObjectsContructor::convert( vector<IGeometryObject *> & geometryObje
 	{
 		IDynamicObject * dynamicObject = (GeometryPointDynamic *)DynamicObjectFactory::getInstance().createDynamicObject( (*iter) );
 
+		if( 0 == dynamicObject )
+		{
+			continue;
+		}
 		dynamicObjects.push_back( dynamicObject );
 	}
 }

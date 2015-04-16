@@ -87,9 +87,6 @@ void GeometrySpringDynamic::initSpring()
 	int angle_tg_int = angle_from_tg / M_PI * 180;
 	int angle_cos_int = angle_from_cos / M_PI * 180;
 
-	int a = 0;
-	a++;
-
 	const GeometryLinkDynamic * linkFrom = getDynamicLinkFrom();
 	const GeometryLinkDynamic * linkTo = getDynamicLinkTo();
 

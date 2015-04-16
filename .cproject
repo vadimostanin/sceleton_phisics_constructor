@@ -63,6 +63,7 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="pthread"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="png"/>
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="edje"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="ephysics"/>
 								</option>
 								<option id="gnu.cpp.link.option.flags.1277436186" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-zmuldefs" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1508405349" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -92,6 +93,7 @@
 						</tool>
 					</fileInfo>
 					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.326595433.348820087" name="GraphicPointDynamic.h" rcbsApplicability="disable" resourcePath="src/PrimitivesVisual/GraphicPointDynamic.h" toolsToInvoke=""/>
+					<fileInfo id="cdt.managedbuild.config.gnu.cross.exe.debug.326595433.1745455102" name="GeometrySpringDynamic.h" rcbsApplicability="disable" resourcePath="src/PrimitivesDynamic/GeometrySpringDynamic.h" toolsToInvoke=""/>
 					<sourceEntries>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
