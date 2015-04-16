@@ -15,7 +15,7 @@
 #include "DynamicTimeLineManager.h"
 
 #define GRABBABLE_MASK_BIT (1<<31)
-cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
+//cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
 cpShapeFilter NOT_GRABBABLE_FILTER = {CP_NO_GROUP, ~GRABBABLE_MASK_BIT, ~GRABBABLE_MASK_BIT};
 
 DynamicObjectFactory::DynamicObjectFactory() : m_Space( 0 ), m_LeftBorder( 0 ), m_RightBorder( 0 ),

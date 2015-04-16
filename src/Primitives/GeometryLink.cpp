@@ -8,6 +8,7 @@
 #include "GeometryLink.h"
 #include <stdlib.h>
 #include <sstream>
+#include <cmath>
 using namespace std;
 
 GeometryLink::GeometryLink() : m_Id( rand() )
@@ -138,3 +139,19 @@ const GeometryPoint * GeometryLink::getPointTo() const
 	const GeometryPoint * p = m_Points[1];
 	return p;
 }
+
+int GeometryLink::getWidth() const
+{
+	int linkfrom_katet_width = abs( getPointFrom()->getX() - getPointTo()->getX() );
+	int linkfrom_katet_height = abs( getPointFrom()->getY() - getPointTo()->getY() );
+
+	int linkfrom_width = sqrt( linkfrom_katet_width * linkfrom_katet_width + linkfrom_katet_height * linkfrom_katet_height );
+
+	return linkfrom_width;
+}
+
+
+
+
+
+

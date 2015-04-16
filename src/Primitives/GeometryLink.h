@@ -36,6 +36,8 @@ public:
 	IGeometryObject & operator = ( IGeometryObject & src );
 	bool isValid();
 
+	int getWidth() const;
+
 private:
 	const GeometryPoint * m_Points[2];
 	int m_Id;
