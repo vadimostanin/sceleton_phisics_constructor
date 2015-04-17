@@ -21,7 +21,6 @@ public:
 	DynamicObjectFactory();
 	virtual ~DynamicObjectFactory();
 
-	IDynamicObject * createObject( GeometryObjectsTypes type );
 	IDynamicObject * createDynamicObject( IGeometryObject * geometryObject );
 	IGraphicObject * createGraphicObject( IDynamicObject * geometryObject, Evas_Object * canvas );
 

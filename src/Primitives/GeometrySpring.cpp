@@ -6,15 +6,21 @@
  */
 
 #include "GeometrySpring.h"
+#include "GeometrySpringGetCrosslinkPredicate.h"
+#include "GeometrySpringGetShortestLinkPredicate.h"
+#include "GeometryLinksAngleGetPredicate.h"
 #include <stdlib.h>
+#include <cstring>
+#include <cmath>
 #include <sstream>
 using namespace std;
 
-GeometrySpring::GeometrySpring() : m_Id( rand() ), m_IsForward( true )
+GeometrySpring::GeometrySpring() : m_Id( rand() ), m_IsClosedPath( true ), m_State( GEOMETRYOBJECTCONSTRUCTING_NONE )
 {
+	memset( m_geometryLinks, 0, sizeof( m_geometryLinks ) );
 }
 
-GeometrySpring::GeometrySpring( const GeometryLink * linkFrom, const GeometryLink * linkTo ) : m_Id( rand() ), m_IsForward( true )
+GeometrySpring::GeometrySpring( const GeometryLink * linkFrom, const GeometryLink * linkTo ) : m_Id( rand() ), m_IsClosedPath( true ), m_State( GEOMETRYOBJECTCONSTRUCTING_NONE )
 {
 	m_geometryLinks[0] = linkFrom;
 	m_geometryLinks[1] = linkTo;
@@ -33,7 +39,7 @@ GeometrySpring & GeometrySpring::operator = ( const GeometrySpring & src )
 	const GeometryLink * link = src.getLinkFrom();
 	setLinkFrom( link );
 	setLinkTo( src.getLinkTo() );
-	setIsForward( src.getIsForward() );
+	setIsClosedPath( src.getIsClosedPath() );
 
 	return *this;
 }
@@ -70,14 +76,37 @@ const GeometryLink * GeometrySpring::getLinkTo() const
 	return m_geometryLinks[1];
 }
 
-void GeometrySpring::setIsForward( bool isForward )
+void GeometrySpring::setIsClosedPath( bool isClosedPath )
 {
-	m_IsForward = isForward;
+	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
+	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
+	GeometrySpringGetShortestLinkPredicate getShortesLink( this );
+	const GeometryLink * shorteslink = getShortesLink();
+
+	int crosslink_x = crosslinkPoint->getX();
+	int crosslink_y = crosslinkPoint->getY();
+
+	float degree = M_PI / 180.0;
+
+	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
+	GeometryPoint pointX0YN( crosslink_x + shorteslink->getWidth(), crosslink_y );
+	GeometryLink linkY0( &pointX0Y0, &pointX0YN );
+
+	GeometryLinksAngleGetPredicate getAngleLinkFrom( getLinkFrom(), &linkY0 );
+	GeometryLinksAngleGetPredicate getAngleLinkTo( getLinkFrom(), &linkY0 );
+
+	float linkFromAngle = getAngleLinkFrom();
+	float linkToAngle = getAngleLinkTo();
+
+	int linkFromAngleInt = linkFromAngle / M_PI * 180.0;
+	int linkToAngleInt = linkToAngle / M_PI * 180.0;
+
+	m_IsClosedPath = isClosedPath;
 }
 
-bool GeometrySpring::getIsForward() const
+bool GeometrySpring::getIsClosedPath() const
 {
-	return m_IsForward;
+	return m_IsClosedPath;
 }
 
 void GeometrySpring::setLinkFrom( const GeometryLink * linkFrom )
@@ -102,13 +131,9 @@ void GeometrySpring::setId( int id)
 
 IGeometryObject * GeometrySpring::clone()
 {
-	GeometrySpring * newSpring = new GeometrySpring;
-
-	newSpring->setLinkFrom( this->getLinkFrom() );
-	newSpring->setLinkTo( this->getLinkTo() );
-
+	GeometrySpring * newSpring = new GeometrySpring( getLinkFrom(), getLinkTo() );
 	newSpring->setId( getId() );
-	newSpring->setIsForward( getIsForward() );
+	newSpring->setIsClosedPath( getIsClosedPath() );
 
 
 	return newSpring;
@@ -133,7 +158,7 @@ IGeometryObject & GeometrySpring::operator = ( IGeometryObject & src )
 	const GeometryLink * link = ((GeometrySpring &)src).getLinkFrom();
 	setLinkFrom( link );
 	setLinkTo( ((GeometrySpring &)src).getLinkTo() );
-	setIsForward( ((GeometrySpring &)src).getIsForward() );
+	setIsClosedPath( ((GeometrySpring &)src).getIsClosedPath() );
 	setId( ((GeometrySpring &)src).getId() );
 
 	return *this;
@@ -159,5 +184,10 @@ GeometryObjectsTypes GeometrySpring::getType() const
 
 GeometryObjectsConstructiongStates GeometrySpring::getConstructingState()
 {
-	return GEOMETRYOBJECTCONSTRUCTING_COMPLETE;
+	return m_State;
+}
+
+void GeometrySpring::setConstructingState( GeometryObjectsConstructiongStates state )
+{
+	m_State = state;
 }

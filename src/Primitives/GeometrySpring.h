@@ -28,8 +28,10 @@ public:
 	void setLinkFrom( const GeometryLink * linkFrom );
 	void setLinkTo( const GeometryLink * linkTo );
 
-	void setIsForward( bool isForward );
-	bool getIsForward() const;
+	void setIsClosedPath( int x, int y );
+	bool getIsClosedPath() const;
+
+	void setConstructingState( GeometryObjectsConstructiongStates state );
 
 	GeometryObjectsTypes getType() const;
 	GeometryObjectsConstructiongStates getConstructingState();
@@ -42,11 +44,15 @@ public:
 
 private:
 
+	void setIsClosedPath( bool isClosedPath );
+
 	const GeometryLink * m_geometryLinks[2];
 
 	int m_Id;
 
-	bool m_IsForward;
+	bool m_IsClosedPath;
+
+	GeometryObjectsConstructiongStates m_State;
 };
 
 #endif /* GEOMETRYSPRING_H_ */

@@ -31,7 +31,7 @@ private:
 	void initCircleVertexes();
 	void draw_line_2d();
 
-	GeometrySpring m_geometrySpring;
+	GeometrySpring * m_geometrySpring;
 	unsigned int m_springRotateAngle;
 };
 

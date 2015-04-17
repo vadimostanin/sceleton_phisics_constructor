@@ -104,29 +104,6 @@ IDynamicObject * DynamicObjectFactory::createDynamicObject( IGeometryObject * ge
 	return object;
 }
 
-IDynamicObject * DynamicObjectFactory::createObject( GeometryObjectsTypes type )
-{
-	IDynamicObject * object = NULL;
-
-	switch( type )
-	{
-		case GEOMETRYOBJECT_POINT:
-				object = new GeometryPointDynamic( m_Space );
-			break;
-		case GEOMETRYOBJECT_LINK:
-				object = new GeometryLinkDynamic( m_Space );
-			break;
-		case GEOMETRYOBJECT_SPRING:
-				object = new GeometrySpringDynamic( m_Space );
-			break;
-		default:
-			break;
-	}
-
-	return object;
-}
-
-
 IGraphicObject * DynamicObjectFactory::createGraphicObject( IDynamicObject * dynamicObject, Evas_Object * canvas )
 {
 	IGraphicObject * object = 0;

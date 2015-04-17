@@ -8,12 +8,13 @@
 #include "GraphicSpring.h"
 #include "GeometrySpringGetCrosslinkPredicate.h"
 #include "GeometrySpringGetShortestLinkPredicate.h"
+#include "GeometryLinksAngleGetPredicate.h"
 #include <iostream>
 using namespace std;
 
 GraphicSpring::GraphicSpring( IGeometryObject * geometryObject, Evas_Object * canvas ) : GraphicObjectBase( canvas ), m_springRotateAngle( 0 )
 {
-	m_geometrySpring = *geometryObject;
+	m_geometrySpring = (GeometrySpring *)geometryObject;
 }
 
 GraphicSpring::GraphicSpring( const GraphicSpring & src )
@@ -31,13 +32,14 @@ void GraphicSpring::draw()
 //	cout << "draw spring id=" << m_geometrySpring.getId() << endl << flush;
 
 	initLineVertexes();
+	initCircleVertexes();
 
 	draw_line_2d();
 }
 
 IGeometryObject & GraphicSpring::getGeometryObject()
 {
-	return m_geometrySpring;
+	return *m_geometrySpring;
 }
 
 string GraphicSpring::getVertexShader()
@@ -76,11 +78,11 @@ void GraphicSpring::initLineVertexes()
 {
 	m_vertexBuffer.clear();
 
-	int from_x = ( m_geometrySpring.getLinkFrom()->getPointFrom()->getX() + m_geometrySpring.getLinkFrom()->getPointTo()->getX() ) / 2;
-	int from_y = ( m_geometrySpring.getLinkFrom()->getPointFrom()->getY() + m_geometrySpring.getLinkFrom()->getPointTo()->getY() ) / 2;
+	int from_x = ( m_geometrySpring->getLinkFrom()->getPointFrom()->getX() + m_geometrySpring->getLinkFrom()->getPointTo()->getX() ) / 2;
+	int from_y = ( m_geometrySpring->getLinkFrom()->getPointFrom()->getY() + m_geometrySpring->getLinkFrom()->getPointTo()->getY() ) / 2;
 
-	int to_x = ( m_geometrySpring.getLinkTo()->getPointFrom()->getX() + m_geometrySpring.getLinkTo()->getPointTo()->getX() ) / 2;
-	int to_y = ( m_geometrySpring.getLinkTo()->getPointFrom()->getY() + m_geometrySpring.getLinkTo()->getPointTo()->getY() ) / 2;
+	int to_x = ( m_geometrySpring->getLinkTo()->getPointFrom()->getX() + m_geometrySpring->getLinkTo()->getPointTo()->getX() ) / 2;
+	int to_y = ( m_geometrySpring->getLinkTo()->getPointFrom()->getY() + m_geometrySpring->getLinkTo()->getPointTo()->getY() ) / 2;
 
 	m_vertexBuffer.push_back( pixels_to_coords_x( from_x ) );
 	m_vertexBuffer.push_back( pixels_to_coords_y( from_y ) );
@@ -97,10 +99,29 @@ void GraphicSpring::initCircleVertexes()
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( geometrySpring );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
 	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
-	const GeometryLink * shorteslinks = getShortesLink();
+	const GeometryLink * shorteslink = getShortesLink();
 
 	int crosslink_x = crosslinkPoint->getX();
 	int crosslink_y = crosslinkPoint->getY();
+
+	float degree = M_PI / 180.0;
+
+	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
+	GeometryPoint pointX0Y1( crosslink_x, crosslink_y + shorteslink->getWidth() );
+	GeometryLink linkY0( &pointX0Y0, &pointX0Y1 );
+
+	GeometryLinksAngleGetPredicate getAngle( geometrySpring->getLinkFrom(), &linkY0 );
+
+	float angle = getAngle();
+
+	int angle_int = angle / M_PI * 180.0;
+
+	cout << "angle=" << angle_int << endl << flush;
+
+	for( float angle_i = ( -1 ) * M_PI ; angle_i < M_PI ; angle_i += degree )
+	{
+		;
+	}
 
 }
 

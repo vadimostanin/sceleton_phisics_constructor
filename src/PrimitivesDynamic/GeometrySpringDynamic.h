@@ -16,7 +16,6 @@
 class GeometrySpringDynamic: public GeometrySpring, public IDynamicObject
 {
 public:
-	GeometrySpringDynamic( cpSpace * space );
 	GeometrySpringDynamic( cpSpace * space, GeometrySpring * geometrySpring );
 	virtual ~GeometrySpringDynamic();
 
