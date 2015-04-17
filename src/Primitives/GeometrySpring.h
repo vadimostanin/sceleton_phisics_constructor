@@ -24,13 +24,15 @@ public:
 
 	const GeometryLink * getLinkFrom() 	const;
 	const GeometryLink * getLinkTo() 	const;
-	const int 		     getLength() 	const;
 
 	void setLinkFrom( const GeometryLink * linkFrom );
 	void setLinkTo( const GeometryLink * linkTo );
-	void setLength( int length );
+
+	void setIsForward( bool isForward );
+	bool getIsForward() const;
 
 	GeometryObjectsTypes getType() const;
+	GeometryObjectsConstructiongStates getConstructingState();
 	int getId() const;
 	void setId( int id );
 	IGeometryObject * clone();
@@ -44,8 +46,7 @@ private:
 
 	int m_Id;
 
-	int m_Length;
-
+	bool m_IsForward;
 };
 
 #endif /* GEOMETRYSPRING_H_ */

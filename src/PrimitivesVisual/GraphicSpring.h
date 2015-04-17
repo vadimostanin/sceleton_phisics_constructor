@@ -12,7 +12,8 @@
 #include "IGraphicObject.h"
 #include "GeometrySpring.h"
 
-class GraphicSpring: public GraphicObjectBase, public IGraphicObject {
+class GraphicSpring: public GraphicObjectBase, public IGraphicObject
+{
 public:
 	GraphicSpring( IGeometryObject * geometryObject, Evas_Object * canvas );
 	GraphicSpring( const GraphicSpring & src );

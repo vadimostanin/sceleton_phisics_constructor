@@ -12,6 +12,7 @@
 #include "GraphicObjectsContrucor.h"
 #include "GeometryLinkAddCondition.h"
 #include "GeometrySpringAddCondition.h"
+#include "MouseCoordinatesHolder.h"
 #include <iostream>
 using namespace std;
 
@@ -86,6 +87,9 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		point_object->setY( y );
 		cout << "add point:" << point_object->getX() << "x" << point_object->getY() << endl << flush;
 	}
+
+	MouseCoordinatesHolder::getInstance().setX( x );
+	MouseCoordinatesHolder::getInstance().setY( y );
 
 	IGraphicObject * graphicObject;
 

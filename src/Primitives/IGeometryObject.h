@@ -9,6 +9,7 @@
 #define IGEOMETRYOBJECT_H_
 
 #include "GeometryObjectsTypes.h"
+#include "GeometryObjectsConstructiongStates.h"
 #include <string>
 using namespace std;
 
@@ -18,6 +19,7 @@ public:
 	virtual ~IGeometryObject(){}
 
 	virtual GeometryObjectsTypes getType() const = 0;
+	virtual GeometryObjectsConstructiongStates getConstructingState() = 0;
 	virtual int getId() const = 0;
 	virtual IGeometryObject * clone() = 0;
 	virtual string toString() = 0;

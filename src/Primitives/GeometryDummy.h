@@ -10,13 +10,15 @@
 
 #include "IGeometryObject.h"
 
-class GeometryDummy: public IGeometryObject {
+class GeometryDummy: public IGeometryObject
+{
 public:
 	GeometryDummy();
 	GeometryDummy( const GeometryDummy & src );
 	virtual ~GeometryDummy();
 
 	GeometryObjectsTypes getType() const;
+	GeometryObjectsConstructiongStates getConstructingState();
 	int getId() const;
 	void setId( int id);
 	IGeometryObject * clone();

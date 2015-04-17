@@ -10,11 +10,11 @@
 #include <sstream>
 using namespace std;
 
-GeometrySpring::GeometrySpring() : m_Id( rand() ), m_Length( 0 )
+GeometrySpring::GeometrySpring() : m_Id( rand() ), m_IsForward( true )
 {
 }
 
-GeometrySpring::GeometrySpring( const GeometryLink * linkFrom, const GeometryLink * linkTo ) : m_Id( rand() ), m_Length( 0 )
+GeometrySpring::GeometrySpring( const GeometryLink * linkFrom, const GeometryLink * linkTo ) : m_Id( rand() ), m_IsForward( true )
 {
 	m_geometryLinks[0] = linkFrom;
 	m_geometryLinks[1] = linkTo;
@@ -33,13 +33,21 @@ GeometrySpring & GeometrySpring::operator = ( const GeometrySpring & src )
 	const GeometryLink * link = src.getLinkFrom();
 	setLinkFrom( link );
 	setLinkTo( src.getLinkTo() );
-	m_Length = src.getLength();
+	setIsForward( src.getIsForward() );
 
 	return *this;
 }
 
 bool GeometrySpring::operator == ( const GeometrySpring & src ) const
 {
+	if( getLinkFrom() != src.getLinkFrom() )
+	{
+		return false;
+	}
+	if( getLinkTo() != src.getLinkTo() )
+	{
+		return false;
+	}
 	return true;
 }
 
@@ -62,9 +70,14 @@ const GeometryLink * GeometrySpring::getLinkTo() const
 	return m_geometryLinks[1];
 }
 
-const int GeometrySpring::getLength() const
+void GeometrySpring::setIsForward( bool isForward )
 {
-	return m_Length;
+	m_IsForward = isForward;
+}
+
+bool GeometrySpring::getIsForward() const
+{
+	return m_IsForward;
 }
 
 void GeometrySpring::setLinkFrom( const GeometryLink * linkFrom )
@@ -75,11 +88,6 @@ void GeometrySpring::setLinkFrom( const GeometryLink * linkFrom )
 void GeometrySpring::setLinkTo( const GeometryLink * linkTo )
 {
 	m_geometryLinks[1] = linkTo;
-}
-
-void GeometrySpring::setLength( int length )
-{
-	m_Length = length;
 }
 
 int GeometrySpring::getId() const
@@ -99,8 +107,8 @@ IGeometryObject * GeometrySpring::clone()
 	newSpring->setLinkFrom( this->getLinkFrom() );
 	newSpring->setLinkTo( this->getLinkTo() );
 
-	newSpring->m_Id = m_Id;
-	newSpring->m_Length = m_Length;
+	newSpring->setId( getId() );
+	newSpring->setIsForward( getIsForward() );
 
 
 	return newSpring;
@@ -125,8 +133,8 @@ IGeometryObject & GeometrySpring::operator = ( IGeometryObject & src )
 	const GeometryLink * link = ((GeometrySpring &)src).getLinkFrom();
 	setLinkFrom( link );
 	setLinkTo( ((GeometrySpring &)src).getLinkTo() );
-	m_Length = ((GeometrySpring &)src).getLength();
-	m_Id = ((GeometrySpring &)src).getId();
+	setIsForward( ((GeometrySpring &)src).getIsForward() );
+	setId( ((GeometrySpring &)src).getId() );
 
 	return *this;
 }
@@ -147,4 +155,9 @@ bool GeometrySpring::isValid()
 GeometryObjectsTypes GeometrySpring::getType() const
 {
 	return GEOMETRYOBJECT_SPRING;
+}
+
+GeometryObjectsConstructiongStates GeometrySpring::getConstructingState()
+{
+	return GEOMETRYOBJECTCONSTRUCTING_COMPLETE;
 }

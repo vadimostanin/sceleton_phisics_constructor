@@ -30,6 +30,11 @@ GeometryObjectsTypes GeometryLink::getType() const
 	return GEOMETRYOBJECT_LINK;
 }
 
+GeometryObjectsConstructiongStates GeometryLink::getConstructingState()
+{
+	return GEOMETRYOBJECTCONSTRUCTING_COMPLETE;
+}
+
 int GeometryLink::getId() const
 {
 	return m_Id;

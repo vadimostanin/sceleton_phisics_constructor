@@ -31,6 +31,7 @@ public:
 	int getId() const;
 	void setId( int id );
 	GeometryObjectsTypes getType() const;
+	GeometryObjectsConstructiongStates getConstructingState();
 	IGeometryObject * clone();
 	string toString();
 	IGeometryObject & operator = ( IGeometryObject & src );
