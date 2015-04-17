@@ -10,7 +10,7 @@
 #include <string.h>
 #include <iostream>
 
-GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space, GeometrySpring * geometrySpring ) : GeometrySpring( *geometrySpring ), m_Space( space ), m_Body( 0 ), m_Shape( 0 ), m_ConstraintGear( 0 )
+GeometrySpringDynamic::GeometrySpringDynamic( cpSpace * space, GeometrySpring * geometrySpring ) : GeometrySpring( geometrySpring->getLinkFrom(), geometrySpring->getLinkTo() ), m_Space( space ), m_Body( 0 ), m_Shape( 0 ), m_ConstraintGear( 0 )
 {
 	memset( m_DynamicLinks, 0, sizeof( m_DynamicLinks ) );
 	setLinkFrom( geometrySpring->getLinkFrom() );
