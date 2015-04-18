@@ -117,6 +117,7 @@ void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 				geoSpring.setLinkTo( link_to );
 			}
 		}
+		geoSpring.setIsClosedPath( x, y );
 	}
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
 	{

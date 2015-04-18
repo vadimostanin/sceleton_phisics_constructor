@@ -9,6 +9,8 @@
 #include "GeometrySpringGetCrosslinkPredicate.h"
 #include "GeometrySpringGetShortestLinkPredicate.h"
 #include "GeometryLinksAngleGetPredicate.h"
+#include "GeometryLinkGetAbsoluteAnglePredicate.h"
+#include "MouseCoordinatesHolder.h"
 #include <iostream>
 using namespace std;
 
@@ -93,30 +95,42 @@ void GraphicSpring::initLineVertexes()
 
 void GraphicSpring::initCircleVertexes()
 {
-	m_vertexBuffer.clear();
+//	m_vertexBuffer.clear();
+
+//	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
+//	const GeometryLink * shorteslink = getShortesLink();
+//
+//	int crosslink_x = crosslinkPoint->getX();
+//	int crosslink_y = crosslinkPoint->getY();
+//
+//	float degree = M_PI / 180.0;
+//
+//	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
+//	GeometryPoint pointX0Y1( crosslink_x, crosslink_y + shorteslink->getWidth() );
+//	GeometryLink linkY0( &pointX0Y0, &pointX0Y1 );
+//
+//	GeometryLinksAngleGetPredicate getAngle( geometrySpring->getLinkFrom(), &linkY0 );
+//
+//	float angle = getAngle();
+//
+//	int angle_int = angle / M_PI * 180.0;
+//
+//	cout << "angle=" << angle_int << endl << flush;
+//
+//	for( float angle_i = ( -1 ) * M_PI ; angle_i < M_PI ; angle_i += degree )
+//	{
+//		;
+//	}
+
+	int mouseX = MouseCoordinatesHolder::getInstance().getX();
+	int mouseY = MouseCoordinatesHolder::getInstance().getY();
 
 	GeometrySpring * geometrySpring = (GeometrySpring *)&( getGeometryObject() );
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( geometrySpring );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
-	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
-	const GeometryLink * shorteslink = getShortesLink();
-
-	int crosslink_x = crosslinkPoint->getX();
-	int crosslink_y = crosslinkPoint->getY();
+	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( crosslinkPoint->getX(), crosslinkPoint->getY(), mouseX, mouseY );
 
 	float degree = M_PI / 180.0;
-
-	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
-	GeometryPoint pointX0Y1( crosslink_x, crosslink_y + shorteslink->getWidth() );
-	GeometryLink linkY0( &pointX0Y0, &pointX0Y1 );
-
-	GeometryLinksAngleGetPredicate getAngle( geometrySpring->getLinkFrom(), &linkY0 );
-
-	float angle = getAngle();
-
-	int angle_int = angle / M_PI * 180.0;
-
-	cout << "angle=" << angle_int << endl << flush;
 
 	for( float angle_i = ( -1 ) * M_PI ; angle_i < M_PI ; angle_i += degree )
 	{

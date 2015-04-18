@@ -28,6 +28,8 @@ public:
 	const GeometryPoint * getPointFrom() const;
 	const GeometryPoint * getPointTo() const;
 
+	int getAngle() const;
+
 	int getId() const;
 	void setId( int id );
 	GeometryObjectsTypes getType() const;

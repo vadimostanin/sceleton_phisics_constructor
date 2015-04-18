@@ -9,10 +9,12 @@
 #include "GeometrySpringGetCrosslinkPredicate.h"
 #include "GeometrySpringGetShortestLinkPredicate.h"
 #include "GeometryLinksAngleGetPredicate.h"
+#include "GeometryLinkGetAbsoluteAnglePredicate.h"
 #include <stdlib.h>
 #include <cstring>
 #include <cmath>
 #include <sstream>
+#include <iostream>
 using namespace std;
 
 GeometrySpring::GeometrySpring() : m_Id( rand() ), m_IsClosedPath( true ), m_State( GEOMETRYOBJECTCONSTRUCTING_NONE )
@@ -76,31 +78,60 @@ const GeometryLink * GeometrySpring::getLinkTo() const
 	return m_geometryLinks[1];
 }
 
-void GeometrySpring::setIsClosedPath( bool isClosedPath )
+//void GeometrySpring::setIsClosedPath( int x, int y )
+//{
+//	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
+//	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
+//	GeometrySpringGetShortestLinkPredicate getShortesLink( this );
+//	const GeometryLink * shorteslink = getShortesLink();
+//
+//	int crosslink_x = crosslinkPoint->getX();
+//	int crosslink_y = crosslinkPoint->getY();
+//
+//	float degree = M_PI / 180.0;
+//
+//	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
+//	GeometryPoint pointX0YN( crosslink_x + shorteslink->getWidth(), crosslink_y );
+//	GeometryLink linkY0( &pointX0Y0, &pointX0YN );
+//
+//	GeometryLinksAngleGetPredicate getAngleLinkFrom( getLinkFrom(), &linkY0 );
+//	GeometryLinksAngleGetPredicate getAngleLinkTo( getLinkFrom(), &linkY0 );
+//
+//	float linkFromAngle = getAngleLinkFrom();
+//	float linkToAngle = getAngleLinkTo();
+//
+//	int linkFromAngleInt = linkFromAngle / M_PI * 180.0;
+//	int linkToAngleInt = linkToAngle / M_PI * 180.0;
+
+//}
+
+void GeometrySpring::setIsClosedPath( int x, int y )
 {
+	int linkFromAbsoluteAngle = getLinkFrom()->getAngle();
+	int linkToAbsoluteAngle = getLinkTo()->getAngle();
+
+	int minAngle = min( linkFromAbsoluteAngle, linkToAbsoluteAngle );
+	int maxAngle = max( linkFromAbsoluteAngle, linkToAbsoluteAngle );
+
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
-	GeometrySpringGetShortestLinkPredicate getShortesLink( this );
-	const GeometryLink * shorteslink = getShortesLink();
 
-	int crosslink_x = crosslinkPoint->getX();
-	int crosslink_y = crosslinkPoint->getY();
+	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( crosslinkPoint->getX(), crosslinkPoint->getY(), x, y );
+	int currentAbsoluteAngle = getCurrentPointAbsoluteAngle();
+	if( currentAbsoluteAngle > minAngle && currentAbsoluteAngle < maxAngle )
+	{
+		setIsClosedPath( true );
+		cout << "true" << endl << flush;
+	}
+	else
+	{
+		setIsClosedPath( false );
+		cout << "false" << endl << flush;
+	}
+}
 
-	float degree = M_PI / 180.0;
-
-	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
-	GeometryPoint pointX0YN( crosslink_x + shorteslink->getWidth(), crosslink_y );
-	GeometryLink linkY0( &pointX0Y0, &pointX0YN );
-
-	GeometryLinksAngleGetPredicate getAngleLinkFrom( getLinkFrom(), &linkY0 );
-	GeometryLinksAngleGetPredicate getAngleLinkTo( getLinkFrom(), &linkY0 );
-
-	float linkFromAngle = getAngleLinkFrom();
-	float linkToAngle = getAngleLinkTo();
-
-	int linkFromAngleInt = linkFromAngle / M_PI * 180.0;
-	int linkToAngleInt = linkToAngle / M_PI * 180.0;
-
+void GeometrySpring::setIsClosedPath( bool isClosedPath )
+{
 	m_IsClosedPath = isClosedPath;
 }
 

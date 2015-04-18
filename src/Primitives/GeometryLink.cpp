@@ -6,6 +6,7 @@
  */
 
 #include "GeometryLink.h"
+#include "GeometryLinkGetAbsoluteAnglePredicate.h"
 #include <stdlib.h>
 #include <sstream>
 #include <cmath>
@@ -153,6 +154,13 @@ int GeometryLink::getWidth() const
 	int linkfrom_width = sqrt( linkfrom_katet_width * linkfrom_katet_width + linkfrom_katet_height * linkfrom_katet_height );
 
 	return linkfrom_width;
+}
+
+int GeometryLink::getAngle() const
+{
+	GeometryLinkGetAbsoluteAnglePredicate getLinkAbsoluteAngle( this );
+
+	return getLinkAbsoluteAngle();
 }
 
 
