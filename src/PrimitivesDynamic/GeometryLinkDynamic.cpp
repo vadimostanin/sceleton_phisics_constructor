@@ -46,10 +46,7 @@ void GeometryLinkDynamic::initLink()
 
 	cpFloat mass = 1;
 
-	int katet_width = abs( getPointFrom()->getX() - getPointTo()->getX() );
-	int katet_height = abs( getPointFrom()->getY() - getPointTo()->getY() );
-
-	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+	int box_width = getWidth();
 	int box_height = 2;
 
 	cpFloat moment = cpMomentForBox( mass, box_width - ballRadius * 2, box_height );
@@ -85,18 +82,7 @@ void GeometryLinkDynamic::initJoints()
 
 	cpFloat ballRadius = getDynamicPointFrom()->getRadius();
 
-	int from_x = getPointFrom()->getX();
-	int to_x = getPointTo()->getX();
-	int from_y = getPointFrom()->getY();
-	int to_y = getPointTo()->getY();
-
-	int from_to_center_x = ( from_x + to_x ) / 2;
-	int from_to_center_y = ( from_y + to_y ) / 2;
-
-	int katet_width = abs( from_x - to_x );
-	int katet_height = abs( from_y - to_y );
-
-	int box_width = sqrt( katet_height * katet_height + katet_width * katet_width );
+	int box_width = getWidth();
 
 	cpVect fromLink = cpv( ( -1 ) * box_width + ( box_width / 2 ) + ballRadius, 0 );
 	cpVect toLink = cpv( box_width - ( box_width / 2 ) - ballRadius, 0 );

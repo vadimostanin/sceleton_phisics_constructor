@@ -27,8 +27,8 @@ GeometryLinkGetAbsoluteAnglePredicate::~GeometryLinkGetAbsoluteAnglePredicate()
 
 int GeometryLinkGetAbsoluteAnglePredicate::operator()()
 {
-	int linkfrom_pointfrom_x = m_linkX1;
-	int linkfrom_pointto_x = m_linkX2;
+	int linkfrom_pointfrom_x = -m_linkX1;
+	int linkfrom_pointto_x = -m_linkX2;
 
 	int linkfrom_pointfrom_y = m_linkY1;
 	int linkfrom_pointto_y = m_linkY2;
@@ -61,22 +61,13 @@ int GeometryLinkGetAbsoluteAnglePredicate::operator()()
 	float angleCosRelativeHorizontalVectorInt = angleCosRelativeHorizontalVector / M_PI * 180;
 
 	int angleResultInt = 0;
-	if( angleCosRelativeVerticalVectorInt < 90 )//first and second quarter
+	if( angleCosRelativeVerticalVectorInt <= 90 )//first and second quarter
 	{
 		angleResultInt = angleCosRelativeHorizontalVectorInt;
 	}
-	else if( angleCosRelativeVerticalVectorInt >= 90 )//third and fourth quarter
+	else//third and fourth quarter
 	{
-		if( angleCosRelativeHorizontalVectorInt > 90 )//third quarter
-		{
-			angleResultInt = angleCosRelativeHorizontalVectorInt;
-			angleResultInt += 90;
-		}
-		else if( angleCosRelativeHorizontalVectorInt >= 90 )//third quarter
-		{
-			angleResultInt = angleCosRelativeHorizontalVectorInt;
-			angleResultInt += 180;
-		}
+		angleResultInt = 360 - angleCosRelativeHorizontalVectorInt;
 	}
 
 	return angleResultInt;

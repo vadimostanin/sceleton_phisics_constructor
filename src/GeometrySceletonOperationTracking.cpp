@@ -13,6 +13,7 @@
 #include "GeometryLinkAddCondition.h"
 #include "GeometrySpringAddCondition.h"
 #include "MouseCoordinatesHolder.h"
+#include "GeometryLinkGetAbsoluteAnglePredicate.h"
 #include <iostream>
 using namespace std;
 
@@ -100,6 +101,11 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 
 void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 {
+	GeometryLinkGetAbsoluteAnglePredicate getAngle( m_ViewUpdater.getCanvasWidth() / 2, m_ViewUpdater.getCanvasHeight() / 2, x, y );
+	int angle = getAngle();
+	cout << "angle=" << angle << endl << flush;
+	return;
+
 	if( 0 == m_GeometryObjectTracking )
 	{
 		return;
