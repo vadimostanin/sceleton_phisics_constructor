@@ -27,8 +27,8 @@ GeometryLinkGetAbsoluteAnglePredicate::~GeometryLinkGetAbsoluteAnglePredicate()
 
 int GeometryLinkGetAbsoluteAnglePredicate::operator()()
 {
-	int linkfrom_pointfrom_x = -m_linkX1;
-	int linkfrom_pointto_x = -m_linkX2;
+	int linkfrom_pointfrom_x = m_linkX1;
+	int linkfrom_pointto_x = m_linkX2;
 
 	int linkfrom_pointfrom_y = m_linkY1;
 	int linkfrom_pointto_y = m_linkY2;
@@ -37,7 +37,7 @@ int GeometryLinkGetAbsoluteAnglePredicate::operator()()
 	int linkfrom_vector_y = linkfrom_pointfrom_y - linkfrom_pointto_y;
 
 	int tempLinkVertical_vector_x = 0;
-	int tempLinkVertical_vector_y = 10;
+	int tempLinkVertical_vector_y = -10;
 
 	int tempLinkHorizantal_vector_x = 10;
 	int tempLinkHorizantal_vector_y = 0;

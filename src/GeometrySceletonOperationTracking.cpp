@@ -11,7 +11,6 @@
 #include "GraphicLink.h"
 #include "GraphicObjectsContrucor.h"
 #include "GeometryLinkAddCondition.h"
-#include "GeometrySpringAddCondition.h"
 #include "MouseCoordinatesHolder.h"
 #include "GeometryLinkGetAbsoluteAnglePredicate.h"
 #include <iostream>
@@ -57,6 +56,7 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 		m_GeometryObjectTracking = spring_object;
 		spring_object->setLinkFrom( found_link_from );
 		spring_object->setLinkTo( found_link_from );
+		spring_object->setConstructingState( GEOMETRYOBJECTCONSTRUCTING_INPROGRESS );
 
 		cout << "add spring from:" << found_link_from->getId() << "; to:" << found_link_from->getId() << endl << flush;
 
@@ -101,21 +101,18 @@ void GeometrySceletonOperationTracking::trackerBegin( int x, int y )
 
 void GeometrySceletonOperationTracking::trackerContinue( int x, int y )
 {
-	GeometryLinkGetAbsoluteAnglePredicate getAngle( m_ViewUpdater.getCanvasWidth() / 2, m_ViewUpdater.getCanvasHeight() / 2, x, y );
-	int angle = getAngle();
-	cout << "angle=" << angle << endl << flush;
-	return;
-
 	if( 0 == m_GeometryObjectTracking )
 	{
 		return;
 	}
+	MouseCoordinatesHolder::getInstance().setX( x );
+	MouseCoordinatesHolder::getInstance().setY( y );
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_SPRING )
 	{
 		GeometrySpring & geoSpring = *((GeometrySpring*)m_GeometryObjectTracking);
 		const GeometryLink * linkFrom = geoSpring.getLinkFrom();
 		const GeometryLink * link_to = NULL;
-		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestLink( *linkFrom, x, y, link_to );
+		bool foundNearestPoint = GeometryObjectsManager::getInstance().getNearestneighbourLink( *linkFrom, x, y, link_to );
 		if( foundNearestPoint == true )
 		{
 			if( geoSpring.getLinkTo() != link_to )
@@ -164,21 +161,12 @@ void GeometrySceletonOperationTracking::trackerEnd( int x, int y )
 
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_SPRING )
 	{
-		GeometrySpring * geoSpring = ((GeometrySpring*)m_GeometryObjectTracking);
-		GeometrySpringAddCondition condition( geoSpring );
-		if( false == condition() )
-		{
-			GeometryObjectsManager::getInstance().removeObjectSmart( m_GeometryObjectTracking );
-			clearTrackingStack();
-
-			deleted = true;
-
-			cout << "remove spring:" << endl << flush;
-		}
+		GeometrySpring * geometrySpring = (GeometrySpring *)m_GeometryObjectTracking;
+		geometrySpring->setConstructingState( GEOMETRYOBJECTCONSTRUCTING_COMPLETE );
 	}
 	else if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
 	{
-		GeometryLink * geoLink = ((GeometryLink*)m_GeometryObjectTracking);
+		GeometryLink * geoLink = (GeometryLink*)m_GeometryObjectTracking;
 		GeometryLinkAddCondition condition( geoLink );
 		if( false == condition() )
 		{

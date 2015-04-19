@@ -107,6 +107,10 @@ const GeometryLink * GeometrySpring::getLinkTo() const
 
 void GeometrySpring::setIsClosedPath( int x, int y )
 {
+	if( getConstructingState() != GEOMETRYOBJECTCONSTRUCTING_INPROGRESS )
+	{
+		return;
+	}
 	int linkFromAbsoluteAngle = getLinkFrom()->getAngle();
 	int linkToAbsoluteAngle = getLinkTo()->getAngle();
 
@@ -115,18 +119,18 @@ void GeometrySpring::setIsClosedPath( int x, int y )
 
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
-
+//cout << "cross=" << crosslinkPoint->getX() << "x" << crosslinkPoint->getY() << endl << flush;
 	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( crosslinkPoint->getX(), crosslinkPoint->getY(), x, y );
 	int currentAbsoluteAngle = getCurrentPointAbsoluteAngle();
-	if( currentAbsoluteAngle > minAngle && currentAbsoluteAngle < maxAngle )
+	if( currentAbsoluteAngle >= minAngle && currentAbsoluteAngle <= maxAngle )
 	{
 		setIsClosedPath( true );
-		cout << "true" << endl << flush;
+//		cout << "true=" << currentAbsoluteAngle << ">=" << minAngle << " and " << currentAbsoluteAngle << "<=" << maxAngle << endl << flush;
 	}
 	else
 	{
 		setIsClosedPath( false );
-		cout << "false" << endl << flush;
+//		cout << "false=" << currentAbsoluteAngle << "<" << minAngle << " or " << currentAbsoluteAngle << ">" << maxAngle << endl << flush;
 	}
 }
 

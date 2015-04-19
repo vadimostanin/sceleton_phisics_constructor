@@ -95,47 +95,78 @@ void GraphicSpring::initLineVertexes()
 
 void GraphicSpring::initCircleVertexes()
 {
-//	m_vertexBuffer.clear();
-
-//	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
-//	const GeometryLink * shorteslink = getShortesLink();
-//
-//	int crosslink_x = crosslinkPoint->getX();
-//	int crosslink_y = crosslinkPoint->getY();
-//
-//	float degree = M_PI / 180.0;
-//
-//	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
-//	GeometryPoint pointX0Y1( crosslink_x, crosslink_y + shorteslink->getWidth() );
-//	GeometryLink linkY0( &pointX0Y0, &pointX0Y1 );
-//
-//	GeometryLinksAngleGetPredicate getAngle( geometrySpring->getLinkFrom(), &linkY0 );
-//
-//	float angle = getAngle();
-//
-//	int angle_int = angle / M_PI * 180.0;
-//
-//	cout << "angle=" << angle_int << endl << flush;
-//
-//	for( float angle_i = ( -1 ) * M_PI ; angle_i < M_PI ; angle_i += degree )
-//	{
-//		;
-//	}
+	m_vertexBuffer.clear();
 
 	int mouseX = MouseCoordinatesHolder::getInstance().getX();
 	int mouseY = MouseCoordinatesHolder::getInstance().getY();
 
 	GeometrySpring * geometrySpring = (GeometrySpring *)&( getGeometryObject() );
+	GeometryLinkGetAbsoluteAnglePredicate getLinkFromAbsoluteAngle( geometrySpring->getLinkFrom() );
+	GeometryLinkGetAbsoluteAnglePredicate getLinkToAbsoluteAngle( geometrySpring->getLinkTo() );
+	int linkFromAngle     = getLinkFromAbsoluteAngle();
+	int linkToAngle     = getLinkToAbsoluteAngle();
+
+	if( linkFromAngle == linkToAngle )
+	{
+		return;
+	}
+
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( geometrySpring );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
-	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( crosslinkPoint->getX(), crosslinkPoint->getY(), mouseX, mouseY );
+	int X0 = crosslinkPoint->getX();
+	int Y0 = crosslinkPoint->getY();
 
-	float degree = M_PI / 180.0;
+	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( mouseX, mouseY, X0, Y0 );
+//cout << "X0=" << X0 << "; Y0=" << Y0 << "; mouseX=" << mouseX << "; mouseY=" << mouseY << endl << flush;
+	int currentMouseAngle = getCurrentPointAbsoluteAngle();
+//cout << "currentMouseAngle=" << currentMouseAngle << endl << flush;
+	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
+	const GeometryLink * shorteslink = getShortesLink();
+	int Radius = shorteslink->getWidth() / 2;
 
-	for( float angle_i = ( -1 ) * M_PI ; angle_i < M_PI ; angle_i += degree )
+//	cout << "currentAngle=" << currentMouseAngle << "; angleFrom=" << linkFromAngle << "; angleTo=" << linkToAngle << endl << flush;
+
+	for( int angle_i = 0 ; angle_i < 360 ; angle_i ++ )
 	{
-		;
+		if( true == geometrySpring->getIsClosedPath() )
+		{
+			if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
+			{
+				float radian = ( (float)angle_i / 180.0 ) * M_PI;
+				int coordX = X0 + Radius * cos( radian );
+				int coordY = Y0 - Radius * sin( radian );
+
+				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+			}
+		}
+		else
+		{
+			if( angle_i < linkFromAngle && angle_i > currentMouseAngle )
+			{
+				float radian = ( (float)angle_i / 180.0 ) * M_PI;
+				int coordX = X0 + Radius * cos( radian );
+				int coordY = Y0 - Radius * sin( radian );
+
+				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+			}
+		}
 	}
+
+//	for( float radian_i = -M_PI ; radian_i < M_PI ; radian_i += 0.1 )
+//	{
+//		int angle_i = radian_i / M_PI * 180 + 180;
+//		if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
+//		{
+//			int coordX = X0 + Radius * cos( radian_i );
+//			int coordY = Y0 + Radius * sin( radian_i );
+//
+//			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+//			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+//		}
+//	}
+	cout << "points size=" << m_vertexBuffer.size() << endl << flush;
 
 }
 
@@ -182,7 +213,7 @@ void GraphicSpring::draw_line_2d()
 	__evas_gl_glapi->glUniformMatrix4fv( m_rotate_idx, matrixCount, GL_FALSE, rotateMatrix );
 	__evas_gl_glapi->glUniform4f( m_color_idx, v_color[0], v_color[1], v_color[2], v_color[3] );
 
-	__evas_gl_glapi->glDrawArrays( GL_LINES, 0, vertixesCount );
+	__evas_gl_glapi->glDrawArrays( GL_POINTS, 0, vertixesCount );
 
 	__evas_gl_glapi->glDisableVertexAttribArray( m_positionIdx );
 

@@ -8,6 +8,7 @@
 #include "GeometryObjectsManager.h"
 #include "GeometryObjectFindPredicate.h"
 #include "GeometryObjectFactory.h"
+#include "GeometryLinksIsCrosslinkPredicate.h"
 #include <cmath>
 #include <limits.h>
 #include <iostream>
@@ -39,6 +40,7 @@ void GeometryObjectsManager::removeObjectSmart( IGeometryObject * object )
 	}
     IGeometryObject * point_ptr = (* found_iter);
 
+    point_ptr->~IGeometryObject();
     new(point_ptr) GeometryDummy;
 
     bool valid_all = true;
@@ -53,6 +55,7 @@ void GeometryObjectsManager::removeObjectSmart( IGeometryObject * object )
 			valid_all = object_ptr->isValid();
 			if( false == valid_all )
 			{
+				object_ptr->~IGeometryObject();
 				new( object_ptr ) GeometryDummy;
 				valid_all = false;
 				break;
@@ -74,6 +77,7 @@ void GeometryObjectsManager::removeDummyObjects()
 		{
 			iter = m_geometryObjects.erase( iter );
 			end = m_geometryObjects.end();
+			object_ptr->~IGeometryObject();
 			GeometryObjectFactory::getInstance().deleteGeometryObject( object_ptr );
 		}
 		else
@@ -157,7 +161,7 @@ bool GeometryObjectsManager::getNearestPoint( const GeometryPoint & startPoint, 
 	return false;
 }
 
-bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  int x, int y, const GeometryLink * & result_link )
+bool GeometryObjectsManager::getNearestneighbourLink( const GeometryLink & startLink,  int x, int y, const GeometryLink * & resultLink )
 {
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -175,7 +179,53 @@ bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  in
 
 		const GeometryLink * link_iter = (GeometryLink *)(*iter);
 
-		if( link_from == *link_iter )
+		if( startLink == *link_iter )
+		{
+			continue;
+		}
+
+		int link_iter_center_x = ( link_iter->getPointFrom()->getX() + link_iter->getPointTo()->getX() ) / 2;
+		int link_iter_center_y = ( link_iter->getPointFrom()->getY() + link_iter->getPointTo()->getY() ) / 2;
+
+		double distance = sqrt( ( link_iter_center_x - x )*( link_iter_center_x - x ) + ( link_iter_center_y - y )*( link_iter_center_y - y ) );
+
+		GeometryLinksIsCrosslinkPredicate isCrosslink( &startLink, link_iter );
+		bool isCross = isCrosslink();
+//		cout << "IsCross=" << isCross << endl << flush;
+		if( distance >= min_distance || false == isCross )
+		{
+			continue;
+		}
+		min_distance = distance;
+		found = true;
+		resultLink = link_iter;
+	}
+	if( found == true )
+	{
+		return true;
+	}
+	return false;
+}
+
+bool GeometryObjectsManager::getNearestLink( const GeometryLink & startLink,  int x, int y, const GeometryLink * & resultLink )
+{
+	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
+	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
+	vector<IGeometryObject *>::iterator iter = begin;
+	double min_distance = INT_MAX;
+
+	bool found = false;
+
+	for( ; iter != end ; iter++ )
+	{
+		if( (*iter)->getType() != GEOMETRYOBJECT_LINK )
+		{
+			continue;
+		}
+
+		const GeometryLink * link_iter = (GeometryLink *)(*iter);
+
+		if( startLink == *link_iter )
 		{
 			continue;
 		}
@@ -191,7 +241,7 @@ bool GeometryObjectsManager::getNearestLink( const GeometryLink & link_from,  in
 		}
 		min_distance = distance;
 		found = true;
-		result_link = link_iter;
+		resultLink = link_iter;
 	}
 	if( found == true )
 	{
