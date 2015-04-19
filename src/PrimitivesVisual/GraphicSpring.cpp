@@ -10,6 +10,7 @@
 #include "GeometrySpringGetShortestLinkPredicate.h"
 #include "GeometryLinksAngleGetPredicate.h"
 #include "GeometryLinkGetAbsoluteAnglePredicate.h"
+#include "IsAngleBetweenTwoPredicate.h"
 #include "MouseCoordinatesHolder.h"
 #include <iostream>
 using namespace std;
@@ -128,29 +129,16 @@ void GraphicSpring::initCircleVertexes()
 
 	for( int angle_i = 0 ; angle_i < 360 ; angle_i ++ )
 	{
-		if( true == geometrySpring->getIsClosedPath() )
+//		IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, geometrySpring->getIsClosedPath(), angle_i );
+//		if( true == isAngleBetween() )
+		if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
 		{
-			if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
-			{
-				float radian = ( (float)angle_i / 180.0 ) * M_PI;
-				int coordX = X0 + Radius * cos( radian );
-				int coordY = Y0 - Radius * sin( radian );
+			float radian = ( (float)angle_i / 180.0 ) * M_PI;
+			int coordX = X0 + Radius * cos( radian );
+			int coordY = Y0 - Radius * sin( radian );
 
-				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
-			}
-		}
-		else
-		{
-			if( angle_i < linkFromAngle && angle_i > currentMouseAngle )
-			{
-				float radian = ( (float)angle_i / 180.0 ) * M_PI;
-				int coordX = X0 + Radius * cos( radian );
-				int coordY = Y0 - Radius * sin( radian );
-
-				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
-			}
+			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
 		}
 	}
 

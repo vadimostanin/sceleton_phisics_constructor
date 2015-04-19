@@ -21,29 +21,46 @@ IsAngleBetweenTwoPredicate::~IsAngleBetweenTwoPredicate()
 bool IsAngleBetweenTwoPredicate::operator ()()
 {
 	int diffAngles = abs( m_Angle1 - m_Angle2 );
+	int testAngleOffset = m_TestAngle - diffAngles;
+	int angle1Offset = m_Angle1 - diffAngles;
+	int angle2Offset = m_Angle2 - diffAngles;
 
-	if( true == m_IsShortAngle )
+	int sumAnglesOffset = angle1Offset + angle2Offset;
+
+	bool between = testAngleOffset > 0 && testAngleOffset <= sumAnglesOffset;
+
+	bool result = false;
+
+	if( sumAnglesOffset > 180 )//long
 	{
-		if( diffAngles > 180 )
+		if( true == between )
 		{
-			return false;
-		}
-		else
-		{
-			return true;
+			if( true == m_IsShortAngle )
+			{
+				result = false;
+			}
+			else
+			{
+				result = true;
+			}
 		}
 	}
-	else
+	else//short
 	{
-		if( diffAngles > 180 )
+		if( true == between )
 		{
-			return true;
-		}
-		else
-		{
-			return false;
+			if( true == m_IsShortAngle )
+			{
+				result = true;
+			}
+			else
+			{
+				result = false;
+			}
 		}
 	}
+
+	return result;
 }
 
 

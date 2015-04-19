@@ -7,7 +7,7 @@
 
 #include <MouseCoordinatesHolder.h>
 
-MouseCoordinatesHolder::MouseCoordinatesHolder()
+MouseCoordinatesHolder::MouseCoordinatesHolder() : m_X( 0 ), m_Y( 0 )
 {
 }
 

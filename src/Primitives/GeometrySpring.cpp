@@ -10,6 +10,7 @@
 #include "GeometrySpringGetShortestLinkPredicate.h"
 #include "GeometryLinksAngleGetPredicate.h"
 #include "GeometryLinkGetAbsoluteAnglePredicate.h"
+#include "IsAngleBetweenTwoPredicate.h"
 #include <stdlib.h>
 #include <cstring>
 #include <cmath>
@@ -114,15 +115,13 @@ void GeometrySpring::setIsClosedPath( int x, int y )
 	int linkFromAbsoluteAngle = getLinkFrom()->getAngle();
 	int linkToAbsoluteAngle = getLinkTo()->getAngle();
 
-	int minAngle = min( linkFromAbsoluteAngle, linkToAbsoluteAngle );
-	int maxAngle = max( linkFromAbsoluteAngle, linkToAbsoluteAngle );
-
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
 //cout << "cross=" << crosslinkPoint->getX() << "x" << crosslinkPoint->getY() << endl << flush;
-	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( crosslinkPoint->getX(), crosslinkPoint->getY(), x, y );
+	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( x, y, crosslinkPoint->getX(), crosslinkPoint->getY() );
 	int currentAbsoluteAngle = getCurrentPointAbsoluteAngle();
-	if( currentAbsoluteAngle >= minAngle && currentAbsoluteAngle <= maxAngle )
+	IsAngleBetweenTwoPredicate isAngleBetween( linkFromAbsoluteAngle, linkToAbsoluteAngle, true, currentAbsoluteAngle );
+	if( true == isAngleBetween() )
 	{
 		setIsClosedPath( true );
 //		cout << "true=" << currentAbsoluteAngle << ">=" << minAngle << " and " << currentAbsoluteAngle << "<=" << maxAngle << endl << flush;
