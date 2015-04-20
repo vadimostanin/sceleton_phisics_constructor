@@ -7,6 +7,7 @@
 
 #include "IsAngleBetweenTwoPredicate.h"
 #include <cmath>
+#include <algorithm>
 using namespace std;
 
 IsAngleBetweenTwoPredicate::IsAngleBetweenTwoPredicate( int angle1, int angle2, bool isShortAngle, int testAngle ) :
@@ -20,18 +21,14 @@ IsAngleBetweenTwoPredicate::~IsAngleBetweenTwoPredicate()
 
 bool IsAngleBetweenTwoPredicate::operator ()()
 {
-	int diffAngles = abs( m_Angle1 - m_Angle2 );
-	int testAngleOffset = m_TestAngle - diffAngles;
-	int angle1Offset = m_Angle1 - diffAngles;
-	int angle2Offset = m_Angle2 - diffAngles;
+	int minAngle = min( m_Angle1, m_Angle2 );
+	int maxAngle = max( m_Angle1, m_Angle2 );
 
-	int sumAnglesOffset = angle1Offset + angle2Offset;
-
-	bool between = testAngleOffset > 0 && testAngleOffset <= sumAnglesOffset;
+	bool between = m_TestAngle >= minAngle && m_TestAngle <= maxAngle ;
 
 	bool result = false;
 
-	if( sumAnglesOffset > 180 )//long
+	if( abs( m_Angle1 - m_Angle2 ) > 180 )//long
 	{
 		if( true == between )
 		{

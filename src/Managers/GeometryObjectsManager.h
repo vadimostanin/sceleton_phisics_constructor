@@ -37,7 +37,8 @@ public:
 
 	static GeometryObjectsManager & getInstance();
 
-	void initTestingState();
+	void initTestingState1();
+	void initTestingState2();
 
 private:
 

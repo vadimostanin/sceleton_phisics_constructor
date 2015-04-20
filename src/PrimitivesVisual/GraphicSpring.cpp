@@ -34,7 +34,7 @@ void GraphicSpring::draw()
 {
 //	cout << "draw spring id=" << m_geometrySpring.getId() << endl << flush;
 
-	initLineVertexes();
+//	initLineVertexes();
 	initCircleVertexes();
 
 	draw_line_2d();
@@ -127,11 +127,56 @@ void GraphicSpring::initCircleVertexes()
 
 //	cout << "currentAngle=" << currentMouseAngle << "; angleFrom=" << linkFromAngle << "; angleTo=" << linkToAngle << endl << flush;
 
-	for( int angle_i = 0 ; angle_i < 360 ; angle_i ++ )
+
+//	bool IsClosePath = true;
+//	IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, IsClosePath, angle_i );
+//	IsAngleBetweenTwoPredicate isAngleMinusBetween2( linkFromAngleMinus360, linkToAngleMinus360, IsClosePath, angle_i );
+//	IsAngleBetweenTwoPredicate isAngleMinusBetween3( linkFromAngleMinus360, linkToAngle, IsClosePath, angle_i );
+//	IsAngleBetweenTwoPredicate isAngleMinusBetween4( linkFromAngle, linkToAngleMinus360, IsClosePath, angle_i );
+//	if( true == isAngleBetween() || true == isAngleMinusBetween() )
+//	{
+//		if( ( angle_i >= linkFromAngle && angle_i <= currentMouseAngle ) ||
+//			( angle_i >= currentMouseAngleMinus360 && angle_i <= linkFromAngleMinus360 ) )
+//		{
+//			float radian = ( (float)angle_i / 180.0 ) * M_PI;
+//			int coordX = X0 + Radius * cos( radian );
+//			int coordY = Y0 - Radius * sin( radian );
+//
+//			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+//			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+//		}
+//
+//	}
+//	else
+//	{
+////			if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
+////			{
+////				float radian = ( (float)angle_i / 180.0 ) * M_PI;
+////				int coordX = X0 + Radius * cos( radian );
+////				int coordY = Y0 - Radius * sin( radian );
+////
+////				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+////				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+////			}
+//	}
+	int linkFromAngleMinus360 = linkFromAngle - 360;//move from -360 to 0
+	int linkToAngleMinus360 = linkToAngle - 360;//move from -360 to 0
+	int currentMouseAngleMinus360 = currentMouseAngle - 360;
+
+	int minAngle = min( currentMouseAngle, linkFromAngle );
+	int maxAngle = max( currentMouseAngle, linkFromAngle );
+	maxAngle = min( currentMouseAngle, linkToAngle );
+
+	for( int angle_i = minAngle ; angle_i != maxAngle ; angle_i ++ )
 	{
-//		IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, geometrySpring->getIsClosedPath(), angle_i );
+//		if( angle_i >= 360 )
+//		{
+//			angle_i = 0;
+//		}
+
+		bool IsClosePath = true;
+//		IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, IsClosePath, angle_i );
 //		if( true == isAngleBetween() )
-		if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
 		{
 			float radian = ( (float)angle_i / 180.0 ) * M_PI;
 			int coordX = X0 + Radius * cos( radian );
@@ -141,21 +186,6 @@ void GraphicSpring::initCircleVertexes()
 			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
 		}
 	}
-
-//	for( float radian_i = -M_PI ; radian_i < M_PI ; radian_i += 0.1 )
-//	{
-//		int angle_i = radian_i / M_PI * 180 + 180;
-//		if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
-//		{
-//			int coordX = X0 + Radius * cos( radian_i );
-//			int coordY = Y0 + Radius * sin( radian_i );
-//
-//			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-//			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
-//		}
-//	}
-	cout << "points size=" << m_vertexBuffer.size() << endl << flush;
-
 }
 
 void GraphicSpring::draw_line_2d()

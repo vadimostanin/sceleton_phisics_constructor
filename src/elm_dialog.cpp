@@ -37,7 +37,7 @@ void on_construct_test_objects( void * userData )
 {
 	DrawingContent * viewUpdater = (DrawingContent *)userData;
 
-	GeometryObjectsManager::getInstance().initTestingState();
+	GeometryObjectsManager::getInstance().initTestingState2();
 	vector<IGeometryObject *> geometryObjects;
 	vector<IGraphicObject *> graphicObjects;
 	GeometryObjectsManager::getInstance().getObjects( geometryObjects );

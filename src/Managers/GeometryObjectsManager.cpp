@@ -318,7 +318,7 @@ void GeometryObjectsManager::save( string filename )
 	}
 }
 
-void GeometryObjectsManager::initTestingState()
+void GeometryObjectsManager::initTestingState1()
 {
 	GeometryPoint * point_1 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
 	point_1->setX( 400 );
@@ -347,6 +347,40 @@ void GeometryObjectsManager::initTestingState()
 	addObject( link_2 );
 
 	addObject( spring_1 );
+}
+
+void GeometryObjectsManager::initTestingState2()
+{
+	GeometryPoint * point_1 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+	point_1->setX( 200 );
+	point_1->setY( 100 );
+	GeometryPoint * point_2 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+	point_2->setX( 200 );
+	point_2->setY( 200 );
+	GeometryPoint * point_3 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+	point_3->setX( 100 );
+	point_3->setY( 250 );
+	GeometryPoint * point_4 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
+	point_4->setX( 300 );
+	point_4->setY( 250 );
+	GeometryLink * link_1 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
+	link_1->setPointFrom( point_1 );
+	link_1->setPointTo( point_2 );
+	GeometryLink * link_2 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
+	link_2->setPointFrom( point_2 );
+	link_2->setPointTo( point_3 );
+	GeometryLink * link_3 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
+	link_3->setPointFrom( point_2 );
+	link_3->setPointTo( point_4 );
+
+	addObject( point_1 );
+	addObject( point_2 );
+	addObject( point_3 );
+	addObject( point_4 );
+
+	addObject( link_1 );
+	addObject( link_2 );
+	addObject( link_3 );
 }
 
 GeometryObjectsManager & GeometryObjectsManager::getInstance()
