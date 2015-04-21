@@ -33,11 +33,21 @@ using namespace std;
 #include "DynamicObjectsContructor.h"
 #include "GraphicObjectsContrucor.h"
 
+#include "IsAngleBetweenTwoPredicate.h"
+
+void test_functor_IsAngleInShortPathBetweenTwo()
+{
+	IsAngleBetweenTwoPredicate IsAngle( 230, 240, true, 241 );
+	bool is = IsAngle();
+	cout << "is=" << is << endl << flush;
+}
+
 void on_construct_test_objects( void * userData )
 {
 	DrawingContent * viewUpdater = (DrawingContent *)userData;
 
 	GeometryObjectsManager::getInstance().initTestingState2();
+
 	vector<IGeometryObject *> geometryObjects;
 	vector<IGraphicObject *> graphicObjects;
 	GeometryObjectsManager::getInstance().getObjects( geometryObjects );
@@ -113,6 +123,8 @@ EAPI_MAIN int elm_main(int argc, char **argv)
 
 	DrawingContent drawingContent( window.getEvasObject(), mainContent.getLayout() );
 
+//	on_construct_test_objects(NULL);
+//return 0;
 	GraphicObjectsContrucor::getInstance().setCanvas( drawingContent.getDrawingCanvas() );
 
 	ToolbarContent toolbar( mainContent.getLayout() );

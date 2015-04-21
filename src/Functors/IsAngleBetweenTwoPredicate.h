@@ -16,12 +16,23 @@ public:
 
 	bool operator()();
 
+	int getMinAngle() const;
+	int getMaxAngle() const;
+
 private:
+
+	bool calcLeftSide();
+	bool calcRightSide();
 
 	int  m_Angle1;
 	int  m_Angle2;
 	bool m_IsShortAngle;
 	int  m_TestAngle;
+
+	int m_MinAngle;
+	int m_MaxAngle;
+
+	bool m_Result;
 
 };
 

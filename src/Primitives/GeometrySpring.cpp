@@ -79,33 +79,6 @@ const GeometryLink * GeometrySpring::getLinkTo() const
 	return m_geometryLinks[1];
 }
 
-//void GeometrySpring::setIsClosedPath( int x, int y )
-//{
-//	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
-//	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
-//	GeometrySpringGetShortestLinkPredicate getShortesLink( this );
-//	const GeometryLink * shorteslink = getShortesLink();
-//
-//	int crosslink_x = crosslinkPoint->getX();
-//	int crosslink_y = crosslinkPoint->getY();
-//
-//	float degree = M_PI / 180.0;
-//
-//	GeometryPoint pointX0Y0( crosslink_x, crosslink_y );
-//	GeometryPoint pointX0YN( crosslink_x + shorteslink->getWidth(), crosslink_y );
-//	GeometryLink linkY0( &pointX0Y0, &pointX0YN );
-//
-//	GeometryLinksAngleGetPredicate getAngleLinkFrom( getLinkFrom(), &linkY0 );
-//	GeometryLinksAngleGetPredicate getAngleLinkTo( getLinkFrom(), &linkY0 );
-//
-//	float linkFromAngle = getAngleLinkFrom();
-//	float linkToAngle = getAngleLinkTo();
-//
-//	int linkFromAngleInt = linkFromAngle / M_PI * 180.0;
-//	int linkToAngleInt = linkToAngle / M_PI * 180.0;
-
-//}
-
 void GeometrySpring::setIsClosedPath( int x, int y )
 {
 	if( getConstructingState() != GEOMETRYOBJECTCONSTRUCTING_INPROGRESS )
@@ -118,18 +91,18 @@ void GeometrySpring::setIsClosedPath( int x, int y )
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();
 //cout << "cross=" << crosslinkPoint->getX() << "x" << crosslinkPoint->getY() << endl << flush;
-	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( x, y, crosslinkPoint->getX(), crosslinkPoint->getY() );
+	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( crosslinkPoint->getX(), crosslinkPoint->getY(), x, y );
 	int currentAbsoluteAngle = getCurrentPointAbsoluteAngle();
 	IsAngleInShortPathBetweenTwo isAngleBetween( linkFromAbsoluteAngle, linkToAbsoluteAngle, currentAbsoluteAngle );
 	if( true == isAngleBetween() )
 	{
 		setIsClosedPath( true );
-		cout << "true=" << "curr=" << currentAbsoluteAngle << "; from" << linkFromAbsoluteAngle << "; to" << linkToAbsoluteAngle << endl << flush;
+		cout << "true=" << "curr=" << currentAbsoluteAngle << "; from=" << linkFromAbsoluteAngle << "; to=" << linkToAbsoluteAngle << endl << flush;
 	}
 	else
 	{
 		setIsClosedPath( false );
-		cout << "false=" << "curr=" << currentAbsoluteAngle << "; from" << linkFromAbsoluteAngle << "; to" << linkToAbsoluteAngle << endl << flush;
+		cout << "false=" << "curr=" << currentAbsoluteAngle << "; from=" << linkFromAbsoluteAngle << "; to=" << linkToAbsoluteAngle << endl << flush;
 	}
 }
 

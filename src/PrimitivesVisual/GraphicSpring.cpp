@@ -117,7 +117,7 @@ void GraphicSpring::initCircleVertexes()
 	int X0 = crosslinkPoint->getX();
 	int Y0 = crosslinkPoint->getY();
 
-	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( mouseX, mouseY, X0, Y0 );
+	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( X0, Y0, mouseX, mouseY );
 //cout << "X0=" << X0 << "; Y0=" << Y0 << "; mouseX=" << mouseX << "; mouseY=" << mouseY << endl << flush;
 	int currentMouseAngle = getCurrentPointAbsoluteAngle();
 //cout << "currentMouseAngle=" << currentMouseAngle << endl << flush;
@@ -128,62 +128,46 @@ void GraphicSpring::initCircleVertexes()
 //	cout << "currentAngle=" << currentMouseAngle << "; angleFrom=" << linkFromAngle << "; angleTo=" << linkToAngle << endl << flush;
 
 
-//	bool IsClosePath = true;
-//	IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, IsClosePath, angle_i );
-//	IsAngleBetweenTwoPredicate isAngleMinusBetween2( linkFromAngleMinus360, linkToAngleMinus360, IsClosePath, angle_i );
-//	IsAngleBetweenTwoPredicate isAngleMinusBetween3( linkFromAngleMinus360, linkToAngle, IsClosePath, angle_i );
-//	IsAngleBetweenTwoPredicate isAngleMinusBetween4( linkFromAngle, linkToAngleMinus360, IsClosePath, angle_i );
-//	if( true == isAngleBetween() || true == isAngleMinusBetween() )
-//	{
-//		if( ( angle_i >= linkFromAngle && angle_i <= currentMouseAngle ) ||
-//			( angle_i >= currentMouseAngleMinus360 && angle_i <= linkFromAngleMinus360 ) )
-//		{
-//			float radian = ( (float)angle_i / 180.0 ) * M_PI;
-//			int coordX = X0 + Radius * cos( radian );
-//			int coordY = Y0 - Radius * sin( radian );
-//
-//			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-//			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
-//		}
-//
-//	}
-//	else
-//	{
-////			if( angle_i >= linkFromAngle && angle_i <= currentMouseAngle )
-////			{
-////				float radian = ( (float)angle_i / 180.0 ) * M_PI;
-////				int coordX = X0 + Radius * cos( radian );
-////				int coordY = Y0 - Radius * sin( radian );
-////
-////				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-////				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
-////			}
-//	}
-	int linkFromAngleMinus360 = linkFromAngle - 360;//move from -360 to 0
-	int linkToAngleMinus360 = linkToAngle - 360;//move from -360 to 0
-	int currentMouseAngleMinus360 = currentMouseAngle - 360;
-
 	int minAngle = min( currentMouseAngle, linkFromAngle );
 	int maxAngle = max( currentMouseAngle, linkFromAngle );
-	maxAngle = min( currentMouseAngle, linkToAngle );
 
-	for( int angle_i = minAngle ; angle_i != maxAngle ; angle_i ++ )
+	IsAngleBetweenTwoPredicate isMouseAngleBetween( linkFromAngle, linkToAngle, true, currentMouseAngle );
+
+	if( true == isMouseAngleBetween() )
 	{
-//		if( angle_i >= 360 )
-//		{
-//			angle_i = 0;
-//		}
-
-		bool IsClosePath = true;
-//		IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, IsClosePath, angle_i );
-//		if( true == isAngleBetween() )
+		cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
+		for( int angle_i = minAngle ; angle_i <= maxAngle ; angle_i ++ )
 		{
-			float radian = ( (float)angle_i / 180.0 ) * M_PI;
-			int coordX = X0 + Radius * cos( radian );
-			int coordY = Y0 - Radius * sin( radian );
+//			IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, true, angle_i );
+//			if( true == isAngleBetween() )
+			{
+				float radian = ( (float)angle_i / 180.0 ) * M_PI;
+				int coordX = X0 + Radius * cos( radian );
+				int coordY = Y0 - Radius * sin( radian );
 
-			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+			}
+		}
+	}
+	else
+	{
+		maxAngle -= 360;
+
+		cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
+
+		for( int angle_i = maxAngle ; angle_i <= minAngle ; angle_i++ )
+		{
+//			IsAngleBetweenTwoPredicate isAngleBetween( linkFromAngle, linkToAngle, false, angle_i );
+//			if( true == isAngleBetween() )
+			{
+				float radian = ( (float)angle_i / 180.0 ) * M_PI;
+				int coordX = X0 + Radius * cos( radian );
+				int coordY = Y0 - Radius * sin( radian );
+
+				m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
+				m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+			}
 		}
 	}
 }
