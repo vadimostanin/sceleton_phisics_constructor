@@ -29,6 +29,8 @@ public:
 	const GeometryPoint * getPointTo() const;
 
 	int getAngle() const;
+	int getMiddleX() const;
+	int getMiddleY() const;
 
 	int getId() const;
 	void setId( int id );

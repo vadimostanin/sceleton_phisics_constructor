@@ -27,8 +27,11 @@ public:
 
 private:
 
+	vector<int> m_vertexCircleLinkFrom;
+
 	void initLineVertexes();
 	void initCircleVertexes();
+	void initCircleAtLinks( int x0, int y0, int radius );
 	void draw_line_2d();
 
 	GeometrySpring * m_geometrySpring;

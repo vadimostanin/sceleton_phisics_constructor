@@ -163,6 +163,16 @@ int GeometryLink::getAngle() const
 	return getLinkAbsoluteAngle();
 }
 
+int GeometryLink::getMiddleX() const
+{
+	return ( getPointFrom()->getX() + getPointTo()->getX() ) / 2;
+}
+
+int GeometryLink::getMiddleY() const
+{
+	return ( getPointFrom()->getY() + getPointTo()->getY() ) / 2;
+}
+
 
 
 
