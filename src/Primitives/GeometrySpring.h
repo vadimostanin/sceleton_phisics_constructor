@@ -34,7 +34,7 @@ public:
 	void setConstructingState( GeometryObjectsConstructiongStates state );
 
 	GeometryObjectsTypes getType() const;
-	GeometryObjectsConstructiongStates getConstructingState();
+	GeometryObjectsConstructiongStates getConstructingState() const;
 	int getId() const;
 	void setId( int id );
 	IGeometryObject * clone();

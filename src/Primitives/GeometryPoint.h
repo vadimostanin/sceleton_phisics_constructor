@@ -28,7 +28,7 @@ public:
 	void setY( int y );
 
 	GeometryObjectsTypes getType() const;
-	GeometryObjectsConstructiongStates getConstructingState();
+	GeometryObjectsConstructiongStates getConstructingState() const;
 	int getId() const;
 	void setId( int id );
 	IGeometryObject * clone();

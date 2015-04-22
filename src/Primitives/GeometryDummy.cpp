@@ -62,7 +62,7 @@ GeometryObjectsTypes GeometryDummy::getType() const
 	return GEOMETRYOBJECT_DUMMY;
 }
 
-GeometryObjectsConstructiongStates GeometryDummy::getConstructingState()
+GeometryObjectsConstructiongStates GeometryDummy::getConstructingState() const
 {
 	return GEOMETRYOBJECTCONSTRUCTING_COMPLETE;
 }

@@ -191,7 +191,7 @@ GeometryObjectsTypes GeometrySpring::getType() const
 	return GEOMETRYOBJECT_SPRING;
 }
 
-GeometryObjectsConstructiongStates GeometrySpring::getConstructingState()
+GeometryObjectsConstructiongStates GeometrySpring::getConstructingState() const
 {
 	return m_State;
 }

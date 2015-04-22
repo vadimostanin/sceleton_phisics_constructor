@@ -104,7 +104,7 @@ GeometryObjectsTypes GeometryPoint::getType() const
 	return GEOMETRYOBJECT_POINT;
 }
 
-GeometryObjectsConstructiongStates GeometryPoint::getConstructingState()
+GeometryObjectsConstructiongStates GeometryPoint::getConstructingState() const
 {
 	return GEOMETRYOBJECTCONSTRUCTING_COMPLETE;
 }

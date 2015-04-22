@@ -31,7 +31,7 @@ GeometryObjectsTypes GeometryLink::getType() const
 	return GEOMETRYOBJECT_LINK;
 }
 
-GeometryObjectsConstructiongStates GeometryLink::getConstructingState()
+GeometryObjectsConstructiongStates GeometryLink::getConstructingState() const
 {
 	return GEOMETRYOBJECTCONSTRUCTING_COMPLETE;
 }
