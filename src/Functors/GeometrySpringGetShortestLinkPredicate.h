@@ -14,14 +14,14 @@
 class GeometrySpringGetShortestLinkPredicate
 {
 public:
-	GeometrySpringGetShortestLinkPredicate( GeometrySpring * geometrySpring );
+	GeometrySpringGetShortestLinkPredicate( const GeometrySpring * geometrySpring );
 	virtual ~GeometrySpringGetShortestLinkPredicate();
 
 	const GeometryLink * operator()();
 
 private:
 
-	 GeometrySpring * m_GeometrySpring;
+	const GeometrySpring * m_GeometrySpring;
 
 };
 

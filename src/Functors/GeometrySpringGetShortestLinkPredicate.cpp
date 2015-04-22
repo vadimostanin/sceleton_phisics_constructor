@@ -9,7 +9,7 @@
 #include "GeometryLink.h"
 #include <cmath>
 
-GeometrySpringGetShortestLinkPredicate::GeometrySpringGetShortestLinkPredicate( GeometrySpring * geometrySpring ) : m_GeometrySpring( geometrySpring )
+GeometrySpringGetShortestLinkPredicate::GeometrySpringGetShortestLinkPredicate( const GeometrySpring * geometrySpring ) : m_GeometrySpring( geometrySpring )
 {
 }
 

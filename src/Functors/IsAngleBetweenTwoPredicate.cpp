@@ -10,9 +10,8 @@
 #include <algorithm>
 using namespace std;
 
-IsAngleBetweenTwoPredicate::IsAngleBetweenTwoPredicate( int angle1, int angle2, bool isShortAngle, int testAngle ) :
-	m_Angle1( angle1 ), m_Angle2( angle2 ), m_IsShortAngle( isShortAngle ), m_TestAngle( testAngle ),
-	m_MinAngle( 0 ), m_MaxAngle( 0 ), m_Result( false )
+IsAngleBetweenTwoPredicate::IsAngleBetweenTwoPredicate( int angle1, int angle2, bool searchInShortPath, int testAngle ) :
+	m_Angle1( angle1 ), m_Angle2( angle2 ), m_SearchInShortPath( searchInShortPath ), m_TestAngle( testAngle ), m_Result( false )
 {
 	bool leftResult = calcLeftSide();
 	bool rightResult = calcRightSide();
@@ -41,7 +40,7 @@ bool IsAngleBetweenTwoPredicate::calcLeftSide()
 		{
 			if( true == between )
 			{
-				if( true == m_IsShortAngle )
+				if( true == m_SearchInShortPath )
 				{
 					result = false;
 				}
@@ -55,7 +54,7 @@ bool IsAngleBetweenTwoPredicate::calcLeftSide()
 		{
 			if( true == between )
 			{
-				if( true == m_IsShortAngle )
+				if( true == m_SearchInShortPath )
 				{
 					result = true;
 				}
@@ -89,7 +88,7 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 		{
 			if( true == between )
 			{
-				if( true == m_IsShortAngle )
+				if( true == m_SearchInShortPath )
 				{
 					result = false;
 				}
@@ -103,7 +102,7 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 		{
 			if( true == between )
 			{
-				if( true == m_IsShortAngle )
+				if( true == m_SearchInShortPath )
 				{
 					result = true;
 				}
@@ -118,20 +117,16 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 	return result;
 }
 
+int IsAngleBetweenTwoPredicate::getIsBigArea() const
+{
+	return false;
+}
+
 bool IsAngleBetweenTwoPredicate::operator ()()
 {
 	return m_Result;
 }
 
-int IsAngleBetweenTwoPredicate::getMinAngle() const
-{
-	return m_MinAngle;
-}
-
-int IsAngleBetweenTwoPredicate::getMaxAngle() const
-{
-	return m_MaxAngle;
-}
 
 
 

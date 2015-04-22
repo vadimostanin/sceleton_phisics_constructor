@@ -254,7 +254,7 @@ bool GeometryObjectsManager::getLinkUnderPoint( int x, int y, GeometryLink ** re
 {
 	bool found = false;
 
-	const unsigned int square_border = 1000;
+	const unsigned int square_border = 1500;
 
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -373,9 +373,9 @@ void GeometryObjectsManager::initTestingState2()
 	link_3->setPointFrom( point_1 );
 	link_3->setPointTo( point_4 );
 
-	int angle1 = link_1->getAngle();
-	int angle2 = link_2->getAngle();
-	int angle3 = link_3->getAngle();
+//	int angle1 = link_1->getAngle();
+//	int angle2 = link_2->getAngle();
+//	int angle3 = link_3->getAngle();
 
 	addObject( point_1 );
 	addObject( point_2 );

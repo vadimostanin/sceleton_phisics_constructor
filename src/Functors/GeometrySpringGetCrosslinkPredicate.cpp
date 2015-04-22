@@ -8,7 +8,7 @@
 #include "GeometrySpringGetCrosslinkPredicate.h"
 #include "GeometryLink.h"
 
-GeometrySpringGetCrosslinkPredicate::GeometrySpringGetCrosslinkPredicate( GeometrySpring * geometrySpring ) : m_GeometrySpring( geometrySpring )
+GeometrySpringGetCrosslinkPredicate::GeometrySpringGetCrosslinkPredicate( const GeometrySpring * geometrySpring ) : m_GeometrySpring( geometrySpring )
 {
 }
 

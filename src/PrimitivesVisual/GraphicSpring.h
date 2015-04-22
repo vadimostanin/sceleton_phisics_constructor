@@ -31,6 +31,8 @@ private:
 
 	void initLineVertexes();
 	void initCircleVertexes();
+	void initPartialCircleVertex();
+	void initCompleteCircleVertex();
 	void initCircleAtLinks( int x0, int y0, int radius );
 	void draw_line_2d();
 

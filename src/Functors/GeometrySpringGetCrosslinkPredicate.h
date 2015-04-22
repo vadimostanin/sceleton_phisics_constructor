@@ -14,14 +14,14 @@
 class GeometrySpringGetCrosslinkPredicate
 {
 public:
-	GeometrySpringGetCrosslinkPredicate( GeometrySpring * geometrySpring );
+	GeometrySpringGetCrosslinkPredicate( const GeometrySpring * geometrySpring );
 	virtual ~GeometrySpringGetCrosslinkPredicate();
 
 	const GeometryPoint * operator()();
 
 private:
 
-	 GeometrySpring * m_GeometrySpring;
+	const GeometrySpring * m_GeometrySpring;
 
 };
 

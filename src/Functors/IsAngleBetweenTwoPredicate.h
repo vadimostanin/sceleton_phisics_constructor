@@ -11,13 +11,12 @@
 class IsAngleBetweenTwoPredicate
 {
 public:
-	IsAngleBetweenTwoPredicate( int angle1, int angle2, bool shortAngle, int testAngle );
+	IsAngleBetweenTwoPredicate( int angle1, int angle2, bool searchInShortPath, int testAngle );
 	virtual ~IsAngleBetweenTwoPredicate();
 
 	bool operator()();
 
-	int getMinAngle() const;
-	int getMaxAngle() const;
+	int getIsBigArea() const;
 
 private:
 
@@ -26,14 +25,10 @@ private:
 
 	int  m_Angle1;
 	int  m_Angle2;
-	bool m_IsShortAngle;
+	bool m_SearchInShortPath;
 	int  m_TestAngle;
 
-	int m_MinAngle;
-	int m_MaxAngle;
-
 	bool m_Result;
-
 };
 
 #endif /* PREDICATES_ISANGLEBETWEENTWOPREDICATE_H_ */

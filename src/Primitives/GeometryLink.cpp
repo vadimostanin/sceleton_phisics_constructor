@@ -156,13 +156,6 @@ int GeometryLink::getWidth() const
 	return linkfrom_width;
 }
 
-int GeometryLink::getAngle() const
-{
-	GeometryLinkGetAbsoluteAnglePredicate getLinkAbsoluteAngle( this );
-
-	return getLinkAbsoluteAngle();
-}
-
 int GeometryLink::getMiddleX() const
 {
 	return ( getPointFrom()->getX() + getPointTo()->getX() ) / 2;

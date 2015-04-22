@@ -28,7 +28,6 @@ public:
 	const GeometryPoint * getPointFrom() const;
 	const GeometryPoint * getPointTo() const;
 
-	int getAngle() const;
 	int getMiddleX() const;
 	int getMiddleY() const;
 

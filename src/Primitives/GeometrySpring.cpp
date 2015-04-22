@@ -11,6 +11,7 @@
 #include "GeometryLinksAngleGetPredicate.h"
 #include "GeometryLinkGetAbsoluteAnglePredicate.h"
 #include "IsAngleInShortPathBetweenTwo.h"
+#include "GeometrySpringGetAngles.h"
 #include <stdlib.h>
 #include <cstring>
 #include <cmath>
@@ -85,8 +86,9 @@ void GeometrySpring::setIsClosedPath( int x, int y )
 	{
 		return;
 	}
-	int linkFromAbsoluteAngle = getLinkFrom()->getAngle();
-	int linkToAbsoluteAngle = getLinkTo()->getAngle();
+	GeometrySpringGetAngles getAngles( this );
+	int linkFromAbsoluteAngle = getAngles.getLinkFromAngle();
+	int linkToAbsoluteAngle = getAngles.getLinkToAngle();
 
 	GeometrySpringGetCrosslinkPredicate getCrosslinkPoint( this );
 	const GeometryPoint * crosslinkPoint = getCrosslinkPoint();

@@ -129,11 +129,9 @@ void GraphicSpring::initCircleAtLinks( int x0, int y0, int radius )
 	}
 }
 
-void GraphicSpring::initCircleVertexes()
+void GraphicSpring::initPartialCircleVertex()
 {
-	m_vertexBuffer.clear();
-
-	GeometrySpring * geometrySpring = (GeometrySpring *)&( getGeometryObject() );
+	const GeometrySpring * geometrySpring = (GeometrySpring *)&( getGeometryObject() );
 	GeometryLinkGetAbsoluteAnglePredicate getLinkFromAbsoluteAngle( geometrySpring->getLinkFrom() );
 	GeometryLinkGetAbsoluteAnglePredicate getLinkToAbsoluteAngle( geometrySpring->getLinkTo() );
 	int linkFromAngle     = getLinkFromAbsoluteAngle();
@@ -169,7 +167,7 @@ void GraphicSpring::initCircleVertexes()
 	int minAngle = min( currentMouseAngle, linkFromAngle );
 	int maxAngle = max( currentMouseAngle, linkFromAngle );
 
-	IsAngleBetweenTwoPredicate isMouseAngleBetween( linkFromAngle, linkToAngle, true, currentMouseAngle );
+	IsAngleBetweenTwoPredicate isMouseAngleBetween( linkFromAngle, linkToAngle, geometrySpring->getIsClosedPath(), currentMouseAngle );
 
 	if( true == isMouseAngleBetween() )
 	{
@@ -218,6 +216,26 @@ void GraphicSpring::initCircleVertexes()
 	}
 }
 
+void GraphicSpring::initCompleteCircleVertex()
+{
+
+}
+
+void GraphicSpring::initCircleVertexes()
+{
+	m_vertexBuffer.clear();
+
+	GeometrySpring * geometrySpring = (GeometrySpring *)&( getGeometryObject() );
+	if( geometrySpring->getConstructingState() == GEOMETRYOBJECTCONSTRUCTING_INPROGRESS )
+	{
+		initPartialCircleVertex();
+	}
+	else
+	{
+		initCompleteCircleVertex();
+	}
+}
+
 void GraphicSpring::draw_line_2d()
 {
 	Evas_GL_API * __evas_gl_glapi = m_glApi;
@@ -261,7 +279,7 @@ void GraphicSpring::draw_line_2d()
 	__evas_gl_glapi->glUniformMatrix4fv( m_rotate_idx, matrixCount, GL_FALSE, rotateMatrix );
 	__evas_gl_glapi->glUniform4f( m_color_idx, v_color[0], v_color[1], v_color[2], v_color[3] );
 
-	__evas_gl_glapi->glDrawArrays( GL_LINES, 0, vertixesCount );
+	__evas_gl_glapi->glDrawArrays( GL_POINTS, 0, vertixesCount );
 
 	__evas_gl_glapi->glDisableVertexAttribArray( m_positionIdx );
 
