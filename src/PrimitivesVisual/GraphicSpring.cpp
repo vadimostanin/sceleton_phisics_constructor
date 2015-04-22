@@ -147,8 +147,12 @@ void GraphicSpring::initPartialCircleVertex()
 	int X0 = crosslinkPoint->getX();
 	int Y0 = crosslinkPoint->getY();
 
-	const int radiusFrom = 5;
-	initCircleAtLinks( geometrySpring->getLinkFrom()->getMiddleX(), geometrySpring->getLinkFrom()->getMiddleY(), radiusFrom );
+	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
+	const GeometryLink * shorteslink = getShortesLink();
+	int outerRadius = shorteslink->getWidth() / 2;
+
+	const int innerRadius = 5;
+	initCircleAtLinks( geometrySpring->getLinkFrom()->getMiddleX(), geometrySpring->getLinkFrom()->getMiddleY(), innerRadius );
 
 	int mouseX = MouseCoordinatesHolder::getInstance().getX();
 	int mouseY = MouseCoordinatesHolder::getInstance().getY();
@@ -157,9 +161,6 @@ void GraphicSpring::initPartialCircleVertex()
 //cout << "X0=" << X0 << "; Y0=" << Y0 << "; mouseX=" << mouseX << "; mouseY=" << mouseY << endl << flush;
 	int currentMouseAngle = getCurrentPointAbsoluteAngle();
 //cout << "currentMouseAngle=" << currentMouseAngle << endl << flush;
-	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
-	const GeometryLink * shorteslink = getShortesLink();
-	int Radius = shorteslink->getWidth() / 2;
 
 //	cout << "currentAngle=" << currentMouseAngle << "; angleFrom=" << linkFromAngle << "; angleTo=" << linkToAngle << endl << flush;
 
@@ -173,13 +174,13 @@ void GraphicSpring::initPartialCircleVertex()
 	{
 		cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
 		float radian = ( (float)minAngle / 180.0 ) * M_PI;
-		int last_coord_x = X0 + Radius * cos( radian );
-		int last_coord_y = Y0 + Radius * sin( radian );
+		int last_coord_x = X0 + outerRadius * cos( radian );
+		int last_coord_y = Y0 + outerRadius * sin( radian );
 		for( int angle_i = minAngle ; angle_i <= maxAngle ; angle_i ++ )
 		{
 			radian = ( (float)angle_i / 180.0 ) * M_PI;
-			int coordX = X0 + Radius * cos( radian );
-			int coordY = Y0 - Radius * sin( radian );
+			int coordX = X0 + outerRadius * cos( radian );
+			int coordY = Y0 - outerRadius * sin( radian );
 
 //			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
 //			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
@@ -197,21 +198,21 @@ void GraphicSpring::initPartialCircleVertex()
 		cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
 
 		float radian = ( (float)minAngle / 180.0 ) * M_PI;
-		int last_coord_x = X0 + Radius * cos( radian );
-		int last_coord_y = Y0 + Radius * sin( radian );
+//		int last_coord_x = X0 + outerRadius * cos( radian );
+//		int last_coord_y = Y0 + outerRadius * sin( radian );
 		for( int angle_i = minAngle ; angle_i > maxAngle ; angle_i-- )
 		{
 			radian = ( (float)angle_i / 180.0 ) * M_PI;
-			int coordX = X0 + Radius * cos( radian );
-			int coordY = Y0 - Radius * sin( radian );
+			int coordX = X0 + outerRadius * cos( radian );
+			int coordY = Y0 - outerRadius * sin( radian );
 
 //			m_vertexBuffer.push_back( pixels_to_coords_x( last_coord_x ) );
 //			m_vertexBuffer.push_back( pixels_to_coords_y( last_coord_y ) );
 			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
 			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
 
-			last_coord_x = coordX;
-			last_coord_y = coordY;
+//			last_coord_x = coordX;
+//			last_coord_y = coordY;
 		}
 	}
 }
@@ -234,12 +235,12 @@ void GraphicSpring::initCompleteCircleVertex()
 	int X0 = crosslinkPoint->getX();
 	int Y0 = crosslinkPoint->getY();
 
-	const int radiusFrom = 5;
-	initCircleAtLinks( geometrySpring->getLinkFrom()->getMiddleX(), geometrySpring->getLinkFrom()->getMiddleY(), radiusFrom );
-
 	GeometrySpringGetShortestLinkPredicate getShortesLink( geometrySpring );
 	const GeometryLink * shorteslink = getShortesLink();
-	int Radius = shorteslink->getWidth() / 2;
+	int outerRadius = shorteslink->getWidth() / 2;
+
+	const int innerRadius = 5;
+	initCircleAtLinks( geometrySpring->getLinkFrom()->getMiddleX(), geometrySpring->getLinkFrom()->getMiddleY(), innerRadius );
 
 //	cout << "currentAngle=" << currentMouseAngle << "; angleFrom=" << linkFromAngle << "; angleTo=" << linkToAngle << endl << flush;
 
@@ -258,8 +259,8 @@ void GraphicSpring::initCompleteCircleVertex()
 		for( int angle_i = minAngle ; angle_i <= maxAngle ; angle_i ++ )
 		{
 			radian = ( (float)angle_i / 180.0 ) * M_PI;
-			int coordX = X0 + Radius * cos( radian );
-			int coordY = Y0 - Radius * sin( radian );
+			int coordX = X0 + outerRadius * cos( radian );
+			int coordY = Y0 - outerRadius * sin( radian );
 
 //			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
 //			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
@@ -277,21 +278,21 @@ void GraphicSpring::initCompleteCircleVertex()
 		cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
 
 		float radian = ( (float)minAngle / 180.0 ) * M_PI;
-		int last_coord_x = X0 + Radius * cos( radian );
-		int last_coord_y = Y0 + Radius * sin( radian );
+//		int last_coord_x = X0 + Radius * cos( radian );
+//		int last_coord_y = Y0 + Radius * sin( radian );
 		for( int angle_i = minAngle ; angle_i > maxAngle ; angle_i-- )
 		{
 			radian = ( (float)angle_i / 180.0 ) * M_PI;
-			int coordX = X0 + Radius * cos( radian );
-			int coordY = Y0 - Radius * sin( radian );
+			int coordX = X0 + outerRadius * cos( radian );
+			int coordY = Y0 - outerRadius * sin( radian );
 
 //			m_vertexBuffer.push_back( pixels_to_coords_x( last_coord_x ) );
 //			m_vertexBuffer.push_back( pixels_to_coords_y( last_coord_y ) );
 			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
 			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
 
-			last_coord_x = coordX;
-			last_coord_y = coordY;
+//			last_coord_x = coordX;
+//			last_coord_y = coordY;
 		}
 	}
 }
@@ -336,7 +337,10 @@ void GraphicSpring::initCircleVertexes()
 	}
 	else
 	{
-//		initCompleteCircleVertex();
+		initCompleteCircleVertex();
+
+		const int innerRadiusFrom = 5;
+		initCircleAtLinks( geometrySpring->getLinkTo()->getMiddleX(), geometrySpring->getLinkTo()->getMiddleY(), innerRadiusFrom );
 	}
 }
 
