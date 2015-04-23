@@ -23,7 +23,7 @@ public:
 	ToolbarContentRadio( ToolbarContentRadioParams & params );
 	virtual ~ToolbarContentRadio();
 
-	static void on_click( void *data, Evas *e, void *event_info );
+	static void on_click( void *data, Evas_Object *e, void *event_info );
 
 	void create( Evas_Object * parent );
 	Evas_Object * getEvas() const;

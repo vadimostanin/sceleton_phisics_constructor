@@ -15,13 +15,14 @@
 #include <vector>
 #include <algorithm>
 #include <fstream>
-#include <png++/png.hpp>
-#include <png++/types.hpp>
+#include "3party/png++/png.hpp"
+#include "3party/png++/types.hpp"
 using namespace std;
 
+//#define MAIN_EDJ "/opt/usr/apps/org.tizen.tizen_porting/res/edje/main.edj"
 #define MAIN_EDJ "./main.edj"
 
-DrawingContent * lpThis = 0;
+static DrawingContent * lpThis = 0;
 
 DrawingContent::DrawingContent( Evas_Object *mainWindowObject, Evas_Object *mainLayout ) : m_MainLayout( mainLayout ), m_MainWindowObject( mainWindowObject ),
 		m_DynamicTimer( DynamicDrawTimer, this ), m_DrawDynamic( false )
@@ -102,7 +103,7 @@ bool DrawingContent::DynamicDrawTimer( void * userData )
 {
 	DrawingContent * lpThis = ( DrawingContent * )userData;
 
-	elm_glview_changed_set( (Elm_Glview *)lpThis->getDrawingCanvas() );
+	elm_glview_changed_set( lpThis->getDrawingCanvas() );
 
 	return true;
 }
@@ -145,13 +146,6 @@ void DrawingContent::createDrawingCanvas()
 	m_glApi = elm_glview_gl_api_get( m_DrawingCanvas );
 	evas_object_data_set( glview, "DrawingContent", this );
 
-//	edje_object_calc_force( elm_layout_edje_get( m_DrawingLayout ) );
-//
-//	Evas_Coord x, y;
-//	evas_object_geometry_get( m_DrawingLayout, &x, &y, &m_CanvasWidth, &m_CanvasHeight );
-//
-//	evas_object_geometry_get( glview, &x, &y, &m_CanvasWidth, &m_CanvasHeight );
-
 	elm_glview_size_get( glview, &m_CanvasWidth, &m_CanvasHeight );
 }
 
@@ -162,7 +156,7 @@ Evas_Object * DrawingContent::getDrawingCanvas()
 
 void DrawingContent::update()
 {
-	elm_glview_changed_set( (Elm_Glview *)m_DrawingCanvas );
+	elm_glview_changed_set( m_DrawingCanvas );
 }
 
 void DrawingContent::setGraphicObjects( vector<IGraphicObject *> & graphicObjects )

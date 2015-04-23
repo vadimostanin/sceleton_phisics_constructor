@@ -8,8 +8,7 @@
 #include "ToolbarContentButton.h"
 #include "ToolbarContentTypes.h"
 #include <elementary-1/Elementary.h>
-
-#define MAIN_EDJ "./main.edj"
+#include <Evas.h>
 
 ToolbarContentButton::ToolbarContentButton( ToolbarContentButtonParams & params ) : ToolbarContentItem( TOOLBARCONTENT_BUTTON, params )
 {
@@ -48,7 +47,7 @@ Evas_Object * ToolbarContentButton::getEvas() const
 	return m_Evas;
 }
 
-void ToolbarContentButton::on_click( void *data, Evas *e, void *event_info )
+void ToolbarContentButton::on_click( void *data, Evas_Object *e, void *event_info )
 {
 	CallbackData * callbackData = (CallbackData *)data;
 	ToolbarContentButtonParams & params = (ToolbarContentButtonParams &)callbackData->lpThis->m_Params;

@@ -13,6 +13,7 @@
 #include <iostream>
 using namespace std;
 
+//#define MAIN_EDJ "/opt/usr/apps/org.tizen.tizen_porting/res/edje/main.edj"
 #define MAIN_EDJ "./main.edj"
 
 MainContent::MainContent( Evas_Object *parent ) : m_Parent( parent ), m_MainLayout( NULL )

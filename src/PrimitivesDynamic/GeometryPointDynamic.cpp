@@ -37,7 +37,7 @@ const IGeometryObject & GeometryPointDynamic::getGeometryObject() const
 	return *this;
 }
 
-GeometryPointDynamic * lpThis = 0;
+static GeometryPointDynamic * lpThis = 0;
 
 void GeometryPointDynamic::update()
 {

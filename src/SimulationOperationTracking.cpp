@@ -15,7 +15,7 @@
 using namespace std;
 
 #define GRABBABLE_MASK_BIT (1<<31)
-cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
+static cpShapeFilter GRAB_FILTER = {CP_NO_GROUP, GRABBABLE_MASK_BIT, GRABBABLE_MASK_BIT};
 
 SimulationOperationTracking::SimulationOperationTracking( DrawingContent & viewUpdater ) : m_ViewUpdater( viewUpdater ), m_GeometryObjectTracking( NULL ),
 		m_MouseBody( 0 ), m_TrackingBody( 0 ), m_MouseJoint( 0 ), m_Space( 0 )

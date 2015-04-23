@@ -7,8 +7,8 @@
 
 #include "GraphicPoint.h"
 #include <Evas.h>
-#include <GL/gl.h>
 #include <iostream>
+#include <cmath>
 #include <fstream>
 using namespace std;
 

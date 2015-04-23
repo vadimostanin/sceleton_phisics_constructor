@@ -45,7 +45,7 @@ Evas_Object * ToolbarContentRadio::getEvas() const
 	return m_Evas;
 }
 
-void ToolbarContentRadio::on_click( void *data, Evas *e, void *event_info )
+void ToolbarContentRadio::on_click( void *data, Evas_Object *e, void *event_info )
 {
 	CallbackData * callbackData = (CallbackData *)data;
 	ToolbarContentRadioParams & params = (ToolbarContentRadioParams &)callbackData->lpThis->m_Params;

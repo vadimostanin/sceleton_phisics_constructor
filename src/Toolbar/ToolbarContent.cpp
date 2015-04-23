@@ -12,6 +12,7 @@
 #include <iostream>
 using namespace std;
 
+//#define MAIN_EDJ "/opt/usr/apps/org.tizen.tizen_porting/res/edje/main.edj"
 #define MAIN_EDJ "./main.edj"
 
 void on_button_click( void * user_data )
