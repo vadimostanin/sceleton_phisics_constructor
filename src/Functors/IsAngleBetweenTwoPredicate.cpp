@@ -86,7 +86,7 @@ bool IsAngleBetweenTwoPredicate::calcLeftSide()
 					result = false;
 				}
 
-				if( angleFrom < m_TestAngle )
+				if( angleFrom <= m_TestAngle )
 				{
 					m_MinAngle = m_AngleFrom;
 					m_MaxAngle = m_TestAngle;
@@ -118,7 +118,7 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 		tempTestAngle -= 360;
 	}
 
-	bool between = tempTestAngle > minAngle && tempTestAngle < maxAngle ;
+	bool between = tempTestAngle >= minAngle && tempTestAngle <= maxAngle ;
 
 	bool result = false;
 

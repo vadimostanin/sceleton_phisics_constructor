@@ -11,6 +11,7 @@
 #include "GeometryLinksAngleGetPredicate.h"
 #include "GeometryLinkGetAbsoluteAnglePredicate.h"
 #include "IsAngleBetweenTwoPredicate.h"
+#include "GeometrySpringGetAngles.h"
 #include "MouseCoordinatesHolder.h"
 #include <iostream>
 using namespace std;
@@ -132,10 +133,10 @@ void GraphicSpring::initCircleAtLinks( int x0, int y0, int radius )
 void GraphicSpring::initPartialCircleVertex()
 {
 	const GeometrySpring * geometrySpring = (GeometrySpring *)&( getGeometryObject() );
-	GeometryLinkGetAbsoluteAnglePredicate getLinkFromAbsoluteAngle( geometrySpring->getLinkFrom() );
-	GeometryLinkGetAbsoluteAnglePredicate getLinkToAbsoluteAngle( geometrySpring->getLinkTo() );
-	int linkFromAngle     = getLinkFromAbsoluteAngle();
-	int linkToAngle     = getLinkToAbsoluteAngle();
+
+	GeometrySpringGetAngles getAngles( geometrySpring );
+	int linkFromAngle = getAngles.getLinkFromAngle();
+	int linkToAngle = getAngles.getLinkToAngle();
 
 	if( linkFromAngle == linkToAngle )
 	{
@@ -188,10 +189,9 @@ void GraphicSpring::initPartialCircleVertex()
 void GraphicSpring::initCompleteCircleVertex()
 {
 	const GeometrySpring * geometrySpring = (GeometrySpring *)&( getGeometryObject() );
-	GeometryLinkGetAbsoluteAnglePredicate getLinkFromAbsoluteAngle( geometrySpring->getLinkFrom() );
-	GeometryLinkGetAbsoluteAnglePredicate getLinkToAbsoluteAngle( geometrySpring->getLinkTo() );
-	int linkFromAngle     = getLinkFromAbsoluteAngle();
-	int linkToAngle     = getLinkToAbsoluteAngle();
+	GeometrySpringGetAngles getAngles( geometrySpring );
+	int linkFromAngle = getAngles.getLinkFromAngle();
+	int linkToAngle = getAngles.getLinkToAngle();
 
 	if( linkFromAngle == linkToAngle )
 	{
