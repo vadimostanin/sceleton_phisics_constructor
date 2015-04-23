@@ -30,6 +30,20 @@ void GeometryObjectsManager::addObject( IGeometryObject * object )
 	m_geometryObjects.push_back( object );
 }
 
+void GeometryObjectsManager::clearObjects()
+{
+	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
+	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
+	vector<IGeometryObject *>::iterator iter = begin;
+	for(  ; iter != end ; iter++ )
+	{
+		IGeometryObject * object_ptr = (* iter);
+		object_ptr->~IGeometryObject();
+		GeometryObjectFactory::getInstance().deleteGeometryObject( object_ptr );
+	}
+	m_geometryObjects.clear();
+}
+
 void GeometryObjectsManager::removeObjectSmart( IGeometryObject * object )
 {
 	GeometryObjectFindPredicate predicate( object );
@@ -254,7 +268,7 @@ bool GeometryObjectsManager::getLinkUnderPoint( int x, int y, GeometryLink ** re
 {
 	bool found = false;
 
-	const unsigned int square_border = 1500;
+	const unsigned int square_border = 3000;
 
 	vector<IGeometryObject *>::iterator begin = m_geometryObjects.begin();
 	vector<IGeometryObject *>::iterator end = m_geometryObjects.end();
@@ -362,7 +376,7 @@ void GeometryObjectsManager::initTestingState2()
 	point_3->setY( 250 );
 	GeometryPoint * point_4 = (GeometryPoint *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_POINT );
 	point_4->setX( 300 );
-	point_4->setY( 200 );
+	point_4->setY( 210 );
 	GeometryLink * link_1 = (GeometryLink *)GeometryObjectFactory::getInstance().createGeometryObject( GEOMETRYOBJECT_LINK );
 	link_1->setPointFrom( point_1 );
 	link_1->setPointTo( point_2 );

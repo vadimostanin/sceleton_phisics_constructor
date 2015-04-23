@@ -55,23 +55,21 @@ bool IsAngleBetweenTwoPredicate::calcLeftSide()
 				if( true == m_SearchInShortPath )
 				{
 					result = false;
-
-					assert( false );
 				}
 				else
 				{
 					result = true;
+				}
 
-					if( angleFrom < m_TestAngle )
-					{
-						m_MinAngle = m_AngleFrom;
-						m_MaxAngle = m_TestAngle;
-					}
-					else
-					{
-						m_MinAngle = m_TestAngle;
-						m_MaxAngle = m_AngleFrom;
-					}
+				if( angleFrom < m_TestAngle )
+				{
+					m_MinAngle = m_AngleFrom;
+					m_MaxAngle = m_TestAngle;
+				}
+				else
+				{
+					m_MinAngle = m_TestAngle;
+					m_MaxAngle = m_AngleFrom;
 				}
 			}
 		}
@@ -82,23 +80,21 @@ bool IsAngleBetweenTwoPredicate::calcLeftSide()
 				if( true == m_SearchInShortPath )
 				{
 					result = true;
-
-					if( angleFrom < m_TestAngle )
-					{
-						m_MinAngle = m_AngleFrom;
-						m_MaxAngle = m_TestAngle;
-					}
-					else
-					{
-						m_MinAngle = m_TestAngle;
-						m_MaxAngle = m_AngleFrom;
-					}
 				}
 				else
 				{
 					result = false;
+				}
 
-					assert( false );
+				if( angleFrom < m_TestAngle )
+				{
+					m_MinAngle = m_AngleFrom;
+					m_MaxAngle = m_TestAngle;
+				}
+				else
+				{
+					m_MinAngle = m_TestAngle;
+					m_MaxAngle = m_AngleFrom;
 				}
 			}
 		}
@@ -116,12 +112,13 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 	int maxAngle = max( tempMinAngle, tempMaxAngle );
 
 	int tempTestAngle = m_TestAngle;
-	if( tempTestAngle >= 180 )
+	if( tempTestAngle > max( m_AngleFrom, m_AngleTo ) )
+//	if( tempTestAngle >= 180 )
 	{
 		tempTestAngle -= 360;
 	}
 
-	bool between = tempTestAngle >= minAngle && tempTestAngle <= maxAngle ;
+	bool between = tempTestAngle > minAngle && tempTestAngle < maxAngle ;
 
 	bool result = false;
 
@@ -133,29 +130,27 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 				if( true == m_SearchInShortPath )
 				{
 					result = false;
-
-					assert( false );
 				}
 				else
 				{
 					result = true;
+				}
 
-					if( m_AngleFrom < m_AngleTo )
-					{
-						int tempMin = min( tempTestAngle, m_AngleFrom );
-						int tempMax = max( tempTestAngle, m_AngleFrom );
+				if( m_AngleFrom < m_AngleTo )
+				{
+					int tempMin = min( tempTestAngle, m_AngleFrom );
+					int tempMax = max( tempTestAngle, m_AngleFrom );
 
-						m_MinAngle = tempMin;
-						m_MaxAngle = tempMax;
-					}
-					else
-					{
-						int tempMin = min( tempTestAngle, tempMaxAngle );
-						int tempMax = max( tempTestAngle, tempMaxAngle );
+					m_MinAngle = tempMin;
+					m_MaxAngle = tempMax;
+				}
+				else
+				{
+					int tempMin = min( tempTestAngle, tempMaxAngle );
+					int tempMax = max( tempTestAngle, tempMaxAngle );
 
-						m_MinAngle = tempMin;
-						m_MaxAngle = tempMax;
-					}
+					m_MinAngle = tempMin;
+					m_MaxAngle = tempMax;
 				}
 			}
 		}
@@ -166,29 +161,27 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 				if( true == m_SearchInShortPath )
 				{
 					result = true;
-
-					if( m_AngleFrom < m_AngleTo )
-					{
-						int tempMin = min( tempTestAngle, m_AngleFrom );
-						int tempMax = max( tempTestAngle, m_AngleFrom );
-
-						m_MinAngle = tempMin;
-						m_MaxAngle = tempMax;
-					}
-					else
-					{
-						int tempMin = min( tempTestAngle, m_AngleFrom );
-						int tempMax = max( tempTestAngle, m_AngleFrom );
-
-						m_MinAngle = tempMin;
-						m_MaxAngle = tempMax;
-					}
 				}
 				else
 				{
 					result = false;
+				}
 
-					assert( false );
+				if( m_AngleFrom < m_AngleTo )
+				{
+					int tempMin = min( tempTestAngle, m_AngleFrom );
+					int tempMax = max( tempTestAngle, m_AngleFrom );
+
+					m_MinAngle = tempMin;
+					m_MaxAngle = tempMax;
+				}
+				else
+				{
+					int tempMin = min( tempTestAngle, ( m_AngleFrom - 360 ) );
+					int tempMax = max( tempTestAngle, ( m_AngleFrom - 360 ) );
+
+					m_MinAngle = tempMin;
+					m_MaxAngle = tempMax;
 				}
 			}
 		}

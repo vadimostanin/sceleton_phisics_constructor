@@ -25,13 +25,13 @@ public:
 
 	void addObject( IGeometryObject * object );
 	void removeObjectSmart( IGeometryObject * object );
+	void clearObjects();
 	void getObjects( vector<IGeometryObject *> & objects );
 	bool getPoint( int x, int y, GeometryPoint *& point );
 	bool getNearestPoint( const GeometryPoint & startPoint, int x, int y, const GeometryPoint * & point );
 	bool getNearestLink( const GeometryLink & startLink,  int x, int y, const GeometryLink * & link );
 	bool getNearestneighbourLink( const GeometryLink & startLink,  int x, int y, const GeometryLink * & link );
 	bool getLinkUnderPoint( int x, int y, GeometryLink ** result_link );
-	void removeDummyObjects();
 
 	void save( string filename );
 
@@ -41,6 +41,8 @@ public:
 	void initTestingState2();
 
 private:
+
+	void removeDummyObjects();
 
 	vector<IGeometryObject *> m_geometryObjects;
 };

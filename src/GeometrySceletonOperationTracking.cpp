@@ -157,12 +157,14 @@ void GeometrySceletonOperationTracking::trackerEnd( int x, int y )
 		return;
 	}
 
-	bool deleted = false;
+	bool changed = false;
 
 	if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_SPRING )
 	{
 		GeometrySpring * geometrySpring = (GeometrySpring *)m_GeometryObjectTracking;
 		geometrySpring->setConstructingState( GEOMETRYOBJECTCONSTRUCTING_COMPLETE );
+
+		changed = true;
 	}
 	else if( m_GeometryObjectTracking->getType() == GEOMETRYOBJECT_LINK )
 	{
@@ -173,10 +175,10 @@ void GeometrySceletonOperationTracking::trackerEnd( int x, int y )
 			GeometryObjectsManager::getInstance().removeObjectSmart( m_GeometryObjectTracking );
 			clearTrackingStack();
 
-			deleted = true;
+			changed = true;
 		}
 	}
-	if( true == deleted )
+	if( true == changed )
 	{
 		vector<IGraphicObject *> graphicObjects;
 		constructGraphicObjects( graphicObjects );
