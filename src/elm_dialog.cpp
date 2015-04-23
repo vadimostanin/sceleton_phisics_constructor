@@ -37,9 +37,73 @@ using namespace std;
 
 void test_functor_IsAngleInShortPathBetweenTwo()
 {
-	IsAngleBetweenTwoPredicate IsAngle( 230, 240, true, 241 );
-	bool is = IsAngle();
-	cout << "is=" << is << endl << flush;
+	//left side test
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 230, 240, true, 235 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 240, 230, true, 235 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 30, 240, false, 200 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 240, 30, false, 200 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
+
+	//right side test
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 230, 240, false, 10 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 240, 230, false, 300 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 30, 240, true, 10 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
+	{
+		IsAngleBetweenTwoPredicate IsBetween( 240, 30, true, 300 );
+		bool is = IsBetween();
+		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
+		int minAngle = IsBetween.getMinAngle();
+		int maxAngle = IsBetween.getMaxAngle();
+		cout << "min=" << minAngle << "; max=" << maxAngle << endl << flush;
+	}
 }
 
 void on_construct_test_objects( void * userData )
@@ -110,6 +174,8 @@ void on_sceleton_mode( void * userData )
 
 EAPI_MAIN int elm_main(int argc, char **argv)
 {
+	test_functor_IsAngleInShortPathBetweenTwo();
+return 0;
 	Window window;
 	WindowListener windowListener;
 

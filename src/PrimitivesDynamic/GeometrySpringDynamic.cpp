@@ -7,6 +7,7 @@
 
 #include "GeometrySpringDynamic.h"
 #include "GeometryLinksAngleGetPredicate.h"
+#include "GeometrySpringGetAngles.h"
 #include <string.h>
 #include <iostream>
 
@@ -38,9 +39,12 @@ GeometrySpringDynamic::~GeometrySpringDynamic()
 
 void GeometrySpringDynamic::initSpring()
 {
-	GeometryLinksAngleGetPredicate getAngle( getLinkFrom(), getLinkTo() );
+	GeometrySpringGetAngles getAngles( this );
+	int linkFromAbsoluteAngle = getAngles.getLinkFromAngle();
+	int linkToAbsoluteAngle = getAngles.getLinkToAngle();
 
-	float angle = getAngle();
+	int angleInt = abs( linkFromAbsoluteAngle - linkToAbsoluteAngle );
+	float angle = M_PI / 180.0 * angleInt;
 
 	const GeometryLinkDynamic * linkFrom = getDynamicLinkFrom();
 	const GeometryLinkDynamic * linkTo = getDynamicLinkTo();
@@ -48,7 +52,28 @@ void GeometrySpringDynamic::initSpring()
 	cpBody * bodyFrom = linkFrom->getBody();
 	cpBody * bodyTo = linkTo->getBody();
 
-	m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyFrom, bodyTo, angle, 1.0f ) );
+	if( true == getIsClosedPath() )
+	{
+		if( ( linkFromAbsoluteAngle - linkToAbsoluteAngle ) > 0 )
+		{
+			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyFrom, bodyTo, angle, 1.0f ) );
+		}
+		else
+		{
+			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyTo, bodyFrom, angle, 1.0f ) );
+		}
+	}
+	else
+	{
+		if( ( linkFromAbsoluteAngle - linkToAbsoluteAngle ) < 0 )
+		{
+			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyFrom, bodyTo, angle, 1.0f ) );
+		}
+		else
+		{
+			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyTo, bodyFrom, angle, 1.0f ) );
+		}
+	}
 }
 
 void GeometrySpringDynamic::initJoints()

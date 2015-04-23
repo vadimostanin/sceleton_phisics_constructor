@@ -242,9 +242,6 @@ void GraphicSpring::initCompleteCircleVertex()
 	const int innerRadius = 5;
 	initCircleAtLinks( geometrySpring->getLinkFrom()->getMiddleX(), geometrySpring->getLinkFrom()->getMiddleY(), innerRadius );
 
-//	cout << "currentAngle=" << currentMouseAngle << "; angleFrom=" << linkFromAngle << "; angleTo=" << linkToAngle << endl << flush;
-
-
 	int minAngle = min( linkToAngle, linkFromAngle );
 	int maxAngle = max( linkToAngle, linkFromAngle );
 
