@@ -1,5 +1,5 @@
 /*
- * GeometryLinksAngleGetPredicate.h
+ * GeometryLinkGetAbsoluteAnglePredicate.h
  *
  *  Created on: 17 апр. 2015
  *      Author: vadim

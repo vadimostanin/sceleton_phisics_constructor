@@ -33,38 +33,38 @@ using namespace std;
 #include "DynamicObjectsContructor.h"
 #include "GraphicObjectsContrucor.h"
 
-#include "IsAngleBetweenTwoPredicate.h"
+#include "GetAnglesRangeBy3PointsPredicate.h"
 
 void test_functor_IsAngleInShortPathBetweenTwo()
 {
 	//left side test
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 230, 240, true, 235 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 230, 240, true, 235 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min 230=" << minAngle << "; max 235=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 240, 230, true, 235 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 240, 230, true, 235 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min 235=" << minAngle << "; max 240=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 30, 240, false, 200 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 30, 240, false, 200 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min 30=" << minAngle << "; max 200=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 240, 30, false, 200 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 240, 30, false, 200 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
@@ -73,56 +73,56 @@ void test_functor_IsAngleInShortPathBetweenTwo()
 
 	//right side test
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 230, 240, false, 10 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 230, 240, false, 10 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min 10=" << minAngle << "; max 230=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 240, 230, false, 300 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 240, 230, false, 300 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min -120=" << minAngle << "; max -60=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 30, 240, true, 10 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 30, 240, true, 10 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min 10=" << minAngle << "; max 30=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 240, 30, true, 300 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 240, 30, true, 300 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min -120=" << minAngle << "; max -60=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 200, 0, true, 300 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 200, 0, true, 300 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min -160=" << minAngle << "; max -60=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 0, 90, false, 138 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 0, 90, false, 138 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();
 		cout << "min -222=" << minAngle << "; max 0=" << maxAngle << endl << flush;
 	}
 	{
-		IsAngleBetweenTwoPredicate IsBetween( 354, 206, false, 193 );
-		bool is = IsBetween();
+		GetAnglesRangeBy3PointsPredicate IsBetween( 354, 206, false, 193 );
+		bool is = IsBetween.getIsTestAngleInRange();
 		cout << "expected true is=" << ( ( is == true ) ? "true" : "false" ) << endl << flush;
 		int minAngle = IsBetween.getMinAngle();
 		int maxAngle = IsBetween.getMaxAngle();

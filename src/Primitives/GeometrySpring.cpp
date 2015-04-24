@@ -8,7 +8,6 @@
 #include "GeometrySpring.h"
 #include "GeometrySpringGetCrosslinkPredicate.h"
 #include "GeometrySpringGetShortestLinkPredicate.h"
-#include "GeometryLinksAngleGetPredicate.h"
 #include "GeometryLinkGetAbsoluteAnglePredicate.h"
 #include "IsAngleInShortPathBetweenTwo.h"
 #include "GeometrySpringGetAngles.h"

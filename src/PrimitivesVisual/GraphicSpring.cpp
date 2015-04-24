@@ -8,9 +8,9 @@
 #include "GraphicSpring.h"
 #include "GeometrySpringGetCrosslinkPredicate.h"
 #include "GeometrySpringGetShortestLinkPredicate.h"
-#include "GeometryLinksAngleGetPredicate.h"
 #include "GeometryLinkGetAbsoluteAnglePredicate.h"
-#include "IsAngleBetweenTwoPredicate.h"
+#include "GetAnglesRangeBy3PointsPredicate.h"
+#include "GetAnglesRangeBy2PointsPredicate.h"
 #include "GeometrySpringGetAngles.h"
 #include "MouseCoordinatesHolder.h"
 #include <iostream>
@@ -97,7 +97,7 @@ void GraphicSpring::initLineVertexes()
 
 void GraphicSpring::initCircleAtLinks( int x0, int y0, int radius )
 {
-	const int vertexNumber = 30;
+	const int vertexNumber = 3;
 
 	float ang = 0;
 	float da = (float) (M_PI / 180 * (360.0f / vertexNumber));
@@ -111,10 +111,11 @@ void GraphicSpring::initCircleAtLinks( int x0, int y0, int radius )
 		{
 			float fsin = sin( ang );
 			float fcos = cos( ang );
-			m_vertexBuffer.push_back( pixels_to_coords_x( last_coord_x ) );
-			m_vertexBuffer.push_back( pixels_to_coords_y( last_coord_y ) );
 			int coordX = x0 + radius * fcos;
 			int coordY = y0 + radius * fsin;
+
+			m_vertexBuffer.push_back( pixels_to_coords_x( last_coord_x ) );
+			m_vertexBuffer.push_back( pixels_to_coords_y( last_coord_y ) );
 			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
 			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
 
@@ -161,28 +162,28 @@ void GraphicSpring::initPartialCircleVertex()
 	GeometryLinkGetAbsoluteAnglePredicate getCurrentPointAbsoluteAngle( X0, Y0, mouseX, mouseY );
 	int currentMouseAngle = getCurrentPointAbsoluteAngle();
 
-	IsAngleBetweenTwoPredicate isMouseAngleBetween( linkFromAngle, linkToAngle, geometrySpring->getIsClosedPath(), currentMouseAngle );
+	GetAnglesRangeBy3PointsPredicate isMouseAngleBetween( linkFromAngle, linkToAngle, geometrySpring->getIsClosedPath(), currentMouseAngle );
 
 	int minAngle = isMouseAngleBetween.getMinAngle();//min( currentMouseAngle, linkFromAngle );
 	int maxAngle = isMouseAngleBetween.getMaxAngle();//max( currentMouseAngle, linkFromAngle );
 
 //	cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
 	float radian = ( (float)minAngle / 180.0 ) * M_PI;
-//		int last_coord_x = X0 + outerRadius * cos( radian );
-//		int last_coord_y = Y0 + outerRadius * sin( radian );
-	for( int angle_i = minAngle ; angle_i <= maxAngle ; angle_i ++ )
+		int last_coord_x = X0 + outerRadius * cos( radian );
+		int last_coord_y = Y0 - outerRadius * sin( radian );
+	for( int angle_i = minAngle ; angle_i < maxAngle ; angle_i += 10 )
 	{
 		radian = ( (float)angle_i / 180.0 ) * M_PI;
 		int coordX = X0 + outerRadius * cos( radian );
 		int coordY = Y0 - outerRadius * sin( radian );
 
-//			m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-//			m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+		m_vertexBuffer.push_back( pixels_to_coords_x( last_coord_x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( last_coord_y ) );
 		m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
 		m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
 
-//			last_coord_x = coordX;
-//			last_coord_y = coordY;
+			last_coord_x = coordX;
+			last_coord_y = coordY;
 	}
 }
 
@@ -210,28 +211,28 @@ void GraphicSpring::initCompleteCircleVertex()
 	const int innerRadius = 5;
 	initCircleAtLinks( geometrySpring->getLinkFrom()->getMiddleX(), geometrySpring->getLinkFrom()->getMiddleY(), innerRadius );
 
-	IsAngleBetweenTwoPredicate isMouseAngleBetween( linkFromAngle, linkToAngle, geometrySpring->getIsClosedPath(), linkToAngle );
+	GetAnglesRangeBy2PointsPredicate getRange( linkFromAngle, linkToAngle, geometrySpring->getIsClosedPath() );
 
-	int minAngle = isMouseAngleBetween.getMinAngle();
-	int maxAngle = isMouseAngleBetween.getMaxAngle();
+	int minAngle = getRange.getMinAngle();
+	int maxAngle = getRange.getMaxAngle();
 
-//	cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
+	cout << "minAngle=" << minAngle << "; maxAngle=" << maxAngle << endl << flush;
 	float radian = ( (float)minAngle / 180.0 ) * M_PI;
-//	int last_coord_x = X0 + Radius * cos( radian );
-//	int last_coord_y = Y0 + Radius * sin( radian );
-	for( int angle_i = minAngle ; angle_i <= maxAngle ; angle_i ++ )
+	int last_coord_x = X0 + outerRadius * cos( radian );
+	int last_coord_y = Y0 - outerRadius * sin( radian );
+	for( int angle_i = minAngle ; angle_i <= maxAngle ; angle_i +=10 )
 	{
 		radian = ( (float)angle_i / 180.0 ) * M_PI;
 		int coordX = X0 + outerRadius * cos( radian );
 		int coordY = Y0 - outerRadius * sin( radian );
 
-//		m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
-//		m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
+		m_vertexBuffer.push_back( pixels_to_coords_x( last_coord_x ) );
+		m_vertexBuffer.push_back( pixels_to_coords_y( last_coord_y ) );
 		m_vertexBuffer.push_back( pixels_to_coords_x( coordX ) );
 		m_vertexBuffer.push_back( pixels_to_coords_y( coordY ) );
 
-//		last_coord_x = coordX;
-//		last_coord_y = coordY;
+		last_coord_x = coordX;
+		last_coord_y = coordY;
 	}
 }
 
@@ -265,6 +266,26 @@ void GraphicSpring::initCircleVertexes()
 
 		const int innerRadiusFrom = 5;
 		initCircleAtLinks( geometrySpring->getLinkTo()->getMiddleX(), geometrySpring->getLinkTo()->getMiddleY(), innerRadiusFrom );
+	}
+}
+#include <fstream>
+#include <cassert>
+void dump( vector<float> & arr )
+{
+	ofstream file( "./dump.txt" );
+	if( false == file.is_open() )
+	{
+		assert( false );
+	}
+
+	file << arr.size() << endl << endl << flush;
+
+	vector<float>::iterator begin = arr.begin();
+	vector<float>::iterator end = arr.end();
+	vector<float>::iterator iter = begin;
+	for(  ; iter != end ; iter++ )
+	{
+		file << (* iter) << endl << flush;
 	}
 }
 
@@ -311,7 +332,7 @@ void GraphicSpring::draw_line_2d()
 	__evas_gl_glapi->glUniformMatrix4fv( m_rotate_idx, matrixCount, GL_FALSE, rotateMatrix );
 	__evas_gl_glapi->glUniform4f( m_color_idx, v_color[0], v_color[1], v_color[2], v_color[3] );
 
-	__evas_gl_glapi->glDrawArrays( GL_POINTS, 0, vertixesCount );
+	__evas_gl_glapi->glDrawArrays( GL_LINES, 0, vertixesCount );
 
 	__evas_gl_glapi->glDisableVertexAttribArray( m_positionIdx );
 

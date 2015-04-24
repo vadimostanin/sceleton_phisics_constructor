@@ -6,7 +6,6 @@
  */
 
 #include "GeometrySpringDynamic.h"
-#include "GeometryLinksAngleGetPredicate.h"
 #include "GeometrySpringGetAngles.h"
 #include <string.h>
 #include <iostream>

@@ -5,37 +5,46 @@
  *      Author: vadim
  */
 
-#include "IsAngleBetweenTwoPredicate.h"
+#include "GetAnglesRangeBy3PointsPredicate.h"
 #include <cmath>
 #include <algorithm>
 #include <cassert>
 using namespace std;
 
-IsAngleBetweenTwoPredicate::IsAngleBetweenTwoPredicate( int angleFrom, int angleTo, bool searchInShortPath, int testAngle ) :
+GetAnglesRangeBy3PointsPredicate::GetAnglesRangeBy3PointsPredicate( int angleFrom, int angleTo, bool searchInShortPath, int testAngle ) :
 	m_AngleFrom( angleFrom ), m_AngleTo( angleTo ), m_SearchInShortPath( searchInShortPath ), m_TestAngle( testAngle ),
-	m_MinAngle( 0 ), m_MaxAngle( 0 ), m_Result( false )
+	m_MinAngle( 0 ), m_MaxAngle( 0 ), m_IsTestAngleInRange( false )
 {
 	bool leftResult = calcLeftSide();
-	bool rightResult = calcRightSide();
-
-	m_Result = leftResult || rightResult;
+	if( true == leftResult )
+	{
+		m_IsTestAngleInRange = true;
+	}
+	else
+	{
+		bool rightResult = calcRightSide();
+		if( true == rightResult )
+		{
+			m_IsTestAngleInRange = true;
+		}
+	}
 }
 
-IsAngleBetweenTwoPredicate::~IsAngleBetweenTwoPredicate()
+GetAnglesRangeBy3PointsPredicate::~GetAnglesRangeBy3PointsPredicate()
 {
 }
 
-int IsAngleBetweenTwoPredicate::getMinAngle() const
+int GetAnglesRangeBy3PointsPredicate::getMinAngle() const
 {
 	return m_MinAngle;
 }
 
-int IsAngleBetweenTwoPredicate::getMaxAngle() const
+int GetAnglesRangeBy3PointsPredicate::getMaxAngle() const
 {
 	return m_MaxAngle;
 }
 
-bool IsAngleBetweenTwoPredicate::calcLeftSide()
+bool GetAnglesRangeBy3PointsPredicate::calcLeftSide()
 {
 	int minAngle = min( m_AngleFrom, m_AngleTo );
 	int maxAngle = max( m_AngleFrom, m_AngleTo );
@@ -103,7 +112,7 @@ bool IsAngleBetweenTwoPredicate::calcLeftSide()
 	return result;
 }
 
-bool IsAngleBetweenTwoPredicate::calcRightSide()
+bool GetAnglesRangeBy3PointsPredicate::calcRightSide()
 {
 	int tempMinAngle = min( m_AngleFrom, m_AngleTo );
 	int tempMaxAngle = max( m_AngleFrom, m_AngleTo ) - 360;
@@ -190,14 +199,14 @@ bool IsAngleBetweenTwoPredicate::calcRightSide()
 	return result;
 }
 
-int IsAngleBetweenTwoPredicate::getIsBigArea() const
+int GetAnglesRangeBy3PointsPredicate::getIsBigArea() const
 {
 	return false;
 }
 
-bool IsAngleBetweenTwoPredicate::operator ()()
+bool GetAnglesRangeBy3PointsPredicate::getIsTestAngleInRange() const
 {
-	return m_Result;
+	return m_IsTestAngleInRange;
 }
 
 
