@@ -15,7 +15,7 @@ GetRotateAngleFunctor::GetRotateAngleFunctor( const GeometrySpring * geometrySpr
 	m_AngleFrom = getAngles.getLinkFromAngle();
 	m_AngleTo   = getAngles.getLinkToAngle();
 
-	m_RotateAngle = abs( m_AngleFrom ) + abs( m_AngleTo );
+	m_RotateAngle = abs( m_AngleFrom ) - abs( m_AngleTo );
 }
 
 GetRotateAngleFunctor::~GetRotateAngleFunctor()

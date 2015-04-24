@@ -7,6 +7,7 @@
 
 #include "GeometrySpringDynamic.h"
 #include "GeometrySpringGetAngles.h"
+#include "GetRotateAngleFunctor.h"
 #include <string.h>
 #include <iostream>
 
@@ -51,28 +52,12 @@ void GeometrySpringDynamic::initSpring()
 	cpBody * bodyFrom = linkFrom->getBody();
 	cpBody * bodyTo = linkTo->getBody();
 
-	if( true == getIsClosedPath() )
-	{
-		if( ( linkFromAbsoluteAngle - linkToAbsoluteAngle ) > 0 )
-		{
-			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyFrom, bodyTo, angle, 1.0f ) );
-		}
-		else
-		{
-			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyTo, bodyFrom, angle, 1.0f ) );
-		}
-	}
-	else
-	{
-		if( ( linkFromAbsoluteAngle - linkToAbsoluteAngle ) < 0 )
-		{
-			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyFrom, bodyTo, angle, 1.0f ) );
-		}
-		else
-		{
-			m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyTo, bodyFrom, angle, 1.0f ) );
-		}
-	}
+	GetRotateAngleFunctor getAngle( this );
+	int rotateAngleInt = getAngle.getAngle();
+	float rotateAngle  = M_PI / 180.0 * rotateAngleInt;
+
+	m_ConstraintGear = cpSpaceAddConstraint( m_Space, cpGearJointNew( bodyFrom, bodyTo, rotateAngle, 1.0f ) );
+
 }
 
 void GeometrySpringDynamic::initJoints()
@@ -80,10 +65,6 @@ void GeometrySpringDynamic::initJoints()
 	if( 0 != getDynamicLinkFrom() && 0 != getDynamicLinkTo() )
 	{
 		initSpring();
-
-
-
-
 	}
 }
 
