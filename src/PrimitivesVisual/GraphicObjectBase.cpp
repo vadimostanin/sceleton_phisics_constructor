@@ -16,8 +16,6 @@ GraphicObjectBase::GraphicObjectBase() : m_vertexesBufferObject( 0 ), m_Program(
 	m_DrawCanvasHeight = 0;
 
 	initProjectionMatrix( m_projectionMatrix );
-
-	initShaders();
 }
 
 GraphicObjectBase::GraphicObjectBase( Evas_Object * glview ) : m_vertexesBufferObject( 0 ), m_Program( 0 ), m_vertexShader( 0 ), m_fragmentShader( 0 ),
@@ -25,11 +23,11 @@ GraphicObjectBase::GraphicObjectBase( Evas_Object * glview ) : m_vertexesBufferO
 {
 	m_glApi = elm_glview_gl_api_get( glview );
 
+	m_glApi->glEnable( GL_POINT_SIZE );
+
 	elm_glview_size_get( glview, &m_DrawCanvasWidth, &m_DrawCanvasHeight );
 
 	initProjectionMatrix( m_projectionMatrix );
-
-	initShaders();
 }
 
 GraphicObjectBase::GraphicObjectBase( const GraphicObjectBase & src )

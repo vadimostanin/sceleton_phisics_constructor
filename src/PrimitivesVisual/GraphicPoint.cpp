@@ -17,11 +17,15 @@ GraphicPoint::GraphicPoint( IGeometryObject * geometryObject, Evas_Object * glvi
 	initVertex();
 
 	m_Point = (GeometryPoint *)geometryObject;
+
+	initShaders();
 }
 
 GraphicPoint::GraphicPoint( Evas_Object * glview, GeometryPoint * point ) : GraphicObjectBase( glview ), m_Point( point )
 {
 	initVertex();
+
+	initShaders();
 }
 
 GraphicPoint::GraphicPoint( Evas_Object * glview, int x, int y ) : GraphicObjectBase( glview )//GraphicPoint( glview, Point( x, y ) )//delegating constructors only available with -std=c++11 or -std=gnu++11 [enabled by default]

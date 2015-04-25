@@ -15,6 +15,7 @@
 class GraphicSpring: public GraphicObjectBase, public IGraphicObject
 {
 public:
+
 	GraphicSpring( IGeometryObject * geometryObject, Evas_Object * canvas );
 	GraphicSpring( const GraphicSpring & src );
 	virtual ~GraphicSpring();
@@ -38,6 +39,7 @@ private:
 
 	GeometrySpring * m_geometrySpring;
 	unsigned int m_springRotateAngle;
+
 };
 
 #endif /* GRAPHICSPRING_H_ */

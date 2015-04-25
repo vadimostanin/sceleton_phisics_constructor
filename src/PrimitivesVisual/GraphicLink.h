@@ -31,10 +31,12 @@ public:
 
 private:
 
-	GeometryLink m_geometryLink;
-
 	void initLineVertexes();
 	void draw_line_2d();
+
+	GeometryLink m_geometryLink;
+
+	GLuint m_SourcePointIdx;
 };
 
 #endif /* GRAPHICLINK_H_ */

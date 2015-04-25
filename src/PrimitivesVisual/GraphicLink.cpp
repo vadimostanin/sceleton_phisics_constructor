@@ -13,16 +13,26 @@ using namespace std;
 GraphicLink::GraphicLink( IGeometryObject * geometryObject, Evas_Object * glview ) : GraphicObjectBase( glview )
 {
 	m_geometryLink = *geometryObject;
+
+	initShaders();
+
+	m_SourcePointIdx = m_glApi->glGetUniformLocation( m_Program, "sourcePoint" );
 }
 
 GraphicLink::GraphicLink( const GraphicLink & src )
 {
 	m_geometryLink = src.m_geometryLink;
+
+	initShaders();
+
+	m_SourcePointIdx = m_glApi->glGetUniformLocation( m_Program, "sourcePoint" );
 }
 
 GraphicLink::GraphicLink( const GeometryLink & src )
 {
 	m_geometryLink = src;
+
+	initShaders();
 }
 
 GraphicLink & GraphicLink::operator = ( const GeometryLink & src )
@@ -77,13 +87,15 @@ string GraphicLink::getVertexShader()
 {
 	string shader = SHADER(
 
-		attribute vec3 vPosition;
+		attribute vec2 vPosition;
 		uniform mat4 perspective;
 		uniform mat4 translate;
 		uniform mat4 scale;
+		varying vec2 position;
 		void main()
 		{
-		   gl_Position = perspective * translate * scale * vec4( vPosition, 1.0 );
+		   gl_Position = perspective * translate * scale * vec4( vPosition.xy, 0.0, 1.0 );
+		   position = vPosition;
 		}
 
 						);
@@ -94,12 +106,23 @@ string GraphicLink::getVertexShader()
 string GraphicLink::getFragmentShader()
 {
 	string shader =	SHADER(
-
-		void main()
-		{
-			gl_FragColor = vec4( 0.5, 0.5, 1.0, 1.0 );
-		}
-
+\n
+\n		varying vec2 position;
+\n
+\n		uniform vec2 sourcePoint;
+\n
+\n		void main()
+\n		{
+\n			if( cos( 0.1 * abs( distance( sourcePoint.xy, position.xy ) ) ) + 0.5 > 0.0 )
+\n			{
+\n				gl_FragColor = vec4( 0.0, 0.0, 0.0, 0.0 );
+\n			}
+\n			else
+\n			{
+\n				gl_FragColor = vec4( 1.0, 0.0, 0.0, 1.0 );
+\n			}
+\n		}
+\n
 						);
 
 	return shader;
@@ -113,6 +136,7 @@ void GraphicLink::draw_line_2d()
 	GLfloat scaleMatrix[16];
 	GLfloat rotateMatrix[16];
 	GLfloat v_color[4] = { 0.5, 0.5, 1.0, 1.0 };
+	GLfloat v_sourcePoint[2] = { m_vertexBuffer[0], m_vertexBuffer[1] };
 
 	GLfloat perspective[16];
 	init_matrix( perspective );
@@ -139,6 +163,7 @@ void GraphicLink::draw_line_2d()
 	__evas_gl_glapi->glUniformMatrix4fv( m_scale_idx, matrixCount, GL_FALSE, scaleMatrix );
 	__evas_gl_glapi->glUniformMatrix4fv( m_rotate_idx, matrixCount, GL_FALSE, rotateMatrix );
 	__evas_gl_glapi->glUniform4f( m_color_idx, v_color[0], v_color[1], v_color[2], v_color[3] );
+	__evas_gl_glapi->glUniform2f( m_color_idx, v_sourcePoint[0], v_sourcePoint[1] );
 
 	__evas_gl_glapi->glDrawArrays( GL_LINES, 0, vertixesCount );
 
